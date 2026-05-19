@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
@@ -19,62 +19,31 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'system-ui', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     animation: {
-                        blob: "blob 10s infinite",
+                        blob: "blob 12s infinite",
                         float: "float 6s ease-in-out infinite",
                         shimmer: "shimmer 2.5s linear infinite",
-                        orbit: "orbit 20s linear infinite",
-                        pulseGlow: "pulseGlow 3s ease-in-out infinite",
                         gradientShift: "gradientShift 8s ease infinite",
-                        fadeInUp: "fadeInUp 0.6s ease-out forwards",
-                        scaleIn: "scaleIn 0.5s ease-out forwards",
-                        slideInLeft: "slideInLeft 0.6s ease-out forwards",
-                        slideInRight: "slideInRight 0.6s ease-out forwards",
                     },
                     keyframes: {
                         blob: {
                             "0%": { transform: "translate(0px, 0px) scale(1)" },
-                            "33%": { transform: "translate(30px, -50px) scale(1.15)" },
-                            "66%": { transform: "translate(-20px, 20px) scale(0.85)" },
+                            "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                            "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
                             "100%": { transform: "translate(0px, 0px) scale(1)" },
                         },
                         float: {
                             "0%, 100%": { transform: "translateY(0px)" },
-                            "50%": { transform: "translateY(-12px)" },
+                            "50%": { transform: "translateY(-10px)" },
                         },
                         shimmer: {
                             "0%": { backgroundPosition: "-200% 0" },
                             "100%": { backgroundPosition: "200% 0" },
                         },
-                        orbit: {
-                            "0%": { transform: "rotate(0deg) translateX(120px) rotate(0deg)" },
-                            "100%": { transform: "rotate(360deg) translateX(120px) rotate(-360deg)" },
-                        },
-                        pulseGlow: {
-                            "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
-                            "50%": { opacity: "0.8", transform: "scale(1.05)" },
-                        },
                         gradientShift: {
                             "0%, 100%": { backgroundPosition: "0% 50%" },
                             "50%": { backgroundPosition: "100% 50%" },
-                        },
-                        fadeInUp: {
-                            "0%": { opacity: "0", transform: "translateY(30px)" },
-                            "100%": { opacity: "1", transform: "translateY(0)" },
-                        },
-                        scaleIn: {
-                            "0%": { opacity: "0", transform: "scale(0.9)" },
-                            "100%": { opacity: "1", transform: "scale(1)" },
-                        },
-                        slideInLeft: {
-                            "0%": { opacity: "0", transform: "translateX(-40px)" },
-                            "100%": { opacity: "1", transform: "translateX(0)" },
-                        },
-                        slideInRight: {
-                            "0%": { opacity: "0", transform: "translateX(40px)" },
-                            "100%": { opacity: "1", transform: "translateX(0)" },
                         },
                     }
                 }
@@ -84,29 +53,32 @@
     <style>
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #020617; }
-        ::-webkit-scrollbar-thumb { 
-            background: linear-gradient(180deg, #3b82f6, #6366f1); 
-            border-radius: 10px; 
-        }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #3b82f6, #6366f1); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #2563eb, #4f46e5); }
         
         .animation-delay-2000 { animation-delay: 2s; }
         .animation-delay-4000 { animation-delay: 4s; }
-        .animation-delay-6000 { animation-delay: 6s; }
-
         html { scroll-behavior: smooth; }
-        
-        /* Noise texture overlay */
-        .noise-overlay::before {
+
+        /* GPU acceleration for animated elements */
+        .gpu-accelerate {
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        /* Static noise - replaces expensive SVG feTurbulence (same visual at 3% opacity) */
+        .noise-static::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 200px 200px;
             pointer-events: none;
             z-index: 1;
         }
 
-        /* Grid pattern */
+        /* Grid pattern - lightweight */
         .grid-pattern {
             background-image: 
                 linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
@@ -114,30 +86,21 @@
             background-size: 60px 60px;
         }
 
-        /* Glow text */
         .glow-text {
-            text-shadow: 0 0 40px rgba(59, 130, 246, 0.3), 0 0 80px rgba(99, 102, 241, 0.15);
+            text-shadow: 0 0 40px rgba(59, 130, 246, 0.25), 0 0 80px rgba(99, 102, 241, 0.1);
         }
 
-        /* Glass morphism */
+        /* Glass - only used on hero badge, keep backdrop-filter here only */
         .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-        
-        .glass-light {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Animated border gradient */
+        /* Animated border gradient - simplified */
         .border-gradient {
             position: relative;
-            border: none !important;
         }
         .border-gradient::before {
             content: '';
@@ -151,54 +114,38 @@
             mask-composite: exclude;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.4s ease;
         }
         .border-gradient:hover::before {
             opacity: 1;
         }
-
-        /* CBT card animated border */
         .cbt-border-gradient::before {
             background: linear-gradient(135deg, rgba(249,115,22,0.5), rgba(244,63,94,0.2), rgba(249,115,22,0.5));
         }
 
-        /* Feature list stagger */
-        .feature-item { 
-            opacity: 0; 
-            animation: fadeInUp 0.4s ease-out forwards; 
-        }
-
-        /* Smooth hover lift */
         .hover-lift {
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
         }
         .hover-lift:hover {
-            transform: translateY(-8px);
+            transform: translateY(-6px);
         }
 
-        /* Price tag shimmer */
         .price-shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
             background-size: 200% 100%;
             animation: shimmer 3s linear infinite;
         }
 
-        /* Dot grid decoration */
+        /* Dot grid - use smaller repeat for less paint */
         .dot-grid {
-            background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
-            background-size: 20px 20px;
+            background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+            background-size: 24px 24px;
         }
 
-        /* Custom selection */
-        ::selection {
-            background: rgba(59, 130, 246, 0.3);
-            color: #fff;
-        }
+        ::selection { background: rgba(59, 130, 246, 0.3); color: #fff; }
 
-        /* Category filter nav active pill */
-        .cat-filter-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        /* Category filter */
+        .cat-filter-btn { transition: all 0.25s ease; }
         .cat-filter-btn.active {
             background: linear-gradient(135deg, #3b82f6, #6366f1);
             color: #fff !important;
@@ -206,33 +153,21 @@
             box-shadow: 0 4px 15px -3px rgba(59, 130, 246, 0.4);
         }
 
-        /* Section filter transition */
+        /* Section filter - GPU accelerated */
         .category-section {
-            transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.5s ease;
-            overflow: hidden;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            contain: layout style;
         }
         .category-section.section-hidden {
-            opacity: 0;
-            transform: scale(0.97) translateY(-10px);
-            max-height: 0 !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-            pointer-events: none;
+            display: none;
         }
         .category-section.section-visible {
             opacity: 1;
-            transform: scale(1) translateY(0);
-            max-height: 5000px;
-            pointer-events: auto;
+            transform: translateY(0);
         }
 
-        /* Navbar pill style */
-        .nav-pill {
-            position: relative;
-            transition: all 0.3s ease;
-        }
+        /* Navbar pill */
+        .nav-pill { transition: all 0.25s ease; }
         .nav-pill.active-pill {
             background: rgba(59, 130, 246, 0.15);
             color: #60a5fa !important;
@@ -249,61 +184,48 @@
             border-radius: 999px;
         }
 
-        /* Sticky filter bar glass */
-        .filter-bar-glass {
-            background: rgba(248, 250, 252, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        /* Filter bar - solid bg instead of backdrop-filter */
+        .filter-bar-solid {
+            background: rgba(248, 250, 252, 0.97);
             border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         }
 
-        /* Navbar scrolled state */
+        /* Navbar scrolled */
         .nav-scrolled {
-            background: rgba(2, 6, 23, 0.85) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
+            background: rgba(2, 6, 23, 0.92) !important;
             border-bottom: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
     </style>
 </head>
 <body class="bg-slate-50 font-sans antialiased text-slate-800 overflow-x-hidden">
     
     <!-- Navigation -->
-    <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
                 <a href="#" id="navLogo" class="flex items-center space-x-2.5 group">
                     <div class="w-9 h-9 bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/50 group-hover:scale-105 transition-all duration-300">
                         <span class="text-white font-black text-lg leading-none">K</span>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-lg font-extrabold tracking-tight text-white transition-colors duration-300 leading-none">K-Host</span>
-                        <span class="text-[8px] font-semibold uppercase tracking-[0.2em] text-blue-300/80 transition-colors duration-300 leading-none mt-0.5">Cloud Infrastructure</span>
+                        <span class="text-lg font-extrabold tracking-tight text-white leading-none">K-Host</span>
+                        <span class="text-[8px] font-semibold uppercase tracking-[0.2em] text-blue-300/80 leading-none mt-0.5">Cloud Infrastructure</span>
                     </div>
                 </a>
 
-                <!-- Center: Category nav pills -->
                 <div class="hidden lg:flex items-center bg-white/5 rounded-full p-1 border border-white/5">
                     @foreach($categories as $category)
-                        <a href="#kategori-{{ $category->id }}" data-category="{{ $category->id }}" class="nav-pill cat-nav-link relative px-4 py-1.5 text-[12px] font-semibold text-white/60 hover:text-white/90 transition-all duration-300 rounded-full">
-                            {{ $category->name }}
-                        </a>
+                        <a href="#kategori-{{ $category->id }}" data-category="{{ $category->id }}" class="nav-pill cat-nav-link relative px-4 py-1.5 text-[12px] font-semibold text-white/60 hover:text-white/90 rounded-full">{{ $category->name }}</a>
                     @endforeach
-                    <a href="#" data-category="all" class="nav-pill cat-nav-link active-pill relative px-4 py-1.5 text-[12px] font-semibold text-white/60 hover:text-white/90 transition-all duration-300 rounded-full">
-                        Semua
-                    </a>
+                    <a href="#" data-category="all" class="nav-pill cat-nav-link active-pill relative px-4 py-1.5 text-[12px] font-semibold text-white/60 hover:text-white/90 rounded-full">Semua</a>
                 </div>
 
-                <!-- Right: Client Area -->
                 <div class="flex items-center space-x-3">
-                    <a href="{{ route('login') }}" class="hidden sm:inline-flex group relative items-center justify-center px-5 py-2 text-[13px] font-bold text-white transition-all duration-300 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-md shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5">
+                    <a href="{{ route('login') }}" class="hidden sm:inline-flex group relative items-center justify-center px-5 py-2 text-[13px] font-bold text-white rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-md shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-300">
                         <span>Client Area</span>
                         <svg class="w-3.5 h-3.5 ml-1.5 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>
-                    
-                    <!-- Mobile menu button -->
                     <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
@@ -311,8 +233,7 @@
             </div>
         </div>
         
-        <!-- Mobile menu -->
-        <div id="mobileMenu" class="lg:hidden hidden bg-slate-900/95 backdrop-blur-xl border-t border-white/5">
+        <div id="mobileMenu" class="lg:hidden hidden bg-slate-900/95 border-t border-white/5">
             <div class="px-4 py-4 space-y-1">
                 @foreach($categories as $category)
                     <a href="#kategori-{{ $category->id }}" data-category="{{ $category->id }}" class="cat-nav-link-mobile block px-4 py-3 text-sm font-semibold text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all">{{ $category->name }}</a>
@@ -327,24 +248,23 @@
 
     <!-- Hero Section -->
     <main class="relative bg-slate-950 overflow-hidden min-h-screen flex flex-col justify-center">
-        <!-- Background layers -->
         <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-[#0a1628] to-indigo-950/80 z-0"></div>
         <div class="absolute inset-0 grid-pattern z-0 opacity-60"></div>
-        <div class="absolute inset-0 noise-overlay z-0"></div>
+        <div class="absolute inset-0 noise-static z-0"></div>
         
-        <!-- Animated blobs -->
-        <div class="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-blue-600/20 rounded-full mix-blend-screen filter blur-[150px] animate-blob z-0"></div>
-        <div class="absolute top-1/3 -right-20 w-[400px] h-[400px] bg-indigo-500/20 rounded-full mix-blend-screen filter blur-[150px] animate-blob animation-delay-2000 z-0"></div>
-        <div class="absolute -bottom-20 left-1/3 w-[450px] h-[450px] bg-violet-600/15 rounded-full mix-blend-screen filter blur-[150px] animate-blob animation-delay-4000 z-0"></div>
+        <!-- Blobs - optimized: smaller blur, no mix-blend, GPU accelerated -->
+        <div class="gpu-accelerate absolute top-1/4 -left-20 w-[400px] h-[400px] bg-blue-600/25 rounded-full filter blur-[64px] animate-blob z-0"></div>
+        <div class="gpu-accelerate absolute top-1/3 -right-20 w-[350px] h-[350px] bg-indigo-500/25 rounded-full filter blur-[64px] animate-blob animation-delay-2000 z-0"></div>
+        <div class="gpu-accelerate absolute -bottom-20 left-1/3 w-[380px] h-[380px] bg-violet-600/20 rounded-full filter blur-[64px] animate-blob animation-delay-4000 z-0"></div>
         
-        <!-- Floating dots -->
-        <div class="absolute top-20 left-[10%] w-2 h-2 bg-blue-400/40 rounded-full animate-float" style="animation-delay: 0s;"></div>
-        <div class="absolute top-40 right-[15%] w-1.5 h-1.5 bg-indigo-400/30 rounded-full animate-float" style="animation-delay: 1s;"></div>
-        <div class="absolute top-[60%] left-[8%] w-1 h-1 bg-violet-400/40 rounded-full animate-float" style="animation-delay: 2s;"></div>
-        <div class="absolute top-[30%] right-[5%] w-2.5 h-2.5 bg-cyan-400/20 rounded-full animate-float" style="animation-delay: 3s;"></div>
-        <div class="absolute bottom-[20%] right-[25%] w-1.5 h-1.5 bg-blue-300/30 rounded-full animate-float" style="animation-delay: 1.5s;"></div>
+        <!-- Floating dots - GPU accelerated -->
+        <div class="gpu-accelerate absolute top-20 left-[10%] w-2 h-2 bg-blue-400/40 rounded-full animate-float" style="animation-delay: 0s;"></div>
+        <div class="gpu-accelerate absolute top-40 right-[15%] w-1.5 h-1.5 bg-indigo-400/30 rounded-full animate-float" style="animation-delay: 1s;"></div>
+        <div class="gpu-accelerate absolute top-[60%] left-[8%] w-1 h-1 bg-violet-400/40 rounded-full animate-float" style="animation-delay: 2s;"></div>
+        <div class="gpu-accelerate absolute top-[30%] right-[5%] w-2.5 h-2.5 bg-cyan-400/20 rounded-full animate-float" style="animation-delay: 3s;"></div>
+        <div class="gpu-accelerate absolute bottom-[20%] right-[25%] w-1.5 h-1.5 bg-blue-300/30 rounded-full animate-float" style="animation-delay: 1.5s;"></div>
         
-        <!-- Orbiting rings -->
+        <!-- Orbiting rings - static, no animation cost -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] lg:w-[800px] lg:h-[800px] opacity-[0.03] pointer-events-none z-0">
             <div class="absolute inset-0 rounded-full border border-blue-400/50"></div>
             <div class="absolute inset-8 rounded-full border border-indigo-400/30"></div>
@@ -353,32 +273,32 @@
 
         <!-- Hero content -->
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-44 text-center z-10 w-full">
-            <div data-aos="zoom-in" data-aos-duration="800" class="inline-flex items-center px-5 py-2.5 rounded-full glass text-blue-200 text-xs sm:text-sm font-semibold mb-10 animate-float">
+            <div data-aos="zoom-in" data-aos-duration="600" class="inline-flex items-center px-5 py-2.5 rounded-full glass text-blue-200 text-xs sm:text-sm font-semibold mb-10 animate-float">
                 <span class="relative flex h-2.5 w-2.5 mr-3">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.7)]"></span>
                 </span>
                 Infrastruktur Cloud & CBT Standar Enterprise
             </div>
             
-            <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight mb-8 leading-[1.05] glow-text">
+            <h1 data-aos="fade-up" data-aos-duration="800" data-aos-delay="100" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight mb-8 leading-[1.05] glow-text">
                 Performa Maksimal<br class="hidden sm:block"/>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-400 animate-gradientShift" style="background-size: 200% 200%;">untuk Ekosistem Digital Anda</span>
             </h1>
             
-            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200" class="mt-8 max-w-2xl mx-auto text-lg md:text-xl text-slate-400 font-normal leading-relaxed">
+            <p data-aos="fade-up" data-aos-duration="800" data-aos-delay="200" class="mt-8 max-w-2xl mx-auto text-lg md:text-xl text-slate-400 font-normal leading-relaxed">
                 Tingkatkan skala aplikasi Anda dengan Server High-Performance. Sewa panel K-CBT Premium dengan kontrol API penuh, atau bangun infrastruktur tanpa batas di atas Cloud Hosting CyberPanel kami.
             </p>
             
-            <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300" class="mt-14 flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#products" class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-300 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl hover:from-blue-500 hover:to-indigo-500 shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] hover:shadow-[0_0_60px_-10px_rgba(59,130,246,0.8)] hover:-translate-y-1 overflow-hidden">
+            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="300" class="mt-14 flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#products" class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl hover:from-blue-500 hover:to-indigo-500 shadow-[0_0_30px_-8px_rgba(59,130,246,0.5)] hover:shadow-[0_0_45px_-8px_rgba(59,130,246,0.7)] hover:-translate-y-1 overflow-hidden transition-all duration-300">
                     <span class="relative z-10 flex items-center">
                         Eksplorasi Layanan
                         <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </span>
                     <div class="absolute inset-0 price-shimmer"></div>
                 </a>
-                <a href="{{ route('login') }}" class="group inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white/80 transition-all duration-300 rounded-2xl border border-white/10 hover:border-white/25 hover:bg-white/5 hover:text-white hover:-translate-y-1 backdrop-blur-sm">
+                <a href="{{ route('login') }}" class="group inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white/80 rounded-2xl border border-white/10 hover:border-white/25 hover:bg-white/5 hover:text-white hover:-translate-y-1 transition-all duration-300">
                     <span class="flex items-center">
                         Client Area
                         <svg class="w-4 h-4 ml-2 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -387,7 +307,7 @@
             </div>
             
             <!-- Stats -->
-            <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="500" class="mt-20 max-w-3xl mx-auto grid grid-cols-3 gap-6">
+            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="400" class="mt-20 max-w-3xl mx-auto grid grid-cols-3 gap-6">
                 <div class="text-center group cursor-default">
                     <div class="text-3xl md:text-4xl font-black text-white mb-1 group-hover:text-blue-400 transition-colors duration-300">99.9%</div>
                     <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Uptime SLA</div>
@@ -403,7 +323,6 @@
             </div>
         </div>
 
-        <!-- Bottom wave -->
         <div class="absolute bottom-0 w-full overflow-hidden leading-none z-10">
             <svg class="relative block w-full h-16 md:h-24 lg:h-32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
                 <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118,130.83,121.22,200.7,114.47Z" fill="#f8fafc"></path>
@@ -413,14 +332,13 @@
 
     <!-- Product Sections -->
     <div id="products" class="relative bg-slate-50">
+        <div class="absolute inset-0 dot-grid pointer-events-none opacity-30"></div>
         
-        <div class="absolute inset-0 dot-grid pointer-events-none opacity-40"></div>
-        
-        <!-- Sticky Category Filter Bar -->
-        <div id="filterBar" class="sticky top-16 z-40 filter-bar-glass transition-all duration-300">
+        <!-- Sticky Category Filter Bar - solid bg, no backdrop-filter -->
+        <div id="filterBar" class="sticky top-16 z-40 filter-bar-solid transition-all duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2 overflow-x-auto scrollbar-hide pb-0.5">
+                    <div class="flex items-center space-x-2 overflow-x-auto pb-0.5">
                         <button data-category="all" class="cat-filter-btn active whitespace-nowrap inline-flex items-center px-4 py-2 text-[12px] font-bold rounded-full border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-300 bg-white transition-all duration-300">
                             <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                             Semua
@@ -443,8 +361,7 @@
             @foreach($categories as $category)
                 <section id="kategori-{{ $category->id }}" data-section-category="{{ $category->id }}" class="category-section section-visible pt-20 mb-20 scroll-mt-36">
                     
-                    <!-- Section header -->
-                    <div class="text-center mb-14" data-aos="fade-up" data-aos-duration="800">
+                    <div class="text-center mb-14" data-aos="fade-up" data-aos-duration="600">
                         <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold mb-5 uppercase tracking-widest">
                             <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
                             {{ $category->name }}
@@ -454,32 +371,30 @@
                         <div class="w-20 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mt-6 rounded-full"></div>
                     </div>
 
-                    <!-- Product grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         @foreach($products->where('category_id', $category->id) as $product)
                             
                             @php
-                                $aosDelay = ($loop->index % 3) * 100;
+                                $aosDelay = ($loop->index % 3) * 80;
                             @endphp
 
                             @if($product->is_cbt_panel)
                                 <!-- K-CBT Premium Card -->
-                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="relative bg-gradient-to-b from-[#0c1222] to-[#162032] rounded-3xl shadow-2xl border border-slate-700/50 hover:border-orange-500/30 transform hover:-translate-y-2 transition-all duration-500 flex flex-col overflow-hidden group hover-lift border-gradient cbt-border-gradient">
+                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="relative bg-gradient-to-b from-[#0c1222] to-[#162032] rounded-3xl shadow-2xl border border-slate-700/50 hover:border-orange-500/30 hover:-translate-y-2 transition-all duration-400 flex flex-col overflow-hidden group hover-lift border-gradient cbt-border-gradient">
                                     
-                                    <div class="absolute top-0 right-0 w-80 h-80 bg-orange-500/8 rounded-full blur-[100px] -mr-20 -mt-20 pointer-events-none transition-all duration-700 group-hover:bg-orange-500/15"></div>
-                                    <div class="absolute bottom-0 left-0 w-60 h-60 bg-rose-500/5 rounded-full blur-[80px] -ml-10 -mb-10 pointer-events-none transition-all duration-700 group-hover:bg-rose-500/10"></div>
+                                    <!-- Card glow - reduced blur -->
+                                    <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/8 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none group-hover:bg-orange-500/12 transition-colors duration-500"></div>
+                                    <div class="absolute bottom-0 left-0 w-48 h-48 bg-rose-500/5 rounded-full blur-[40px] -ml-8 -mb-8 pointer-events-none group-hover:bg-rose-500/8 transition-colors duration-500"></div>
 
-                                    <!-- Premium badge -->
                                     <div class="absolute top-0 right-0 z-20">
                                         <div class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[10px] font-black px-5 py-2.5 rounded-bl-2xl uppercase tracking-[0.15em] shadow-lg flex items-center shadow-orange-500/25">
-                                            <svg class="w-3 h-3 mr-1.5 animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                            <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                                             K-CBT Premium
                                         </div>
                                     </div>
 
-                                    <!-- Content -->
                                     <div class="p-8 pb-0 relative z-10">
-                                        <h3 class="text-2xl font-black text-white mb-5 pr-24 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-300 group-hover:to-rose-300 transition-all duration-500">{{ $product->name }}</h3>
+                                        <h3 class="text-2xl font-black text-white mb-5 pr-24 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-300 group-hover:to-rose-300 transition-all duration-400">{{ $product->name }}</h3>
                                         
                                         @php
                                             $rawSpecs = array_filter(array_map('trim', preg_split('/[,.]+/', $product->description)));
@@ -508,7 +423,7 @@
 
                                         <div class="flex flex-wrap gap-2 mb-2">
                                             @foreach($badges as $badge)
-                                                <div class="{{ $badge['bg'] }} border backdrop-blur-sm px-3 py-1.5 rounded-lg flex items-center hover:-translate-y-0.5 transition-all duration-300 cursor-default">
+                                                <div class="{{ $badge['bg'] }} border px-3 py-1.5 rounded-lg flex items-center hover:-translate-y-0.5 transition-all duration-300 cursor-default">
                                                     <span class="text-sm mr-1.5">{{ $badge['icon'] }}</span>
                                                     <span class="{{ $badge['color'] }} text-[10px] font-bold tracking-wide uppercase">{{ $badge['text'] }}</span>
                                                 </div>
@@ -516,7 +431,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Features -->
                                     <div class="p-8 pt-4 flex-1 relative z-10">
                                         <div class="h-px w-full bg-gradient-to-r from-orange-500/20 via-slate-600/50 to-transparent mb-5"></div>
                                         <ul class="space-y-3">
@@ -531,14 +445,14 @@
                                         </ul>
                                     </div>
 
-                                    <!-- Price & CTA -->
                                     <div class="p-8 pt-0 mt-auto relative z-10">
-                                        <div class="bg-slate-900/60 rounded-2xl p-5 mb-5 border border-slate-700/40 backdrop-blur-sm group-hover:border-slate-600/60 transition-all duration-500">
+                                        <!-- Price box - solid bg, no backdrop-filter -->
+                                        <div class="bg-slate-900/70 rounded-2xl p-5 mb-5 border border-slate-700/40 group-hover:border-slate-600/60 transition-colors duration-400">
                                             
                                             <div class="flex justify-between items-center mb-2">
                                                 <span class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Investasi Tahunan</span>
                                                 @if($product->discount_percent > 0)
-                                                    <span class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[9px] px-2.5 py-0.5 rounded-md font-black uppercase tracking-wider shadow-orange-500/25 shadow-sm">Save {{ $product->discount_percent }}%</span>
+                                                    <span class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[9px] px-2.5 py-0.5 rounded-md font-black uppercase tracking-wider shadow-sm">Save {{ $product->discount_percent }}%</span>
                                                 @endif
                                             </div>
                                             
@@ -559,7 +473,7 @@
                                         </div>
                                         <form action="{{ route('user.buy', $product->id) }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-400 hover:to-rose-500 text-white font-bold py-4 rounded-2xl shadow-[0_8px_30px_-8px_rgba(249,115,22,0.4)] hover:shadow-[0_12px_40px_-8px_rgba(249,115,22,0.7)] transition-all duration-300 hover:-translate-y-0.5 text-sm uppercase tracking-wider">
+                                            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-400 hover:to-rose-500 text-white font-bold py-4 rounded-2xl shadow-[0_8px_25px_-8px_rgba(249,115,22,0.4)] hover:shadow-[0_10px_35px_-8px_rgba(249,115,22,0.6)] hover:-translate-y-0.5 transition-all duration-300 text-sm uppercase tracking-wider">
                                                 Deploy K-CBT Sekarang
                                             </button>
                                         </form>
@@ -568,9 +482,10 @@
 
                             @else
                                 <!-- Regular Cloud Card -->
-                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-3xl shadow-lg border border-slate-100 hover:border-blue-200 transform hover:-translate-y-2 transition-all duration-500 flex flex-col relative overflow-hidden group hover-lift border-gradient">
+                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-3xl shadow-lg border border-slate-100 hover:border-blue-200 hover:-translate-y-2 transition-all duration-400 flex flex-col relative overflow-hidden group hover-lift border-gradient">
                                     
-                                    <div class="absolute top-0 right-0 w-72 h-72 bg-blue-50 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none transition-all duration-700 group-hover:bg-blue-100/80"></div>
+                                    <!-- Card glow - reduced blur -->
+                                    <div class="absolute top-0 right-0 w-56 h-56 bg-blue-50 rounded-full blur-[40px] -mr-14 -mt-14 pointer-events-none group-hover:bg-blue-100/60 transition-colors duration-500"></div>
 
                                     <div class="p-8 border-b border-slate-100/80 relative z-10">
                                         <h3 class="text-2xl font-black text-slate-900 mb-1 group-hover:text-blue-600 transition-colors duration-300">{{ $product->name }}</h3>
@@ -590,13 +505,11 @@
                                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path></svg>
                                                             <span class="text-[10px] uppercase font-black tracking-wider">Hemat {{ $product->discount_percent }}%</span>
                                                         </span>
-                                                        
                                                         <span class="relative inline-block text-sm font-bold text-slate-400">
                                                             Rp {{ number_format($product->price, 0, ',', '.') }}
                                                             <span class="absolute left-0 top-1/2 w-full h-[2px] bg-rose-400 -translate-y-1/2 rounded-full"></span>
                                                         </span>
                                                     </div>
-                                                    
                                                     <div class="flex items-baseline text-slate-900">
                                                         <span class="text-xl font-bold mr-1">Rp</span>
                                                         <span class="text-4xl font-black tracking-tight">{{ number_format($product->final_price, 0, ',', '.') }}</span>
@@ -660,12 +573,10 @@
     <footer class="relative bg-slate-950 pt-20 pb-10 overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900 to-slate-950 z-0"></div>
         <div class="absolute inset-0 grid-pattern opacity-30 z-0"></div>
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
-        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-                <div data-aos="fade-up" data-aos-duration="800">
+                <div data-aos="fade-up" data-aos-duration="600">
                     <div class="flex items-center space-x-2.5 mb-5">
                         <div class="w-9 h-9 bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                             <span class="text-white font-black text-lg leading-none">K</span>
@@ -678,7 +589,7 @@
                     <p class="text-slate-400 text-sm leading-relaxed max-w-xs">Solusi server dan panel CBT terbaik untuk menunjang kebutuhan ujian berskala masif dan project digital Anda.</p>
                 </div>
                 
-                <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+                <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
                     <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-5">Layanan</h4>
                     <ul class="space-y-3">
                         @foreach($categories as $category)
@@ -692,7 +603,7 @@
                     </ul>
                 </div>
                 
-                <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
                     <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-5">Informasi</h4>
                     <ul class="space-y-3">
                         <li class="flex items-center text-sm text-slate-400">
@@ -712,11 +623,8 @@
             </div>
             
             <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-800 to-transparent mb-8"></div>
-            
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p class="text-slate-500 text-xs font-medium tracking-wide">
-                    &copy; {{ date('Y') }} K-Projects. All rights reserved.
-                </p>
+                <p class="text-slate-500 text-xs font-medium tracking-wide">&copy; {{ date('Y') }} K-Projects. All rights reserved.</p>
                 <div class="flex items-center space-x-1 text-xs text-slate-600">
                     <span>Powered by</span>
                     <span class="font-bold text-slate-400">K-Host Cloud</span>
@@ -726,51 +634,50 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // AOS Init
+        // AOS - once:true is the #1 perf fix for scroll pages
         AOS.init({
-            once: false,
-            mirror: true,
-            offset: 80,
-            duration: 700,
+            once: true,
+            offset: 60,
+            duration: 600,
             easing: 'ease-out-cubic',
+            disable: function() { return window.innerWidth < 768; }
         });
 
         // ========================
-        // NAVBAR SCROLL BEHAVIOR
+        // NAVBAR SCROLL - THROTTLED
         // ========================
         const nav = document.getElementById('mainNav');
-        const filterBar = document.getElementById('filterBar');
+        let ticking = false;
 
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.scrollY;
-            
-            if (currentScroll > 80) {
-                nav.classList.add('nav-scrolled');
-            } else {
-                nav.classList.remove('nav-scrolled');
+        function onScroll() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    if (window.scrollY > 80) {
+                        nav.classList.add('nav-scrolled');
+                    } else {
+                        nav.classList.remove('nav-scrolled');
+                    }
+                    ticking = false;
+                });
+                ticking = true;
             }
-        });
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
 
         // ========================
         // MOBILE MENU
         // ========================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
-        let menuOpen = false;
 
         mobileMenuBtn.addEventListener('click', () => {
-            menuOpen = !menuOpen;
             mobileMenu.classList.toggle('hidden');
         });
 
         mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-                menuOpen = false;
-            });
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
         });
 
         // ========================
@@ -785,33 +692,25 @@
         function filterCategories(categoryId) {
             activeCategory = categoryId;
 
-            // Update filter bar buttons
             filterBtns.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.category === categoryId) {
-                    btn.classList.add('active');
-                }
+                btn.classList.toggle('active', btn.dataset.category === categoryId);
             });
 
-            // Update navbar pills
             navPills.forEach(pill => {
-                pill.classList.remove('active-pill');
-                if (pill.dataset.category === categoryId) {
-                    pill.classList.add('active-pill');
-                }
+                pill.classList.toggle('active-pill', pill.dataset.category === categoryId);
             });
 
-            // Update mobile nav
             mobileNavLinks.forEach(link => {
-                link.classList.remove('text-blue-400');
-                link.classList.add('text-white/70');
                 if (link.dataset.category === categoryId) {
                     link.classList.remove('text-white/70');
                     link.classList.add('text-blue-400');
+                } else {
+                    link.classList.remove('text-blue-400');
+                    link.classList.add('text-white/70');
                 }
             });
 
-            // Filter sections
+            // Simple show/hide - no max-height animation (much faster)
             allSections.forEach(section => {
                 const sectionCat = section.dataset.sectionCategory;
                 if (categoryId === 'all' || sectionCat === categoryId) {
@@ -822,114 +721,74 @@
                     section.classList.add('section-hidden');
                 }
             });
-
-            // Refresh AOS
-            setTimeout(() => AOS.refresh(), 100);
         }
 
-        // Filter bar click handlers
+        // Filter bar click
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const catId = btn.dataset.category;
                 filterCategories(catId);
-                
                 if (catId === 'all') {
-                    // Scroll to products area
                     document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } else {
-                    // Scroll to specific section
                     const target = document.getElementById('kategori-' + catId);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
 
-        // Navbar pill click handlers
+        // Navbar pill click
         navPills.forEach(pill => {
             pill.addEventListener('click', (e) => {
                 e.preventDefault();
                 const catId = pill.dataset.category;
                 filterCategories(catId);
-                
                 if (catId === 'all') {
                     document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } else {
                     const target = document.getElementById('kategori-' + catId);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
 
-        // Mobile nav click handlers
+        // Mobile nav click
         mobileNavLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const catId = link.dataset.category;
                 filterCategories(catId);
                 mobileMenu.classList.add('hidden');
-                menuOpen = false;
-                
                 if (catId === 'all') {
                     document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } else {
                     const target = document.getElementById('kategori-' + catId);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
 
-        // Logo click -> show all
+        // Logo -> show all
         document.getElementById('navLogo').addEventListener('click', (e) => {
             e.preventDefault();
             filterCategories('all');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // ========================
-        // SCROLL SPY - sync active state
-        // ========================
-        const observerOptions = {
-            root: null,
-            rootMargin: '-30% 0px -60% 0px',
-            threshold: 0
-        };
-
+        // Scroll spy - throttled with IntersectionObserver (no scroll listener)
+        const observerOptions = { root: null, rootMargin: '-30% 0px -60% 0px', threshold: 0 };
         const scrollObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && activeCategory === 'all') {
                     const catId = entry.target.dataset.sectionCategory;
-                    // Update only navbar pills (not filter bar) for scroll spy
                     navPills.forEach(pill => {
-                        pill.classList.remove('active-pill');
-                        if (pill.dataset.category === catId) {
-                            pill.classList.add('active-pill');
-                        }
+                        pill.classList.toggle('active-pill', pill.dataset.category === catId);
                     });
                 }
             });
         }, observerOptions);
 
-        allSections.forEach(section => {
-            scrollObserver.observe(section);
-        });
-
-        // When scrolling back to top, show "all" as active in navbar
-        window.addEventListener('scroll', () => {
-            if (window.scrollY < 600) {
-                navPills.forEach(pill => {
-                    pill.classList.remove('active-pill');
-                    if (pill.dataset.category === 'all') {
-                        pill.classList.add('active-pill');
-                    }
-                });
-            }
-        });
+        allSections.forEach(section => scrollObserver.observe(section));
     </script>
 </body>
 </html>
