@@ -232,7 +232,7 @@
                 @forelse($orders as $order)
                 <tr class="hover:bg-slate-50">
                     <!-- Kolom 1: Klien -->
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-6 py-4 whitespace-nowrap align-top">
                         <div class="text-sm font-black text-slate-900">{{ $order->user->name }}</div>
                         <div class="text-xs text-slate-500 mt-1">{{ $order->created_at->format('d M Y') }}</div>
                         <a href="https://wa.me/{{ $order->user->whatsapp }}" target="_blank" class="inline-flex items-center mt-2 px-2 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded-full hover:bg-green-200">
@@ -241,7 +241,7 @@
                     </td>
                     
                     <!-- Kolom 2: Produk -->
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-6 py-4 whitespace-nowrap align-top">
                         <div class="text-sm font-bold text-slate-800">{{ $order->product->name }}</div>
                         <div class="text-xs font-black text-blue-600 mt-1">Rp {{ number_format($order->total_price, 0, ',', '.') }}</div>
                         @if($order->product->is_cbt_panel)
@@ -251,7 +251,7 @@
                         @endif
                     </td>
 
-                    <!-- Kolom 3: Konfigurasi Form Lengkap -->
+                    <!-- Kolom 3: Konfigurasi Form Lengkap (Tetap bisa diedit meski status sudah Success/Active) -->
                     <td class="px-6 py-4">
                         <form action="{{ route('admin.order.update', $order->id) }}" method="POST" class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
                             @csrf @method('PUT')
@@ -269,9 +269,18 @@
 
                             <hr class="border-slate-200">
                             
-                            <!-- Akses Login User -->
+                            <!-- Setup API & Akses Khusus CBT (Hanya Muncul Jika Produk CBT) -->
+                            @if($order->product->is_cbt_panel)
+                                <div class="bg-orange-100/50 p-3 rounded-lg border border-orange-200 mb-3">
+                                    <span class="text-[10px] font-black text-orange-800 uppercase tracking-wider block mb-2">Koneksi Remote API K-CBT:</span>
+                                    <input type="url" name="cbt_api_endpoint" placeholder="Endpoint URL (https://server-cbt.com)" value="{{ $order->cbt_api_endpoint }}" class="border-orange-300 bg-white rounded p-1.5 text-xs w-full mb-2 focus:ring-orange-500">
+                                    <input type="text" name="cbt_api_key" placeholder="API Secret Key (Bearer)" value="{{ $order->cbt_api_key }}" class="border-orange-300 bg-white rounded p-1.5 text-xs w-full focus:ring-orange-500 font-mono">
+                                </div>
+                            @endif
+
+                            <!-- Akses Login Web (Bisa untuk CBT maupun Reguler) -->
                             <div>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Berikan Akses Login:</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Berikan Akses Login Panel/Web:</span>
                                 <input type="url" name="service_url" placeholder="URL Login (https://...)" value="{{ $order->service_url }}" class="border-slate-300 rounded p-1.5 text-xs w-full mb-2">
                                 <div class="grid grid-cols-2 gap-2">
                                     <input type="text" name="service_username" placeholder="Username" value="{{ $order->service_username }}" class="border-slate-300 rounded p-1.5 text-xs w-full font-mono">
@@ -279,17 +288,8 @@
                                 </div>
                             </div>
 
-                            <!-- Setup API Khusus CBT -->
-                            @if($order->product->is_cbt_panel)
-                                <div class="bg-orange-100/50 p-3 rounded-lg border border-orange-200">
-                                    <span class="text-[10px] font-black text-orange-800 uppercase tracking-wider block mb-2">Koneksi Remote API K-CBT:</span>
-                                    <input type="url" name="cbt_api_endpoint" placeholder="Endpoint URL (https://server-cbt.com)" value="{{ $order->cbt_api_endpoint }}" class="border-orange-300 rounded p-1.5 text-xs w-full mb-2 focus:ring-orange-500">
-                                    <input type="text" name="cbt_api_key" placeholder="API Secret Key (Bearer)" value="{{ $order->cbt_api_key }}" class="border-orange-300 rounded p-1.5 text-xs w-full focus:ring-orange-500 font-mono">
-                                </div>
-                            @endif
-
                             <button type="submit" class="w-full bg-slate-800 text-white px-3 py-2 rounded-lg hover:bg-blue-600 text-xs font-bold transition shadow-sm mt-2">
-                                Simpan Semua Konfigurasi
+                                Simpan Konfigurasi Klien
                             </button>
                         </form>
                     </td>
