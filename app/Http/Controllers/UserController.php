@@ -8,7 +8,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http; // Tambahkan ini untuk menembak API
+use App\Models\Setting;
 
 class UserController extends Controller
 {
@@ -18,7 +18,7 @@ class UserController extends Controller
         $categories = Category::orderBy('sort_order', 'asc')->get();
         $products = Product::with('category')->get();
         
-        $cbt_features = \App\Models\Setting::where('key', 'cbt_features')->first()->value ?? '';
+        $cbt_features = Setting::where('key', 'cbt_features')->first()->value ?? '';
 
         return view('user.dashboard', compact('orders', 'categories', 'products', 'cbt_features'));
     }
@@ -41,50 +41,70 @@ class UserController extends Controller
                     'total_price' => $price
                 ]);
             });
-
-            return back()->with('success', 'Pesanan ' . $product->name . ' berhasil dibuat! Menunggu proses Admin.');
+            return back()->with('success', 'Pesanan berhasil dibuat! Menunggu proses Admin.');
         } catch (\Exception $e) {
             return back()->withErrors(['Gagal memproses pesanan: ' . $e->getMessage()]);
         }
     }
 
-    // --- FITUR KEREN: REMOTE API GANTI PASSWORD K-CBT ---
+    // --- MASTER REMOTE CONTROL K-CBT ---
     public function changeCbtPassword(Request $request, Order $order) {
         $request->validate([
-            'new_password' => 'required|string|min:6'
+            'new_password' => 'required|string|min:6',
+            'username' => 'required|string'
         ]);
 
-        // 1. Validasi Keamanan Hak Akses
+        // 1. Validasi Keamanan
         if ($order->user_id !== Auth::id() || $order->status !== 'active' || !$order->product->is_cbt_panel) {
-            return back()->withErrors(['Akses ditolak. Layanan tidak valid.']);
+            return back()->withErrors(['⛔ AKSES DITOLAK: Anda tidak berhak melakukan aksi ini.']);
         }
 
-        // 2. Cek apakah Admin sudah mengisi URL API dan Key
+        // 2. Cek Konfigurasi
         if (empty($order->cbt_api_endpoint) || empty($order->cbt_api_key)) {
-            return back()->withErrors(['Konfigurasi API belum disetel oleh Admin. Silakan hubungi CS.']);
+            return back()->withErrors(['⛔ KONFIGURASI KOSONG: Admin belum menyetel Endpoint/Token API CBT Anda.']);
         }
 
-        // 3. Tembak API ke Server CBT Client
-        try {
-            $response = Http::timeout(10)->withHeaders([
-                'Authorization' => 'Bearer ' . $order->cbt_api_key,
-                'Accept'        => 'application/json'
-            ])->post(rtrim($order->cbt_api_endpoint, '/') . '/api/change-admin-password', [
-                'new_password' => $request->new_password
+        // 3. Setup Target dan Payload
+        $target_url = rtrim($order->cbt_api_endpoint, '/');
+        $endpoint = $target_url . "/system/remote-reset-admin";
+        
+        $postData = [
+            'master_token' => $order->cbt_api_key,
+            'username' => trim($request->username),
+            'new_password' => $request->new_password
+        ];
+
+        // 4. Eksekusi cURL Remote
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json"]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
+        curl_close($ch);
+
+        // 5. Analisis Hasil
+        if ($curlError) {
+            return back()->withErrors(["⛔ TIMEOUT: Gagal Menghubungi Server CBT. Server Anda mungkin sedang offline. Detail: $curlError"]);
+        }
+
+        $res = json_decode($response, true);
+        if ($httpCode == 200 && isset($res['success']) && $res['success']) {
+            // Update UI User
+            $order->update([
+                'service_username' => $request->username,
+                'service_password' => $request->new_password
             ]);
-
-            // 4. Cek Hasil Respon Server CBT
-            if ($response->successful()) {
-                // Opsional: Simpan password baru di database K-Host agar user bisa melihatnya
-                $order->update(['service_password' => $request->new_password]);
-                
-                return back()->with('success', 'Password Admin K-CBT berhasil diubah langsung di server!');
-            } else {
-                return back()->withErrors(['Server K-CBT merespon dengan error: ' . $response->body()]);
-            }
-
-        } catch (\Exception $e) {
-            return back()->withErrors(['Gagal terhubung ke Server K-CBT. Server mungkin sedang offline.']);
+            return back()->with('success', '⚡ MASTER REMOTE SUKSES: ' . $res['message']);
+        } else {
+            $errorDetail = $res['message'] ?? "HTTP Code: $httpCode. Pastikan Route API /system/remote-reset-admin aktif di CBT Anda.";
+            return back()->withErrors(["⛔ GAGAL: $errorDetail"]);
         }
     }
 }
