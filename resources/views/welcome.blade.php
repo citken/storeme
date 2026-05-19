@@ -195,51 +195,117 @@
             color: #fff;
         }
 
-        /* Nav active indicator */
-        .nav-link-active {
-            color: #3b82f6 !important;
+        /* Category filter nav active pill */
+        .cat-filter-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .nav-link-active::after {
-            width: 100% !important;
+        .cat-filter-btn.active {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: #fff !important;
+            border-color: transparent;
+            box-shadow: 0 4px 15px -3px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Section filter transition */
+        .category-section {
+            transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.5s ease;
+            overflow: hidden;
+        }
+        .category-section.section-hidden {
+            opacity: 0;
+            transform: scale(0.97) translateY(-10px);
+            max-height: 0 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            pointer-events: none;
+        }
+        .category-section.section-visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            max-height: 5000px;
+            pointer-events: auto;
+        }
+
+        /* Navbar pill style */
+        .nav-pill {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-pill.active-pill {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa !important;
+        }
+        .nav-pill.active-pill::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #6366f1);
+            border-radius: 999px;
+        }
+
+        /* Sticky filter bar glass */
+        .filter-bar-glass {
+            background: rgba(248, 250, 252, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        /* Navbar scrolled state */
+        .nav-scrolled {
+            background: rgba(2, 6, 23, 0.85) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body class="bg-slate-50 font-sans antialiased text-slate-800 overflow-x-hidden">
     
     <!-- Navigation -->
-    <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+    <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center space-x-3 cursor-pointer group" data-aos="fade-down" data-aos-duration="800">
-                    <div class="relative w-11 h-11 bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/50 group-hover:scale-110 transition-all duration-500">
-                        <span class="text-white font-black text-2xl leading-none">K</span>
-                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-400 via-indigo-400 to-violet-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <span class="relative text-white font-black text-2xl leading-none">K</span>
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="#" id="navLogo" class="flex items-center space-x-2.5 group">
+                    <div class="w-9 h-9 bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/50 group-hover:scale-105 transition-all duration-300">
+                        <span class="text-white font-black text-lg leading-none">K</span>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-2xl font-black tracking-tight nav-brand-text text-white transition-colors duration-300">K-Host</span>
-                        <span class="text-[9px] font-bold uppercase tracking-[0.25em] nav-sub-text text-blue-300 transition-colors duration-300 -mt-0.5">Cloud Infrastructure</span>
+                        <span class="text-lg font-extrabold tracking-tight text-white transition-colors duration-300 leading-none">K-Host</span>
+                        <span class="text-[8px] font-semibold uppercase tracking-[0.2em] text-blue-300/80 transition-colors duration-300 leading-none mt-0.5">Cloud Infrastructure</span>
                     </div>
-                </div>
+                </a>
 
-                <div class="hidden lg:flex items-center space-x-1" data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">
+                <!-- Center: Category nav pills -->
+                <div class="hidden lg:flex items-center bg-white/5 rounded-full p-1 border border-white/5">
                     @foreach($categories as $category)
-                        <a href="#kategori-{{ $category->id }}" class="nav-link relative px-4 py-2 text-[13px] font-semibold nav-link-text text-white/70 hover:text-white transition-all duration-300 rounded-lg hover:bg-white/5 group">
+                        <a href="#kategori-{{ $category->id }}" data-category="{{ $category->id }}" class="nav-pill cat-nav-link relative px-4 py-1.5 text-[12px] font-semibold text-white/60 hover:text-white/90 transition-all duration-300 rounded-full">
                             {{ $category->name }}
-                            <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-indigo-400 transition-all duration-300 group-hover:w-3/4 rounded-full"></span>
                         </a>
                     @endforeach
+                    <a href="#" data-category="all" class="nav-pill cat-nav-link active-pill relative px-4 py-1.5 text-[12px] font-semibold text-white/60 hover:text-white/90 transition-all duration-300 rounded-full">
+                        Semua
+                    </a>
                 </div>
 
-                <div class="flex items-center space-x-3" data-aos="fade-down" data-aos-duration="800" data-aos-delay="200">
-                    <a href="{{ route('login') }}" class="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-white transition-all duration-300 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20 backdrop-blur-md hover:-translate-y-0.5">
+                <!-- Right: Client Area -->
+                <div class="flex items-center space-x-3">
+                    <a href="{{ route('login') }}" class="hidden sm:inline-flex group relative items-center justify-center px-5 py-2 text-[13px] font-bold text-white transition-all duration-300 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-md shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5">
                         <span>Client Area</span>
-                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        <svg class="w-3.5 h-3.5 ml-1.5 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>
                     
                     <!-- Mobile menu button -->
-                    <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-all">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                 </div>
             </div>
@@ -249,8 +315,9 @@
         <div id="mobileMenu" class="lg:hidden hidden bg-slate-900/95 backdrop-blur-xl border-t border-white/5">
             <div class="px-4 py-4 space-y-1">
                 @foreach($categories as $category)
-                    <a href="#kategori-{{ $category->id }}" class="block px-4 py-3 text-sm font-semibold text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all">{{ $category->name }}</a>
+                    <a href="#kategori-{{ $category->id }}" data-category="{{ $category->id }}" class="cat-nav-link-mobile block px-4 py-3 text-sm font-semibold text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-all">{{ $category->name }}</a>
                 @endforeach
+                <a href="#" data-category="all" class="cat-nav-link-mobile block px-4 py-3 text-sm font-semibold text-blue-400 hover:text-white hover:bg-white/5 rounded-xl transition-all">Semua Layanan</a>
                 <div class="pt-2 border-t border-white/5 mt-2">
                     <a href="{{ route('login') }}" class="block px-4 py-3 text-sm font-bold text-center text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl">Client Area</a>
                 </div>
@@ -262,11 +329,7 @@
     <main class="relative bg-slate-950 overflow-hidden min-h-screen flex flex-col justify-center">
         <!-- Background layers -->
         <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-[#0a1628] to-indigo-950/80 z-0"></div>
-        
-        <!-- Animated grid -->
         <div class="absolute inset-0 grid-pattern z-0 opacity-60"></div>
-        
-        <!-- Noise texture -->
         <div class="absolute inset-0 noise-overlay z-0"></div>
         
         <!-- Animated blobs -->
@@ -274,14 +337,14 @@
         <div class="absolute top-1/3 -right-20 w-[400px] h-[400px] bg-indigo-500/20 rounded-full mix-blend-screen filter blur-[150px] animate-blob animation-delay-2000 z-0"></div>
         <div class="absolute -bottom-20 left-1/3 w-[450px] h-[450px] bg-violet-600/15 rounded-full mix-blend-screen filter blur-[150px] animate-blob animation-delay-4000 z-0"></div>
         
-        <!-- Floating geometric shapes -->
+        <!-- Floating dots -->
         <div class="absolute top-20 left-[10%] w-2 h-2 bg-blue-400/40 rounded-full animate-float" style="animation-delay: 0s;"></div>
         <div class="absolute top-40 right-[15%] w-1.5 h-1.5 bg-indigo-400/30 rounded-full animate-float" style="animation-delay: 1s;"></div>
         <div class="absolute top-[60%] left-[8%] w-1 h-1 bg-violet-400/40 rounded-full animate-float" style="animation-delay: 2s;"></div>
         <div class="absolute top-[30%] right-[5%] w-2.5 h-2.5 bg-cyan-400/20 rounded-full animate-float" style="animation-delay: 3s;"></div>
         <div class="absolute bottom-[20%] right-[25%] w-1.5 h-1.5 bg-blue-300/30 rounded-full animate-float" style="animation-delay: 1.5s;"></div>
         
-        <!-- Orbiting ring decoration -->
+        <!-- Orbiting rings -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] lg:w-[800px] lg:h-[800px] opacity-[0.03] pointer-events-none z-0">
             <div class="absolute inset-0 rounded-full border border-blue-400/50"></div>
             <div class="absolute inset-8 rounded-full border border-indigo-400/30"></div>
@@ -290,7 +353,6 @@
 
         <!-- Hero content -->
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-44 text-center z-10 w-full">
-            <!-- Status badge -->
             <div data-aos="zoom-in" data-aos-duration="800" class="inline-flex items-center px-5 py-2.5 rounded-full glass text-blue-200 text-xs sm:text-sm font-semibold mb-10 animate-float">
                 <span class="relative flex h-2.5 w-2.5 mr-3">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
@@ -299,20 +361,17 @@
                 Infrastruktur Cloud & CBT Standar Enterprise
             </div>
             
-            <!-- Main heading -->
             <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tight mb-8 leading-[1.05] glow-text">
                 Performa Maksimal<br class="hidden sm:block"/>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-400 animate-gradientShift" style="background-size: 200% 200%;">untuk Ekosistem Digital Anda</span>
             </h1>
             
-            <!-- Subtitle -->
             <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200" class="mt-8 max-w-2xl mx-auto text-lg md:text-xl text-slate-400 font-normal leading-relaxed">
                 Tingkatkan skala aplikasi Anda dengan Server High-Performance. Sewa panel K-CBT Premium dengan kontrol API penuh, atau bangun infrastruktur tanpa batas di atas Cloud Hosting CyberPanel kami.
             </p>
             
-            <!-- CTA buttons -->
             <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300" class="mt-14 flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#kategori-{{ $categories->first()->id ?? '' }}" class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-300 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl hover:from-blue-500 hover:to-indigo-500 shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] hover:shadow-[0_0_60px_-10px_rgba(59,130,246,0.8)] hover:-translate-y-1 overflow-hidden">
+                <a href="#products" class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-300 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl hover:from-blue-500 hover:to-indigo-500 shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)] hover:shadow-[0_0_60px_-10px_rgba(59,130,246,0.8)] hover:-translate-y-1 overflow-hidden">
                     <span class="relative z-10 flex items-center">
                         Eksplorasi Layanan
                         <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -327,7 +386,7 @@
                 </a>
             </div>
             
-            <!-- Stats bar -->
+            <!-- Stats -->
             <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="500" class="mt-20 max-w-3xl mx-auto grid grid-cols-3 gap-6">
                 <div class="text-center group cursor-default">
                     <div class="text-3xl md:text-4xl font-black text-white mb-1 group-hover:text-blue-400 transition-colors duration-300">99.9%</div>
@@ -353,17 +412,39 @@
     </main>
 
     <!-- Product Sections -->
-    <div class="relative bg-slate-50">
+    <div id="products" class="relative bg-slate-50">
         
-        <!-- Dot grid decoration -->
         <div class="absolute inset-0 dot-grid pointer-events-none opacity-40"></div>
         
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 z-10">
+        <!-- Sticky Category Filter Bar -->
+        <div id="filterBar" class="sticky top-16 z-40 filter-bar-glass transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2 overflow-x-auto scrollbar-hide pb-0.5">
+                        <button data-category="all" class="cat-filter-btn active whitespace-nowrap inline-flex items-center px-4 py-2 text-[12px] font-bold rounded-full border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-300 bg-white transition-all duration-300">
+                            <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                            Semua
+                        </button>
+                        @foreach($categories as $category)
+                            <button data-category="{{ $category->id }}" class="cat-filter-btn whitespace-nowrap inline-flex items-center px-4 py-2 text-[12px] font-bold rounded-full border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-300 bg-white transition-all duration-300">
+                                {{ $category->name }}
+                            </button>
+                        @endforeach
+                    </div>
+                    <div class="hidden sm:flex items-center text-[11px] text-slate-400 font-medium ml-4 flex-shrink-0">
+                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                        Filter kategori
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 z-10">
             @foreach($categories as $category)
-                <section id="kategori-{{ $category->id }}" class="pt-28 -mt-16 mb-28 scroll-mt-24">
+                <section id="kategori-{{ $category->id }}" data-section-category="{{ $category->id }}" class="category-section section-visible pt-20 mb-20 scroll-mt-36">
                     
                     <!-- Section header -->
-                    <div class="text-center mb-16" data-aos="fade-up" data-aos-duration="800">
+                    <div class="text-center mb-14" data-aos="fade-up" data-aos-duration="800">
                         <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold mb-5 uppercase tracking-widest">
                             <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
                             {{ $category->name }}
@@ -385,7 +466,6 @@
                                 <!-- K-CBT Premium Card -->
                                 <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="relative bg-gradient-to-b from-[#0c1222] to-[#162032] rounded-3xl shadow-2xl border border-slate-700/50 hover:border-orange-500/30 transform hover:-translate-y-2 transition-all duration-500 flex flex-col overflow-hidden group hover-lift border-gradient cbt-border-gradient">
                                     
-                                    <!-- Card glow -->
                                     <div class="absolute top-0 right-0 w-80 h-80 bg-orange-500/8 rounded-full blur-[100px] -mr-20 -mt-20 pointer-events-none transition-all duration-700 group-hover:bg-orange-500/15"></div>
                                     <div class="absolute bottom-0 left-0 w-60 h-60 bg-rose-500/5 rounded-full blur-[80px] -ml-10 -mb-10 pointer-events-none transition-all duration-700 group-hover:bg-rose-500/10"></div>
 
@@ -490,14 +570,11 @@
                                 <!-- Regular Cloud Card -->
                                 <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-3xl shadow-lg border border-slate-100 hover:border-blue-200 transform hover:-translate-y-2 transition-all duration-500 flex flex-col relative overflow-hidden group hover-lift border-gradient">
                                     
-                                    <!-- Card glow -->
                                     <div class="absolute top-0 right-0 w-72 h-72 bg-blue-50 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none transition-all duration-700 group-hover:bg-blue-100/80"></div>
 
-                                    <!-- Content -->
                                     <div class="p-8 border-b border-slate-100/80 relative z-10">
                                         <h3 class="text-2xl font-black text-slate-900 mb-1 group-hover:text-blue-600 transition-colors duration-300">{{ $product->name }}</h3>
                                         
-                                        <!-- Popular indicator for mid-tier -->
                                         @if($loop->index % 3 === 1)
                                             <div class="inline-flex items-center mt-2 px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider">
                                                 <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path></svg>
@@ -536,7 +613,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Features -->
                                     <div class="p-8 pt-6 flex-1 relative z-10">
                                         <ul class="space-y-3">
                                             @foreach(explode('.', $product->description) as $descLine)
@@ -552,7 +628,6 @@
                                         </ul>
                                     </div>
 
-                                    <!-- CTA -->
                                     <div class="p-8 pt-0 mt-auto relative z-10">
                                         <a href="{{ route('login') }}" class="block w-full bg-slate-50 border-2 border-slate-200 text-slate-700 hover:bg-slate-900 hover:border-slate-900 hover:text-white font-bold py-4 px-4 rounded-2xl text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 text-sm uppercase tracking-wider">
                                             Pilih Paket Cloud
@@ -583,30 +658,26 @@
 
     <!-- Footer -->
     <footer class="relative bg-slate-950 pt-20 pb-10 overflow-hidden">
-        <!-- Background -->
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900 to-slate-950 z-0"></div>
         <div class="absolute inset-0 grid-pattern opacity-30 z-0"></div>
         <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-            <!-- Top section -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-                <!-- Brand -->
                 <div data-aos="fade-up" data-aos-duration="800">
-                    <div class="flex items-center space-x-3 mb-5">
-                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                            <span class="text-white font-black text-xl leading-none">K</span>
+                    <div class="flex items-center space-x-2.5 mb-5">
+                        <div class="w-9 h-9 bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                            <span class="text-white font-black text-lg leading-none">K</span>
                         </div>
                         <div>
-                            <span class="text-xl font-black text-white tracking-tight">K-Host</span>
-                            <span class="block text-[9px] font-bold uppercase tracking-[0.2em] text-blue-400 -mt-0.5">Cloud Infrastructure</span>
+                            <span class="text-lg font-extrabold text-white tracking-tight">K-Host</span>
+                            <span class="block text-[8px] font-bold uppercase tracking-[0.2em] text-blue-400 -mt-0.5">Cloud Infrastructure</span>
                         </div>
                     </div>
                     <p class="text-slate-400 text-sm leading-relaxed max-w-xs">Solusi server dan panel CBT terbaik untuk menunjang kebutuhan ujian berskala masif dan project digital Anda.</p>
                 </div>
                 
-                <!-- Quick links -->
                 <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
                     <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-5">Layanan</h4>
                     <ul class="space-y-3">
@@ -621,7 +692,6 @@
                     </ul>
                 </div>
                 
-                <!-- Contact / Info -->
                 <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
                     <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-5">Informasi</h4>
                     <ul class="space-y-3">
@@ -641,10 +711,8 @@
                 </div>
             </div>
             
-            <!-- Divider -->
             <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-800 to-transparent mb-8"></div>
             
-            <!-- Bottom section -->
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <p class="text-slate-500 text-xs font-medium tracking-wide">
                     &copy; {{ date('Y') }} K-Projects. All rights reserved.
@@ -670,63 +738,197 @@
             easing: 'ease-out-cubic',
         });
 
-        // Navbar scroll behavior
+        // ========================
+        // NAVBAR SCROLL BEHAVIOR
+        // ========================
         const nav = document.getElementById('mainNav');
-        let lastScroll = 0;
+        const filterBar = document.getElementById('filterBar');
 
         window.addEventListener('scroll', () => {
             const currentScroll = window.scrollY;
             
-            if (currentScroll > 100) {
-                nav.classList.add('bg-slate-950/80', 'backdrop-blur-2xl', 'shadow-lg', 'shadow-black/5');
-                nav.classList.remove('bg-transparent');
-                // Update nav text colors
-                nav.querySelectorAll('.nav-brand-text').forEach(el => {
-                    el.classList.add('text-white');
-                    el.classList.remove('text-white');
-                });
+            if (currentScroll > 80) {
+                nav.classList.add('nav-scrolled');
             } else {
-                nav.classList.remove('bg-slate-950/80', 'backdrop-blur-2xl', 'shadow-lg', 'shadow-black/5');
-                nav.classList.add('bg-transparent');
+                nav.classList.remove('nav-scrolled');
             }
-            
-            lastScroll = currentScroll;
         });
 
-        // Mobile menu toggle
+        // ========================
+        // MOBILE MENU
+        // ========================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
-        
+        let menuOpen = false;
+
         mobileMenuBtn.addEventListener('click', () => {
+            menuOpen = !menuOpen;
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Close mobile menu on link click
         mobileMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.add('hidden');
+                menuOpen = false;
             });
         });
 
-        // Active section highlighting
-        const sections = document.querySelectorAll('section[id^="kategori-"]');
-        const navLinks = document.querySelectorAll('.nav-link');
+        // ========================
+        // CATEGORY FILTER SYSTEM
+        // ========================
+        const allSections = document.querySelectorAll('.category-section');
+        const filterBtns = document.querySelectorAll('.cat-filter-btn');
+        const navPills = document.querySelectorAll('.cat-nav-link');
+        const mobileNavLinks = document.querySelectorAll('.cat-nav-link-mobile');
+        let activeCategory = 'all';
 
+        function filterCategories(categoryId) {
+            activeCategory = categoryId;
+
+            // Update filter bar buttons
+            filterBtns.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === categoryId) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update navbar pills
+            navPills.forEach(pill => {
+                pill.classList.remove('active-pill');
+                if (pill.dataset.category === categoryId) {
+                    pill.classList.add('active-pill');
+                }
+            });
+
+            // Update mobile nav
+            mobileNavLinks.forEach(link => {
+                link.classList.remove('text-blue-400');
+                link.classList.add('text-white/70');
+                if (link.dataset.category === categoryId) {
+                    link.classList.remove('text-white/70');
+                    link.classList.add('text-blue-400');
+                }
+            });
+
+            // Filter sections
+            allSections.forEach(section => {
+                const sectionCat = section.dataset.sectionCategory;
+                if (categoryId === 'all' || sectionCat === categoryId) {
+                    section.classList.remove('section-hidden');
+                    section.classList.add('section-visible');
+                } else {
+                    section.classList.remove('section-visible');
+                    section.classList.add('section-hidden');
+                }
+            });
+
+            // Refresh AOS
+            setTimeout(() => AOS.refresh(), 100);
+        }
+
+        // Filter bar click handlers
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const catId = btn.dataset.category;
+                filterCategories(catId);
+                
+                if (catId === 'all') {
+                    // Scroll to products area
+                    document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    // Scroll to specific section
+                    const target = document.getElementById('kategori-' + catId);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Navbar pill click handlers
+        navPills.forEach(pill => {
+            pill.addEventListener('click', (e) => {
+                e.preventDefault();
+                const catId = pill.dataset.category;
+                filterCategories(catId);
+                
+                if (catId === 'all') {
+                    document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    const target = document.getElementById('kategori-' + catId);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Mobile nav click handlers
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const catId = link.dataset.category;
+                filterCategories(catId);
+                mobileMenu.classList.add('hidden');
+                menuOpen = false;
+                
+                if (catId === 'all') {
+                    document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    const target = document.getElementById('kategori-' + catId);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Logo click -> show all
+        document.getElementById('navLogo').addEventListener('click', (e) => {
+            e.preventDefault();
+            filterCategories('all');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ========================
+        // SCROLL SPY - sync active state
+        // ========================
+        const observerOptions = {
+            root: null,
+            rootMargin: '-30% 0px -60% 0px',
+            threshold: 0
+        };
+
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && activeCategory === 'all') {
+                    const catId = entry.target.dataset.sectionCategory;
+                    // Update only navbar pills (not filter bar) for scroll spy
+                    navPills.forEach(pill => {
+                        pill.classList.remove('active-pill');
+                        if (pill.dataset.category === catId) {
+                            pill.classList.add('active-pill');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        allSections.forEach(section => {
+            scrollObserver.observe(section);
+        });
+
+        // When scrolling back to top, show "all" as active in navbar
         window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop - 150;
-                if (window.scrollY >= sectionTop) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('nav-link-active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('nav-link-active');
-                }
-            });
+            if (window.scrollY < 600) {
+                navPills.forEach(pill => {
+                    pill.classList.remove('active-pill');
+                    if (pill.dataset.category === 'all') {
+                        pill.classList.add('active-pill');
+                    }
+                });
+            }
         });
     </script>
 </body>
