@@ -8,7 +8,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\Setting;
+use Illuminate\Support\Facades\Http; // Tambahkan ini untuk menembak API
 
 class UserController extends Controller
 {
@@ -18,7 +18,7 @@ class UserController extends Controller
         $categories = Category::orderBy('sort_order', 'asc')->get();
         $products = Product::with('category')->get();
         
-        $cbt_features = Setting::where('key', 'cbt_features')->first()->value ?? '';
+        $cbt_features = \App\Models\Setting::where('key', 'cbt_features')->first()->value ?? '';
 
         return view('user.dashboard', compact('orders', 'categories', 'products', 'cbt_features'));
     }
@@ -41,77 +41,68 @@ class UserController extends Controller
                     'total_price' => $price
                 ]);
             });
-            return back()->with('success', 'Pesanan berhasil dibuat! Menunggu proses Admin.');
+
+            return back()->with('success', 'Pesanan ' . $product->name . ' berhasil dibuat! Menunggu proses Admin.');
         } catch (\Exception $e) {
             return back()->withErrors(['Gagal memproses pesanan: ' . $e->getMessage()]);
         }
     }
 
-    // --- MASTER REMOTE CONTROL K-CBT ---
-    // --- MASTER REMOTE CONTROL K-CBT ---
+    // --- FITUR KEREN: REMOTE API GANTI PASSWORD K-CBT ---
+    // --- FITUR KEREN: REMOTE API GANTI PASSWORD K-CBT ---
+    // --- FITUR KEREN: REMOTE API GANTI PASSWORD K-CBT ---
     public function changeCbtPassword(Request $request, Order $order) {
         $request->validate([
-            'new_password' => 'required|string|min:6',
-            'username' => 'required|string'
+            'new_password' => 'required|string|min:6'
         ]);
 
-        // 1. Validasi Keamanan
+        // 1. Validasi Keamanan Hak Akses
         if ($order->user_id !== Auth::id() || $order->status !== 'active' || !$order->product->is_cbt_panel) {
-            return back()->withErrors(['⛔ AKSES DITOLAK: Anda tidak berhak melakukan aksi ini.']);
+            return back()->withErrors(['Akses ditolak. Layanan tidak valid.']);
         }
 
-        // 2. Cek Konfigurasi
+        // 2. Cek apakah Admin sudah mengisi URL API dan Key
         if (empty($order->cbt_api_endpoint) || empty($order->cbt_api_key)) {
-            return back()->withErrors(['⛔ KONFIGURASI KOSONG: Admin belum menyetel Endpoint/Token API CBT Anda.']);
+            return back()->withErrors(['Konfigurasi API belum disetel oleh Admin. Silakan hubungi CS.']);
         }
 
-        // 3. Setup Target dan Payload
-        $target_url = rtrim($order->cbt_api_endpoint, '/');
-        // PENTING: Tambahkan /api/ di depannya karena ini akan ditaruh di routes/api.php CBT
-        $endpoint = $target_url . "/api/system/remote-reset-admin"; 
-        
-        $postData = json_encode([ // Ubah menjadi json_encode
-            'master_token' => $order->cbt_api_key,
-            'username' => trim($request->username),
-            'new_password' => $request->new_password
-        ]);
+        // 3. Tembak API ke Server CBT Client
+        try {
+            // URL Tepat sasaran ke web.php (tanpa /api/)
+            $endpoint = rtrim($order->cbt_api_endpoint, '/') . '/system/remote-reset-admin';
+            
+            $response = Http::timeout(15)
+                ->withoutVerifying() 
+                ->withHeaders([
+                    'Accept' => 'application/json'
+                ])
+                ->post($endpoint, [
+                    'master_token' => $order->cbt_api_key, 
+                    'username'     => $order->service_username, 
+                    'new_password' => $request->new_password
+                ]);
 
-        // 4. Eksekusi cURL Remote
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "Content-Type: application/json", // Wajib karena pakai json_encode
-            "Accept: application/json"
-        ]);
+            // 4. Cek Hasil Respon Server CBT
+            $res = $response->json();
 
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError = curl_error($ch);
-        curl_close($ch);
+            // Pastikan respon valid JSON dan success
+            if ($response->successful() && is_array($res) && isset($res['success']) && $res['success']) {
+                // Simpan password baru di database K-Host
+                $order->update(['service_password' => $request->new_password]);
+                
+                return back()->with('success', '⚡ ' . $res['message']);
+            } else {
+                // K-AI FIX: TANGKAP RESPON MENTAH JIKA BUKAN JSON
+                $rawBody = trim(strip_tags($response->body()));
+                $snippet = substr($rawBody, 0, 150); // Ambil 150 karakter pertama
+                
+                $errorMsg = isset($res['message']) ? $res['message'] : "Respon Mentah (HTTP " . $response->status() . "): " . ($snippet ?: 'BLANK / KOSONG');
+                
+                return back()->withErrors(['GAGAL: ' . $errorMsg]);
+            }
 
-        // 5. Analisis Hasil
-        if ($curlError) {
-            return back()->withErrors(["⛔ TIMEOUT: Gagal Menghubungi Server CBT. Server Anda mungkin sedang offline. Detail: $curlError"]);
+        } catch (\Exception $e) {
+            return back()->withErrors(['Gagal terhubung ke Server K-CBT. Detail: ' . $e->getMessage()]);
         }
-
-        $res = json_decode($response, true);
-        if ($httpCode == 200 && isset($res['success']) && $res['success']) {
-            // Update UI User
-            $order->update([
-                'service_username' => trim($request->username),
-                'service_password' => $request->new_password
-            ]);
-            return back()->with('success', '⚡ MASTER REMOTE SUKSES: ' . $res['message']);
-        } else {
-            // Tangkap pesan error dari CBT atau fallback ke raw response
-            $errorDetail = $res['message'] ?? "HTTP Code: $httpCode. Respons: " . strip_tags($response);
-            return back()->withErrors(["⛔ GAGAL: $errorDetail"]);
-        }
-    
     }
 }
