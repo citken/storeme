@@ -48,6 +48,7 @@ class UserController extends Controller
     }
 
     // --- MASTER REMOTE CONTROL K-CBT ---
+    // --- MASTER REMOTE CONTROL K-CBT ---
     public function changeCbtPassword(Request $request, Order $order) {
         $request->validate([
             'new_password' => 'required|string|min:6',
@@ -66,23 +67,27 @@ class UserController extends Controller
 
         // 3. Setup Target dan Payload
         $target_url = rtrim($order->cbt_api_endpoint, '/');
-        $endpoint = $target_url . "/system/remote-reset-admin";
+        // PENTING: Tambahkan /api/ di depannya karena ini akan ditaruh di routes/api.php CBT
+        $endpoint = $target_url . "/api/system/remote-reset-admin"; 
         
-        $postData = [
+        $postData = json_encode([ // Ubah menjadi json_encode
             'master_token' => $order->cbt_api_key,
             'username' => trim($request->username),
             'new_password' => $request->new_password
-        ];
+        ]);
 
         // 4. Eksekusi cURL Remote
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json"]);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json", // Wajib karena pakai json_encode
+            "Accept: application/json"
+        ]);
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -98,13 +103,15 @@ class UserController extends Controller
         if ($httpCode == 200 && isset($res['success']) && $res['success']) {
             // Update UI User
             $order->update([
-                'service_username' => $request->username,
+                'service_username' => trim($request->username),
                 'service_password' => $request->new_password
             ]);
             return back()->with('success', '⚡ MASTER REMOTE SUKSES: ' . $res['message']);
         } else {
-            $errorDetail = $res['message'] ?? "HTTP Code: $httpCode. Pastikan Route API /system/remote-reset-admin aktif di CBT Anda.";
+            // Tangkap pesan error dari CBT atau fallback ke raw response
+            $errorDetail = $res['message'] ?? "HTTP Code: $httpCode. Respons: " . strip_tags($response);
             return back()->withErrors(["⛔ GAGAL: $errorDetail"]);
         }
+    
     }
 }
