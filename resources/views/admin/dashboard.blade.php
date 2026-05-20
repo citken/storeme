@@ -6,8 +6,9 @@
     $cbtCategories = $categories->filter(fn($c) => str_contains(strtolower($c->name), 'cbt'));
     $regCategories = $categories->filter(fn($c) => !str_contains(strtolower($c->name), 'cbt'));
     
+    // FIX NULL: pakai !== 1 bukan === 0, agar NULL ikut masuk reguler
     $cbtProducts = $products->filter(fn($p) => (int)$p->is_cbt_panel === 1);
-    $regProducts = $products->filter(fn($p) => (int)$p->is_cbt_panel === 0);
+    $regProducts = $products->filter(fn($p) => (int)$p->is_cbt_panel !== 1);
 
     $pendingOrdersCount = $orders->where('status', 'pending')->count() + $orders->where('status', 'processing')->count();
     $pendingDepositsCount = $deposits->where('status', 'Pending')->count() + $deposits->where('status', 'Validating')->count();
