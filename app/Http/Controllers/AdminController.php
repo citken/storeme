@@ -17,13 +17,11 @@ class AdminController extends Controller
         $products = Product::with('category')->get();
         $deposits = Deposit::with('user')->latest()->get();
         
-        // Ambil pengaturan fitur CBT global
         $cbt_features = \App\Models\Setting::firstOrCreate(['key' => 'cbt_features'], ['value' => 'Private Server Dedicated. Anti-Cheat Lock Browser.'])->value;
 
         return view('admin.dashboard', compact('orders', 'categories', 'products', 'deposits', 'cbt_features'));
     }
 
-    // Fungsi Baru untuk Save Fitur K-CBT
     public function updateCbtFeatures(Request $request) {
         \App\Models\Setting::updateOrCreate(['key' => 'cbt_features'], ['value' => $request->cbt_features]);
         return redirect()->back()->with('success', 'Deskripsi Fitur Global K-CBT berhasil diperbarui!');
@@ -37,7 +35,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'required|string', // Ini untuk Fitur Global
+            'description' => 'required|string',
             'sort_order' => 'required|integer',
         ]);
 
@@ -61,7 +59,6 @@ class AdminController extends Controller
         $category->update([
             'name' => $request->name,
             'description' => $request->description,
-            // sort_order tidak di-update dari tabel agar form edit tetap ringkas
         ]);
 
         return redirect()->back()->with('success', 'Kategori dan Fitur Utama berhasil diperbarui!');
@@ -77,28 +74,32 @@ class AdminController extends Controller
             'logo_path' => 'nullable|image|max:2048',
         ]);
 
-        $validated['is_cbt_panel'] = $request->has('is_cbt_panel');
+        // FIX: Gunakan value input, bukan has() — has() selalu true meski value="0"
+        $validated['is_cbt_panel'] = (int) $request->input('is_cbt_panel', 0);
         $validated['discount_percent'] = $validated['discount_percent'] ?? 0;
 
         if ($request->hasFile('logo_path')) {
             $validated['logo_path'] = $request->file('logo_path')->store('product_logos', 'public');
         }
+
         Product::create($validated);
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan.');
     }
 
     public function updateProduct(Request $request, Product $product) {
         $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id', // FIX: tambahkan agar kategori tersimpan saat update
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'discount_percent' => 'nullable|numeric|min:0|max:100',
-            'description' => 'required|string', // Tambahkan ini
+            'description' => 'required|string',
         ]);
 
         $validated['discount_percent'] = $validated['discount_percent'] ?? 0;
         $product->update($validated);
         return redirect()->back()->with('success', 'Produk berhasil diupdate.');
     }
+
     public function bulkUpdatePrice(Request $request) {
         $request->validate([
             'amount' => 'required|numeric|min:0',
@@ -131,13 +132,11 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Status & Kredensial Pesanan berhasil diupdate.');
     }
 
-    // --- FITUR BARU: MANAJEMEN DEPOSIT DI ADMIN ---
     public function updateDepositStatus(Request $request, Deposit $deposit) {
         $request->validate([
             'status' => 'required|in:Pending,Validating,Success,Failed'
         ]);
 
-        // Proteksi Ganda: Jika deposit sudah sukses, tidak boleh di-update menjadi sukses lagi
         if ($deposit->status === 'Success' && $request->status === 'Success') {
             return redirect()->back()->withErrors(['Deposit ini sudah berstatus Success dan saldo sudah ditambahkan sebelumnya.']);
         }
@@ -146,14 +145,12 @@ class AdminController extends Controller
             DB::transaction(function () use ($deposit, $request) {
                 $newStatus = $request->status;
 
-                // Jika status diubah menjadi Success, tambahkan saldo ke User
                 if ($newStatus === 'Success' && $deposit->status !== 'Success') {
-                    $user = clone $deposit->user; // Clone agar instance valid
+                    $user = clone $deposit->user;
                     $user->balance += $deposit->amount;
                     $user->save();
                 }
 
-                // Jika status sebelumnya Success tapi Admin mengubahnya ke Failed (Pembatalan paksa), tarik kembali saldonya
                 if ($deposit->status === 'Success' && $newStatus !== 'Success') {
                     $user = clone $deposit->user;
                     $user->balance -= $deposit->amount;
@@ -169,5 +166,4 @@ class AdminController extends Controller
             return redirect()->back()->withErrors(['Gagal memproses deposit: ' . $e->getMessage()]);
         }
     }
-    
 }
