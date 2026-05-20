@@ -1,4 +1,14 @@
 <!-- resources/views/auth/login.blade.php -->
+@php
+    use Illuminate\Support\Facades\Auth;
+
+    // Kalau sudah login langsung redirect
+    if(Auth::check()) {
+        header("Location: " . route('dashboard'));
+        exit;
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -33,11 +43,12 @@
 
     <div class="glass w-full max-w-md rounded-3xl p-8 shadow-2xl text-white">
 
-        <!-- Logo / Title -->
+        <!-- Logo -->
         <div class="text-center mb-8">
             <h1 class="text-4xl font-extrabold tracking-wide">
                 K-Host
             </h1>
+
             <p class="text-gray-200 mt-2 text-sm">
                 Login untuk masuk ke dashboard hosting
             </p>
@@ -50,7 +61,7 @@
             </div>
         @endif
 
-        <!-- Form -->
+        <!-- Form Login -->
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -63,7 +74,6 @@
                 <input
                     type="email"
                     name="email"
-                    id="email"
                     required
                     placeholder="Masukkan email..."
                     class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 placeholder:text-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -79,14 +89,13 @@
                 <input
                     type="password"
                     name="password"
-                    id="password"
                     required
                     placeholder="Masukkan password..."
                     class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 placeholder:text-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
             </div>
 
-            <!-- Login Button -->
+            <!-- Button Login -->
             <button
                 type="submit"
                 class="w-full bg-blue-500 hover:bg-blue-600 transition duration-300 text-white font-bold py-3 rounded-xl shadow-lg"
