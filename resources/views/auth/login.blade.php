@@ -1,13 +1,16 @@
 <!-- resources/views/auth/login.blade.php -->
 @php
     use Illuminate\Support\Facades\Auth;
-@endphp
 
-@if (Auth::check())
-    <script>
-        window.location.href = "{{ url('/home') }}";
-    </script>
-@endif
+    if (Auth::check()) {
+        $target = Auth::user()->role === 'admin'
+            ? route('admin.dashboard')
+            : route('user.dashboard');
+
+        header("Location: " . $target);
+        exit;
+    }
+@endphp
 
 <!DOCTYPE html>
 <html lang="id">
@@ -16,39 +19,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - K-Host</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <style>
-        body {
-            background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
-            background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .glass {
-            backdrop-filter: blur(15px);
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-        }
-    </style>
 </head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center px-4">
 
-<body class="min-h-screen flex items-center justify-center px-4">
-
-    <div class="glass w-full max-w-md rounded-3xl p-8 shadow-2xl text-white">
-
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-extrabold tracking-wide">K-Host</h1>
-            <p class="text-gray-200 mt-2 text-sm">Login untuk masuk ke dashboard hosting</p>
-        </div>
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <h2 class="text-3xl font-bold text-center text-blue-700 mb-2">Login K-Host</h2>
+        <p class="text-center text-gray-500 mb-6">Masuk ke akun kamu</p>
 
         @if($errors->any())
-            <div class="bg-red-500/20 border border-red-400 text-red-100 px-4 py-3 rounded-xl mb-5">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4">
                 {{ $errors->first() }}
             </div>
         @endif
@@ -56,46 +35,44 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <div class="mb-5">
-                <label class="block mb-2 text-sm font-semibold">Email Address</label>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-semibold mb-2" for="email">Email Address</label>
                 <input
+                    id="email"
                     type="email"
                     name="email"
                     required
-                    placeholder="Masukkan email..."
-                    class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 placeholder:text-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    class="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Masukkan email"
                 >
             </div>
 
             <div class="mb-6">
-                <label class="block mb-2 text-sm font-semibold">Password</label>
+                <label class="block text-gray-700 text-sm font-semibold mb-2" for="password">Password</label>
                 <input
+                    id="password"
                     type="password"
                     name="password"
                     required
-                    placeholder="Masukkan password..."
-                    class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 placeholder:text-gray-300 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    class="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Masukkan password"
                 >
             </div>
 
             <button
                 type="submit"
-                class="w-full bg-blue-500 hover:bg-blue-600 transition duration-300 text-white font-bold py-3 rounded-xl shadow-lg"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition"
             >
-                Login Sekarang
+                Login
             </button>
 
-            <div class="text-center mt-6">
-                <p class="text-sm text-gray-200">Belum punya akun?</p>
-                <a
-                    href="{{ route('register') }}"
-                    class="inline-block mt-3 px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition"
-                >
-                    ➜ Daftar / Register
-                </a>
-            </div>
+            <a
+                href="{{ route('register') }}"
+                class="block text-center mt-4 text-blue-600 hover:underline"
+            >
+                Belum punya akun? Register
+            </a>
         </form>
-
     </div>
 
 </body>
