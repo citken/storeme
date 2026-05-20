@@ -98,7 +98,6 @@
 </head>
 <body class="bg-slate-50 font-sans antialiased text-slate-800 overflow-x-hidden">
     
-    <!-- NAVBAR -->
     <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -144,7 +143,6 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <main class="relative bg-slate-950 overflow-hidden min-h-screen flex flex-col justify-center">
         <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-[#0a1628] to-indigo-950/80 z-0"></div>
         <div class="absolute inset-0 grid-pattern z-0 opacity-60"></div>
@@ -182,7 +180,6 @@
                 </a>
             </div>
             
-            <!-- Quick Features -->
             <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="400" class="mt-20 max-w-3xl mx-auto grid grid-cols-3 gap-6">
                 <div class="text-center group cursor-default">
                     <div class="text-3xl md:text-4xl font-black text-white mb-1 group-hover:text-blue-400 transition-colors duration-300">99.9%</div>
@@ -206,7 +203,6 @@
         </div>
     </main>
 
-    <!-- FILTER BAR & PRICELIST -->
     <div id="products" class="relative bg-slate-50">
         <div class="absolute inset-0 dot-grid pointer-events-none opacity-30"></div>
         
@@ -249,7 +245,6 @@
                             @endphp
 
                             @if($product->is_cbt_panel)
-                                <!-- CBT PREMIUM CARD -->
                                 <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="relative bg-gradient-to-b from-[#0c1222] to-[#162032] rounded-[2rem] shadow-2xl border border-slate-700/50 hover:border-orange-500/30 hover:-translate-y-2 transition-all duration-400 flex flex-col overflow-hidden group hover-lift border-gradient cbt-border-gradient">
                                     
                                     <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/8 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none group-hover:bg-orange-500/15 transition-colors duration-500"></div>
@@ -265,8 +260,15 @@
                                         <h3 class="text-3xl font-black text-white mb-6 pr-24 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-300 group-hover:to-rose-300 transition-all duration-400">{{ $product->name }}</h3>
                                         
                                         @php
-                                            // FIX: Ekstrak Spek dengan akurat tanpa menghilangkan teks penting
-                                            $rawSpecs = array_filter(array_map('trim', explode(',', $product->description)));
+                                            // FIX: Brutal Cleanup! Buang semua kata-kata sampah dari admin panel.
+                                            $cleanString = str_ireplace(
+                                                ['Kapasitas Max:', 'Spesifikasi:', 'Bersamaan', 'Kapasitas', 'Max', 'Spesifikasi'], 
+                                                '', 
+                                                $product->description
+                                            );
+                                            
+                                            // Pecah string berdasarkan KOMA (,) ATAU TITIK (.)
+                                            $rawSpecs = array_filter(array_map('trim', preg_split('/[,.]+/', $cleanString)));
                                             $features = array_filter(array_map('trim', explode('.', $category->description ?? '')));
                                             
                                             $badges = [];
@@ -276,14 +278,13 @@
                                                 
                                                 $label = 'SPESIFIKASI'; $icon = '📌'; $color = 'text-slate-300'; $bg = 'bg-slate-800/50 border-slate-700/50';
 
-                                                // Logika Kategori Label yang Jelas
                                                 if(str_contains($lower, 'user') || str_contains($lower, 'peserta')) {
                                                     $label = 'KAPASITAS'; $icon = '👥'; $color = 'text-blue-400'; $bg = 'bg-blue-500/10 border-blue-500/20';
                                                 } elseif(str_contains($lower, 'ram') || str_contains($lower, 'memory')) {
                                                     $label = 'MEMORY'; $icon = '🧠'; $color = 'text-pink-400'; $bg = 'bg-pink-500/10 border-pink-500/20';
                                                 } elseif(str_contains($lower, 'disk') || str_contains($lower, 'nvme') || str_contains($lower, 'ssd') || str_contains($lower, 'storage')) {
                                                     $label = 'STORAGE'; $icon = '💾'; $color = 'text-purple-400'; $bg = 'bg-purple-500/10 border-purple-500/20';
-                                                } elseif(str_contains($lower, 'core') || str_contains($lower, 'cpu')) {
+                                                } elseif(str_contains($lower, 'core') || str_contains($lower, 'cpu') || str_contains($lower, 'vcpu')) {
                                                     $label = 'PROCESSOR'; $icon = '⚡'; $color = 'text-amber-400'; $bg = 'bg-amber-500/10 border-amber-500/20';
                                                 }
 
@@ -291,14 +292,13 @@
                                             }
                                         @endphp
 
-                                        <!-- Badge Grid Keren -->
-                                        <div class="grid grid-cols-2 gap-3 mb-4">
+                                        <div class="grid grid-cols-2 gap-2.5 mb-4">
                                             @foreach($badges as $badge)
-                                                <div class="{{ $badge['bg'] }} border px-3 py-2.5 rounded-xl flex items-center shadow-sm">
-                                                    <span class="text-xl mr-3 drop-shadow-md">{{ $badge['icon'] }}</span>
-                                                    <div class="flex flex-col">
-                                                        <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1.5">{{ $badge['label'] }}</span>
-                                                        <span class="{{ $badge['color'] }} text-[11px] font-black tracking-wide uppercase leading-none">{{ trim($badge['text']) }}</span>
+                                                <div class="{{ $badge['bg'] }} border px-3 py-2.5 rounded-xl flex items-center shadow-sm h-14 overflow-hidden">
+                                                    <span class="text-xl mr-2.5 drop-shadow-md flex-shrink-0">{{ $badge['icon'] }}</span>
+                                                    <div class="flex flex-col justify-center min-w-0">
+                                                        <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1 truncate">{{ $badge['label'] }}</span>
+                                                        <span class="{{ $badge['color'] }} text-[11px] font-black tracking-wide uppercase leading-tight truncate" title="{{ trim($badge['text']) }}">{{ trim($badge['text']) }}</span>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -351,7 +351,6 @@
                                 </div>
 
                             @else
-                                <!-- REGULER HOSTING CARD -->
                                 <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-[2rem] shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 hover:-translate-y-2 transition-all duration-400 flex flex-col relative overflow-hidden group hover-lift border-gradient">
                                     
                                     <div class="absolute top-0 right-0 w-56 h-56 bg-blue-50 rounded-full blur-[40px] -mr-14 -mt-14 pointer-events-none group-hover:bg-blue-100/60 transition-colors duration-500"></div>
@@ -427,7 +426,6 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
     <footer class="relative bg-slate-950 pt-20 pb-10 overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900 to-slate-950 z-0"></div>
         <div class="absolute inset-0 grid-pattern opacity-30 z-0"></div>
