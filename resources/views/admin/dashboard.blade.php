@@ -6,7 +6,6 @@
     $cbtCategories = $categories->filter(fn($c) => str_contains(strtolower($c->name), 'cbt'));
     $regCategories = $categories->filter(fn($c) => !str_contains(strtolower($c->name), 'cbt'));
     
-    // FIX: Cast eksplisit ke int agar string "0" dan "1" dari DB terbaca benar
     $cbtProducts = $products->filter(fn($p) => (int)$p->is_cbt_panel === 1);
     $regProducts = $products->filter(fn($p) => (int)$p->is_cbt_panel === 0);
 
@@ -238,12 +237,16 @@
             </div>
         </div>
 
+        {{-- ============================================================ --}}
+        {{-- VARIAN LAYANAN REGULER - WITH CATEGORY FILTER --}}
+        {{-- ============================================================ --}}
         <div class="bg-white rounded-[2rem] shadow-[0_5px_20px_-5px_rgba(59,130,246,0.1)] border border-blue-100 overflow-hidden flex flex-col">
             <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center">
                 <h3 class="font-black text-slate-800 text-lg">☁️ Varian Layanan Reguler</h3>
                 <span class="text-[10px] font-black bg-blue-100 text-blue-700 px-3 py-1 rounded-full tracking-widest">ALL FEATURES</span>
             </div>
             
+            {{-- FORM TAMBAH PRODUK --}}
             <div class="p-6 bg-slate-50/50 border-b border-slate-100">
                 <form action="{{ route('admin.product.store') }}" method="POST" class="space-y-3">
                     @csrf
@@ -270,12 +273,38 @@
                 </form>
             </div>
 
-            <div class="p-0 overflow-y-auto max-h-[450px] flex-1">
+            {{-- FILTER KATEGORI --}}
+            <div class="px-6 py-4 bg-white border-b border-slate-100">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider mr-1">Filter:</span>
+                    <button onclick="filterRegProducts('all')" data-filter="all"
+                        class="reg-filter-btn active px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-blue-600 text-white border-blue-600">
+                        Semua ({{ $regProducts->count() }})
+                    </button>
+                    @foreach($regCategories as $cat)
+                    <button onclick="filterRegProducts('{{ $cat->id }}')" data-filter="{{ $cat->id }}"
+                        class="reg-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-white text-slate-600 border-slate-200 hover:border-blue-400 hover:text-blue-600">
+                        {{ $cat->name }} ({{ $regProducts->where('category_id', $cat->id)->count() }})
+                    </button>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- LIST PRODUK --}}
+            <div class="p-0 overflow-y-auto max-h-[500px] flex-1">
                 <table class="w-full text-left border-collapse">
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-slate-100" id="reg-products-tbody">
                         @forelse($regProducts as $product)
-                        <tr class="hover:bg-blue-50/40 transition-colors group">
+                        <tr class="hover:bg-blue-50/40 transition-colors group reg-product-row" data-category-id="{{ $product->category_id }}">
                             <td class="p-6">
+                                {{-- BADGE KATEGORI --}}
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 text-blue-700 text-[10px] font-black px-2.5 py-1 rounded-full">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block"></span>
+                                        {{ $product->category->name ?? '-' }}
+                                    </span>
+                                </div>
+
                                 <form action="{{ route('admin.product.update', $product->id) }}" method="POST" class="space-y-3">
                                     @csrf @method('PUT')
                                     
@@ -314,10 +343,16 @@
                             </td>
                         </tr>
                         @empty
-                        <tr><td class="p-10 text-center"><div class="text-4xl mb-2">📭</div><div class="text-sm font-bold text-slate-400">Belum ada Layanan Reguler.</div></td></tr>
+                        <tr id="reg-empty-row"><td class="p-10 text-center"><div class="text-4xl mb-2">📭</div><div class="text-sm font-bold text-slate-400">Belum ada Layanan Reguler.</div></td></tr>
                         @endforelse
                     </tbody>
                 </table>
+
+                {{-- Pesan saat filter kosong --}}
+                <div id="reg-no-result" class="hidden p-10 text-center">
+                    <div class="text-4xl mb-2">🔍</div>
+                    <div class="text-sm font-bold text-slate-400">Tidak ada layanan di kategori ini.</div>
+                </div>
             </div>
         </div>
     </div>
@@ -552,5 +587,45 @@
         </table>
     </div>
 </div>
+
+{{-- ============================================================ --}}
+{{-- JAVASCRIPT FILTER KATEGORI REGULER --}}
+{{-- ============================================================ --}}
+<script>
+function filterRegProducts(categoryId) {
+    const rows = document.querySelectorAll('.reg-product-row');
+    const noResult = document.getElementById('reg-no-result');
+    const buttons = document.querySelectorAll('.reg-filter-btn');
+
+    // Update active button style
+    buttons.forEach(btn => {
+        if (btn.dataset.filter == categoryId) {
+            btn.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+            btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+        } else {
+            btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+            btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+        }
+    });
+
+    // Filter rows
+    let visibleCount = 0;
+    rows.forEach(row => {
+        if (categoryId === 'all' || row.dataset.categoryId == categoryId) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    // Tampilkan pesan kosong jika tidak ada hasil
+    if (visibleCount === 0) {
+        noResult.classList.remove('hidden');
+    } else {
+        noResult.classList.add('hidden');
+    }
+}
+</script>
 
 @endsection
