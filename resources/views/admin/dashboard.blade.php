@@ -3,15 +3,13 @@
 @section('content')
 
 @php
-    // LOGIKA CERDAS K-PROJECTS: Memisahkan Data CBT dan Reguler secara Real-time
     $cbtCategories = $categories->filter(fn($c) => str_contains(strtolower($c->name), 'cbt'));
     $regCategories = $categories->filter(fn($c) => !str_contains(strtolower($c->name), 'cbt'));
     
-    // FIX BUG: Gunakan filter() agar angka 0 dari DB terbaca sebagai false dengan benar
-    $cbtProducts = $products->filter(fn($p) => $p->is_cbt_panel);
-    $regProducts = $products->filter(fn($p) => !$p->is_cbt_panel);
+    // FIX: Cast eksplisit ke int agar string "0" dan "1" dari DB terbaca benar
+    $cbtProducts = $products->filter(fn($p) => (int)$p->is_cbt_panel === 1);
+    $regProducts = $products->filter(fn($p) => (int)$p->is_cbt_panel === 0);
 
-    // Kalkulasi Statistik Cepat untuk Dashboard
     $pendingOrdersCount = $orders->where('status', 'pending')->count() + $orders->where('status', 'processing')->count();
     $pendingDepositsCount = $deposits->where('status', 'Pending')->count() + $deposits->where('status', 'Validating')->count();
 @endphp
