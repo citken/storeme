@@ -64,15 +64,22 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // Dashboard Admin
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     
-    // Manajemen Kategori
+    // ========================================
+    // K-PROJECTS FIX: Manajemen Kategori 
+    // ========================================
     Route::post('/category', [AdminController::class, 'storeCategory'])->name('admin.category.store');
+    Route::put('/category/{id}', [AdminController::class, 'updateCategory'])->name('admin.category.update');
     
+    // ========================================
     // Manajemen Produk & Harga
+    // ========================================
     Route::post('/product', [AdminController::class, 'storeProduct'])->name('admin.product.store');
     Route::put('/product/{product}', [AdminController::class, 'updateProduct'])->name('admin.product.update');
     Route::post('/product/bulk-price', [AdminController::class, 'bulkUpdatePrice'])->name('admin.product.bulk_price');
     
+    // ========================================
     // Manajemen Pesanan & Pengiriman Akses
+    // ========================================
     Route::put('/order/{order}', [AdminController::class, 'updateOrderStatus'])->name('admin.order.update');
     Route::put('/deposit/{deposit}', [AdminController::class, 'updateDepositStatus'])->name('admin.deposit.update');
     Route::post('/settings/cbt', [AdminController::class, 'updateCbtFeatures'])->name('admin.settings.cbt');

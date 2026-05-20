@@ -29,13 +29,42 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Deskripsi Fitur Global K-CBT berhasil diperbarui!');
     }
 
-    public function storeCategory(Request $request) {
-        $validated = $request->validate([
+    // ==========================================================
+    // MANAJEMEN KATEGORI & FITUR GLOBAL
+    // ==========================================================
+    
+    public function storeCategory(Request $request)
+    {
+        $request->validate([
             'name' => 'required|string|max:255',
-            'sort_order' => 'required|integer'
+            'description' => 'required|string', // Ini untuk Fitur Global
+            'sort_order' => 'required|integer',
         ]);
-        Category::create($validated);
-        return redirect()->back()->with('success', 'Kategori berhasil ditambahkan.');
+
+        \App\Models\Category::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'sort_order' => $request->sort_order,
+        ]);
+
+        return redirect()->back()->with('success', 'Kategori dan Fitur Utama berhasil ditambahkan!');
+    }
+
+    public function updateCategory(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+
+        $category = \App\Models\Category::findOrFail($id);
+        $category->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            // sort_order tidak di-update dari tabel agar form edit tetap ringkas
+        ]);
+
+        return redirect()->back()->with('success', 'Kategori dan Fitur Utama berhasil diperbarui!');
     }
 
     public function storeProduct(Request $request) {
@@ -140,4 +169,5 @@ class AdminController extends Controller
             return redirect()->back()->withErrors(['Gagal memproses deposit: ' . $e->getMessage()]);
         }
     }
+    
 }

@@ -8,18 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], },
                     animation: {
                         blob: "blob 12s infinite",
                         float: "float 6s ease-in-out infinite",
@@ -60,147 +56,48 @@
         .animation-delay-4000 { animation-delay: 4s; }
         html { scroll-behavior: smooth; }
 
-        /* GPU acceleration for animated elements */
-        .gpu-accelerate {
-            will-change: transform;
-            transform: translateZ(0);
-        }
-
-        /* Static noise - replaces expensive SVG feTurbulence (same visual at 3% opacity) */
+        .gpu-accelerate { will-change: transform; transform: translateZ(0); }
         .noise-static::before {
-            content: '';
-            position: absolute;
-            inset: 0;
+            content: ''; position: absolute; inset: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 200px 200px;
-            pointer-events: none;
-            z-index: 1;
+            background-repeat: repeat; background-size: 200px 200px; pointer-events: none; z-index: 1;
         }
-
-        /* Grid pattern - lightweight */
         .grid-pattern {
-            background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
             background-size: 60px 60px;
         }
-
-        .glow-text {
-            text-shadow: 0 0 40px rgba(59, 130, 246, 0.25), 0 0 80px rgba(99, 102, 241, 0.1);
-        }
-
-        /* Glass - only used on hero badge, keep backdrop-filter here only */
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        /* Animated border gradient - simplified */
-        .border-gradient {
-            position: relative;
-        }
+        .glow-text { text-shadow: 0 0 40px rgba(59, 130, 246, 0.25), 0 0 80px rgba(99, 102, 241, 0.1); }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .border-gradient { position: relative; }
         .border-gradient::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            padding: 1px;
+            content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
             background: linear-gradient(135deg, rgba(59,130,246,0.4), rgba(99,102,241,0.1), rgba(59,130,246,0.4));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; opacity: 0; transition: opacity 0.4s ease;
         }
-        .border-gradient:hover::before {
-            opacity: 1;
-        }
-        .cbt-border-gradient::before {
-            background: linear-gradient(135deg, rgba(249,115,22,0.5), rgba(244,63,94,0.2), rgba(249,115,22,0.5));
-        }
-
-        .hover-lift {
-            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
-        }
-        .hover-lift:hover {
-            transform: translateY(-6px);
-        }
-
-        .price-shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
-            background-size: 200% 100%;
-            animation: shimmer 3s linear infinite;
-        }
-
-        /* Dot grid - use smaller repeat for less paint */
-        .dot-grid {
-            background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px);
-            background-size: 24px 24px;
-        }
-
+        .border-gradient:hover::before { opacity: 1; }
+        .cbt-border-gradient::before { background: linear-gradient(135deg, rgba(249,115,22,0.5), rgba(244,63,94,0.2), rgba(249,115,22,0.5)); }
+        .hover-lift { transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease; }
+        .hover-lift:hover { transform: translateY(-6px); }
+        .price-shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); background-size: 200% 100%; animation: shimmer 3s linear infinite; }
+        .dot-grid { background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px); background-size: 24px 24px; }
         ::selection { background: rgba(59, 130, 246, 0.3); color: #fff; }
-
-        /* Category filter */
         .cat-filter-btn { transition: all 0.25s ease; }
-        .cat-filter-btn.active {
-            background: linear-gradient(135deg, #3b82f6, #6366f1);
-            color: #fff !important;
-            border-color: transparent;
-            box-shadow: 0 4px 15px -3px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Section filter - GPU accelerated */
-        .category-section {
-            transition: opacity 0.35s ease, transform 0.35s ease;
-            contain: layout style;
-        }
-        .category-section.section-hidden {
-            display: none;
-        }
-        .category-section.section-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Navbar pill */
+        .cat-filter-btn.active { background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff !important; border-color: transparent; box-shadow: 0 4px 15px -3px rgba(59, 130, 246, 0.4); }
+        .category-section { transition: opacity 0.35s ease, transform 0.35s ease; contain: layout style; }
+        .category-section.section-hidden { display: none; }
+        .category-section.section-visible { opacity: 1; transform: translateY(0); }
         .nav-pill { transition: all 0.25s ease; }
-        .nav-pill.active-pill {
-            background: rgba(59, 130, 246, 0.15);
-            color: #60a5fa !important;
-        }
+        .nav-pill.active-pill { background: rgba(59, 130, 246, 0.15); color: #60a5fa !important; }
         .nav-pill.active-pill::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 2px;
-            background: linear-gradient(90deg, #3b82f6, #6366f1);
-            border-radius: 999px;
+            content: ''; position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%); width: 60%; height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #6366f1); border-radius: 999px;
         }
-
-        /* Filter bar - solid bg instead of backdrop-filter */
-        .filter-bar-solid {
-            background: rgba(248, 250, 252, 0.97);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-        }
-
-        /* Navbar scrolled */
-        .nav-scrolled {
-            background: rgba(2, 6, 23, 0.92) !important;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
+        .filter-bar-solid { background: rgba(248, 250, 252, 0.97); border-bottom: 1px solid rgba(226, 232, 240, 0.8); }
+        .nav-scrolled { background: rgba(2, 6, 23, 0.92) !important; border-bottom: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
     </style>
 </head>
 <body class="bg-slate-50 font-sans antialiased text-slate-800 overflow-x-hidden">
     
-    <!-- Navigation -->
     <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -246,32 +143,27 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <main class="relative bg-slate-950 overflow-hidden min-h-screen flex flex-col justify-center">
         <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-[#0a1628] to-indigo-950/80 z-0"></div>
         <div class="absolute inset-0 grid-pattern z-0 opacity-60"></div>
         <div class="absolute inset-0 noise-static z-0"></div>
         
-        <!-- Blobs - optimized: smaller blur, no mix-blend, GPU accelerated -->
         <div class="gpu-accelerate absolute top-1/4 -left-20 w-[400px] h-[400px] bg-blue-600/25 rounded-full filter blur-[64px] animate-blob z-0"></div>
         <div class="gpu-accelerate absolute top-1/3 -right-20 w-[350px] h-[350px] bg-indigo-500/25 rounded-full filter blur-[64px] animate-blob animation-delay-2000 z-0"></div>
         <div class="gpu-accelerate absolute -bottom-20 left-1/3 w-[380px] h-[380px] bg-violet-600/20 rounded-full filter blur-[64px] animate-blob animation-delay-4000 z-0"></div>
         
-        <!-- Floating dots - GPU accelerated -->
         <div class="gpu-accelerate absolute top-20 left-[10%] w-2 h-2 bg-blue-400/40 rounded-full animate-float" style="animation-delay: 0s;"></div>
         <div class="gpu-accelerate absolute top-40 right-[15%] w-1.5 h-1.5 bg-indigo-400/30 rounded-full animate-float" style="animation-delay: 1s;"></div>
         <div class="gpu-accelerate absolute top-[60%] left-[8%] w-1 h-1 bg-violet-400/40 rounded-full animate-float" style="animation-delay: 2s;"></div>
         <div class="gpu-accelerate absolute top-[30%] right-[5%] w-2.5 h-2.5 bg-cyan-400/20 rounded-full animate-float" style="animation-delay: 3s;"></div>
         <div class="gpu-accelerate absolute bottom-[20%] right-[25%] w-1.5 h-1.5 bg-blue-300/30 rounded-full animate-float" style="animation-delay: 1.5s;"></div>
         
-        <!-- Orbiting rings - static, no animation cost -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] lg:w-[800px] lg:h-[800px] opacity-[0.03] pointer-events-none z-0">
             <div class="absolute inset-0 rounded-full border border-blue-400/50"></div>
             <div class="absolute inset-8 rounded-full border border-indigo-400/30"></div>
             <div class="absolute inset-16 rounded-full border border-violet-400/20"></div>
         </div>
 
-        <!-- Hero content -->
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-44 text-center z-10 w-full">
             <div data-aos="zoom-in" data-aos-duration="600" class="inline-flex items-center px-5 py-2.5 rounded-full glass text-blue-200 text-xs sm:text-sm font-semibold mb-10 animate-float">
                 <span class="relative flex h-2.5 w-2.5 mr-3">
@@ -287,7 +179,7 @@
             </h1>
             
             <p data-aos="fade-up" data-aos-duration="800" data-aos-delay="200" class="mt-8 max-w-2xl mx-auto text-lg md:text-xl text-slate-400 font-normal leading-relaxed">
-                Tingkatkan skala aplikasi Anda dengan Server High-Performance. Sewa panel K-CBT Premium dengan kontrol API penuh, atau bangun infrastruktur tanpa batas di atas Cloud Hosting CyberPanel kami.
+                Tingkatkan skala aplikasi Anda dengan Server High-Performance. Sewa panel K-CBT Premium dengan kontrol API penuh, atau bangun infrastruktur tanpa batas di atas Cloud Hosting kami.
             </p>
             
             <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="300" class="mt-14 flex flex-col sm:flex-row justify-center gap-4">
@@ -298,15 +190,8 @@
                     </span>
                     <div class="absolute inset-0 price-shimmer"></div>
                 </a>
-                <a href="{{ route('login') }}" class="group inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white/80 rounded-2xl border border-white/10 hover:border-white/25 hover:bg-white/5 hover:text-white hover:-translate-y-1 transition-all duration-300">
-                    <span class="flex items-center">
-                        Client Area
-                        <svg class="w-4 h-4 ml-2 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </span>
-                </a>
             </div>
             
-            <!-- Stats -->
             <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="400" class="mt-20 max-w-3xl mx-auto grid grid-cols-3 gap-6">
                 <div class="text-center group cursor-default">
                     <div class="text-3xl md:text-4xl font-black text-white mb-1 group-hover:text-blue-400 transition-colors duration-300">99.9%</div>
@@ -330,15 +215,13 @@
         </div>
     </main>
 
-    <!-- Product Sections -->
     <div id="products" class="relative bg-slate-50">
         <div class="absolute inset-0 dot-grid pointer-events-none opacity-30"></div>
         
-        <!-- Sticky Category Filter Bar - solid bg, no backdrop-filter -->
         <div id="filterBar" class="sticky top-16 z-40 filter-bar-solid transition-all duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2 overflow-x-auto pb-0.5">
+                    <div class="flex items-center space-x-2 overflow-x-auto pb-0.5 scrollbar-hide">
                         <button data-category="all" class="cat-filter-btn active whitespace-nowrap inline-flex items-center px-4 py-2 text-[12px] font-bold rounded-full border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-300 bg-white transition-all duration-300">
                             <svg class="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                             Semua
@@ -349,17 +232,13 @@
                             </button>
                         @endforeach
                     </div>
-                    <div class="hidden sm:flex items-center text-[11px] text-slate-400 font-medium ml-4 flex-shrink-0">
-                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                        Filter kategori
-                    </div>
                 </div>
             </div>
         </div>
         
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 z-10">
             @foreach($categories as $category)
-                <section id="kategori-{{ $category->id }}" data-section-category="{{ $category->id }}" class="category-section section-visible pt-20 mb-20 scroll-mt-36">
+                <section id="kategori-{{ $category->id }}" data-section-category="{{ $category->id }}" class="category-section section-visible pt-10 mb-24 scroll-mt-36">
                     
                     <div class="text-center mb-14" data-aos="fade-up" data-aos-duration="600">
                         <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold mb-5 uppercase tracking-widest">
@@ -367,7 +246,6 @@
                             {{ $category->name }}
                         </div>
                         <h2 class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight mb-4">{{ $category->name }}</h2>
-                        <p class="text-slate-500 font-medium max-w-xl mx-auto text-lg">Pilih spesifikasi yang paling sesuai dengan kebutuhan skala project Anda.</p>
                         <div class="w-20 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mt-6 rounded-full"></div>
                     </div>
 
@@ -379,162 +257,62 @@
                             @endphp
 
                             @if($product->is_cbt_panel)
-                                <!-- K-CBT Premium Card -->
-                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="relative bg-gradient-to-b from-[#0c1222] to-[#162032] rounded-3xl shadow-2xl border border-slate-700/50 hover:border-orange-500/30 hover:-translate-y-2 transition-all duration-400 flex flex-col overflow-hidden group hover-lift border-gradient cbt-border-gradient">
+                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="relative bg-gradient-to-b from-[#0c1222] to-[#162032] rounded-[2rem] shadow-2xl border border-slate-700/50 hover:border-orange-500/30 hover:-translate-y-2 transition-all duration-400 flex flex-col overflow-hidden group hover-lift border-gradient cbt-border-gradient">
                                     
-                                    <!-- Card glow - reduced blur -->
-                                    <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/8 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none group-hover:bg-orange-500/12 transition-colors duration-500"></div>
-                                    <div class="absolute bottom-0 left-0 w-48 h-48 bg-rose-500/5 rounded-full blur-[40px] -ml-8 -mb-8 pointer-events-none group-hover:bg-rose-500/8 transition-colors duration-500"></div>
+                                    <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/8 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none group-hover:bg-orange-500/15 transition-colors duration-500"></div>
+                                    <div class="absolute bottom-0 left-0 w-48 h-48 bg-rose-500/5 rounded-full blur-[40px] -ml-8 -mb-8 pointer-events-none group-hover:bg-rose-500/10 transition-colors duration-500"></div>
 
                                     <div class="absolute top-0 right-0 z-20">
-                                        <div class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[10px] font-black px-5 py-2.5 rounded-bl-2xl uppercase tracking-[0.15em] shadow-lg flex items-center shadow-orange-500/25">
+                                        <div class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[10px] font-black px-5 py-2.5 rounded-bl-[1.5rem] uppercase tracking-[0.15em] shadow-lg flex items-center shadow-orange-500/25">
                                             <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                                             K-CBT Premium
                                         </div>
                                     </div>
 
                                     <div class="p-8 pb-0 relative z-10">
-                                        <h3 class="text-2xl font-black text-white mb-5 pr-24 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-300 group-hover:to-rose-300 transition-all duration-400">{{ $product->name }}</h3>
+                                        <h3 class="text-3xl font-black text-white mb-6 pr-24 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-300 group-hover:to-rose-300 transition-all duration-400">{{ $product->name }}</h3>
                                         
                                         @php
-                                            $rawSpecs = array_filter(array_map('trim', preg_split('/[,.]+/', $product->description)));
-                                            $features = array_filter(array_map('trim', explode('.', $cbt_features ?? '')));
+                                            // 1. Ekstrak Spek dari Input Hardware
+                                            $desc = $product->description;
+                                            preg_match_all('/(\d+\s*(User|GB|Core|NVMe|TB|MB|RAM|Disk))/i', $desc, $specMatches);
+                                            $specs = $specMatches[0];
+                                            
+                                            // 2. Ekstrak Fitur dari Kategori Induk
+                                            $features = array_filter(array_map('trim', explode('.', $category->description ?? '')));
                                             
                                             $badges = [];
-                                            foreach($rawSpecs as $spec) {
-                                                $cleanSpec = str_ireplace(['Kapasitas Max:', 'Spesifikasi:', 'Bersamaan'], '', $spec);
-                                                $cleanSpec = trim($cleanSpec);
-                                                if(empty($cleanSpec)) continue;
-                                                $lower = strtolower($cleanSpec);
-                                                
-                                                if(str_contains($lower, 'user')) {
-                                                    $badges[] = ['icon' => '👥', 'text' => $cleanSpec, 'color' => 'text-blue-300', 'bg' => 'bg-blue-500/10 border-blue-400/20'];
-                                                } elseif(str_contains($lower, 'ram')) {
-                                                    $badges[] = ['icon' => '🧠', 'text' => $cleanSpec, 'color' => 'text-pink-300', 'bg' => 'bg-pink-500/10 border-pink-400/20'];
-                                                } elseif(str_contains($lower, 'disk') || str_contains($lower, 'nvme')) {
-                                                    $badges[] = ['icon' => '💾', 'text' => $cleanSpec, 'color' => 'text-purple-300', 'bg' => 'bg-purple-500/10 border-purple-400/20'];
-                                                } elseif(str_contains($lower, 'core') || str_contains($lower, 'cpu')) {
-                                                    $badges[] = ['icon' => '⚡', 'text' => $cleanSpec, 'color' => 'text-amber-300', 'bg' => 'bg-amber-500/10 border-amber-400/20'];
-                                                } elseif(strlen($cleanSpec) < 30) { 
-                                                    $badges[] = ['icon' => '✨', 'text' => $cleanSpec, 'color' => 'text-slate-300', 'bg' => 'bg-slate-600/20 border-slate-500/30'];
-                                                }
+                                            foreach($specs as $spec) {
+                                                $lower = strtolower($spec);
+                                                if(str_contains($lower, 'user')) $badges[] = ['icon' => '👥', 'text' => $spec, 'color' => 'text-blue-300', 'bg' => 'bg-blue-500/10 border-blue-400/20'];
+                                                elseif(str_contains($lower, 'ram')) $badges[] = ['icon' => '🧠', 'text' => $spec, 'color' => 'text-pink-300', 'bg' => 'bg-pink-500/10 border-pink-400/20'];
+                                                elseif(str_contains($lower, 'disk') || str_contains($lower, 'nvme')) $badges[] = ['icon' => '💾', 'text' => $spec, 'color' => 'text-purple-300', 'bg' => 'bg-purple-500/10 border-purple-400/20'];
+                                                elseif(str_contains($lower, 'core') || str_contains($lower, 'cpu')) $badges[] = ['icon' => '⚡', 'text' => $spec, 'color' => 'text-amber-300', 'bg' => 'bg-amber-500/10 border-amber-400/20'];
+                                                else $badges[] = ['icon' => '✨', 'text' => $spec, 'color' => 'text-slate-300', 'bg' => 'bg-slate-600/20 border-slate-500/30'];
                                             }
                                         @endphp
 
                                         <div class="flex flex-wrap gap-2 mb-2">
                                             @foreach($badges as $badge)
-                                                <div class="{{ $badge['bg'] }} border px-3 py-1.5 rounded-lg flex items-center hover:-translate-y-0.5 transition-all duration-300 cursor-default">
+                                                <div class="{{ $badge['bg'] }} border px-3.5 py-1.5 rounded-lg flex items-center shadow-sm">
                                                     <span class="text-sm mr-1.5">{{ $badge['icon'] }}</span>
-                                                    <span class="{{ $badge['color'] }} text-[10px] font-bold tracking-wide uppercase">{{ $badge['text'] }}</span>
+                                                    <span class="{{ $badge['color'] }} text-[10px] font-bold tracking-wide uppercase">{{ trim($badge['text']) }}</span>
                                                 </div>
                                             @endforeach
-                                        </div>
-                                    </div>
-
-                                    <div class="p-8 pt-4 flex-1 relative z-10">
-                                        <div class="h-px w-full bg-gradient-to-r from-orange-500/20 via-slate-600/50 to-transparent mb-5"></div>
-                                        <ul class="space-y-3">
-                                            @foreach($features as $feature)
-                                                <li class="flex items-start text-sm text-slate-400 font-medium group/item">
-                                                    <div class="flex-shrink-0 w-5 h-5 rounded-md bg-orange-500/10 flex items-center justify-center mr-3 border border-orange-500/15 group-hover/item:bg-orange-500 group-hover/item:border-orange-500 transition-all duration-300">
-                                                        <svg class="h-3 w-3 text-orange-400 group-hover/item:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                                                    </div>
-                                                    <span class="group-hover/item:text-white transition-colors duration-300">{{ trim($feature) }}</span>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-
-                                    <div class="p-8 pt-0 mt-auto relative z-10">
-                                        <!-- Price box - solid bg, no backdrop-filter -->
-                                        <div class="bg-slate-900/70 rounded-2xl p-5 mb-5 border border-slate-700/40 group-hover:border-slate-600/60 transition-colors duration-400">
-                                            
-                                            <div class="flex justify-between items-center mb-2">
-                                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Investasi Tahunan</span>
-                                                @if($product->discount_percent > 0)
-                                                    <span class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[9px] px-2.5 py-0.5 rounded-md font-black uppercase tracking-wider shadow-sm">Save {{ $product->discount_percent }}%</span>
-                                                @endif
-                                            </div>
-                                            
-                                            @if($product->discount_percent > 0)
-                                                <div class="mb-1">
-                                                    <span class="relative inline-block text-sm font-bold text-slate-600">
-                                                        Rp {{ number_format($product->price, 0, ',', '.') }}
-                                                        <span class="absolute left-0 top-1/2 w-full h-[2px] bg-orange-500/70 -translate-y-1/2 rounded-full"></span>
-                                                    </span>
-                                                </div>
-                                            @endif
-
-                                            <div class="flex items-baseline text-white">
-                                                <span class="text-xl font-bold mr-1">Rp</span>
-                                                <span class="text-4xl font-black tracking-tight">{{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                <span class="text-sm font-semibold text-slate-500 ml-2">/thn</span>
-                                            </div>
-                                        </div>
-                                        <form action="{{ route('user.buy', $product->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-400 hover:to-rose-500 text-white font-bold py-4 rounded-2xl shadow-[0_8px_25px_-8px_rgba(249,115,22,0.4)] hover:shadow-[0_10px_35px_-8px_rgba(249,115,22,0.6)] hover:-translate-y-0.5 transition-all duration-300 text-sm uppercase tracking-wider">
-                                                Deploy K-CBT Sekarang
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-
-                            @else
-                                <!-- Regular Cloud Card -->
-                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-3xl shadow-lg border border-slate-100 hover:border-blue-200 hover:-translate-y-2 transition-all duration-400 flex flex-col relative overflow-hidden group hover-lift border-gradient">
-                                    
-                                    <!-- Card glow - reduced blur -->
-                                    <div class="absolute top-0 right-0 w-56 h-56 bg-blue-50 rounded-full blur-[40px] -mr-14 -mt-14 pointer-events-none group-hover:bg-blue-100/60 transition-colors duration-500"></div>
-
-                                    <div class="p-8 border-b border-slate-100/80 relative z-10">
-                                        <h3 class="text-2xl font-black text-slate-900 mb-1 group-hover:text-blue-600 transition-colors duration-300">{{ $product->name }}</h3>
-                                        
-                                        @if($loop->index % 3 === 1)
-                                            <div class="inline-flex items-center mt-2 px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider">
-                                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path></svg>
-                                                Populer
-                                            </div>
-                                        @endif
-                                        
-                                        <div class="mt-5">
-                                            @if($product->discount_percent > 0)
-                                                <div class="flex flex-col">
-                                                    <div class="flex flex-wrap items-center gap-2 mb-2">
-                                                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-sm">
-                                                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path></svg>
-                                                            <span class="text-[10px] uppercase font-black tracking-wider">Hemat {{ $product->discount_percent }}%</span>
-                                                        </span>
-                                                        <span class="relative inline-block text-sm font-bold text-slate-400">
-                                                            Rp {{ number_format($product->price, 0, ',', '.') }}
-                                                            <span class="absolute left-0 top-1/2 w-full h-[2px] bg-rose-400 -translate-y-1/2 rounded-full"></span>
-                                                        </span>
-                                                    </div>
-                                                    <div class="flex items-baseline text-slate-900">
-                                                        <span class="text-xl font-bold mr-1">Rp</span>
-                                                        <span class="text-4xl font-black tracking-tight">{{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                        <span class="text-sm font-semibold text-slate-400 ml-2">/bln</span>
-                                                    </div>
-                                                </div>
-                                            @else
-                                                <div class="flex items-baseline text-slate-900">
-                                                    <span class="text-xl font-bold mr-1">Rp</span>
-                                                    <span class="text-4xl font-black tracking-tight">{{ number_format($product->price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-400 ml-2">/bln</span>
-                                                </div>
-                                            @endif
                                         </div>
                                     </div>
 
                                     <div class="p-8 pt-6 flex-1 relative z-10">
-                                        <ul class="space-y-3">
-                                            @foreach(explode('.', $product->description) as $descLine)
-                                                @if(trim($descLine) != '')
-                                                    <li class="flex items-start text-sm text-slate-600 font-medium group/item">
-                                                        <div class="flex-shrink-0 w-5 h-5 rounded-md bg-blue-50 flex items-center justify-center mr-3 group-hover/item:bg-blue-500 transition-all duration-300">
-                                                            <svg class="h-3 w-3 text-blue-500 group-hover/item:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                        <div class="h-px w-full bg-gradient-to-r from-orange-500/20 via-slate-600/50 to-transparent mb-5"></div>
+                                        <ul class="space-y-3.5">
+                                            @foreach($features as $feature)
+                                                @php $f = trim($feature); @endphp
+                                                @if(strlen($f) > 5 && !preg_match('/(User|GB|Core|NVMe|RAM|Disk)/i', $f))
+                                                    <li class="flex items-start text-sm text-slate-300 font-medium group/item">
+                                                        <div class="flex-shrink-0 w-5 h-5 rounded-md bg-orange-500/10 flex items-center justify-center mr-3 border border-orange-500/20 group-hover/item:bg-orange-500 group-hover/item:border-orange-500 transition-all duration-300">
+                                                            <svg class="h-3 w-3 text-orange-400 group-hover/item:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                                                         </div>
-                                                        <span class="group-hover/item:text-slate-900 transition-colors">{{ trim($descLine) }}</span>
+                                                        <span class="group-hover/item:text-white transition-colors duration-300 leading-snug">{{ $f }}</span>
                                                     </li>
                                                 @endif
                                             @endforeach
@@ -542,8 +320,87 @@
                                     </div>
 
                                     <div class="p-8 pt-0 mt-auto relative z-10">
-                                        <a href="{{ route('login') }}" class="block w-full bg-slate-50 border-2 border-slate-200 text-slate-700 hover:bg-slate-900 hover:border-slate-900 hover:text-white font-bold py-4 px-4 rounded-2xl text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 text-sm uppercase tracking-wider">
-                                            Pilih Paket Cloud
+                                        <div class="bg-slate-900/60 rounded-2xl p-5 mb-5 border border-slate-700/50 group-hover:border-slate-600/80 transition-colors duration-400">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">Investasi Tahunan</span>
+                                                @if($product->discount_percent > 0)
+                                                    <span class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[9px] px-2.5 py-0.5 rounded-md font-black uppercase tracking-wider shadow-sm">Save {{ $product->discount_percent }}%</span>
+                                                @endif
+                                            </div>
+                                            @if($product->discount_percent > 0)
+                                                <div class="mb-1">
+                                                    <span class="relative inline-block text-sm font-bold text-slate-500">
+                                                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                                                        <span class="absolute left-0 top-1/2 w-full h-[2px] bg-orange-500/70 -translate-y-1/2 rounded-full"></span>
+                                                    </span>
+                                                </div>
+                                            @endif
+                                            <div class="flex items-baseline text-white">
+                                                <span class="text-xl font-bold mr-1">Rp</span>
+                                                <span class="text-4xl font-black tracking-tight">{{ number_format($product->final_price, 0, ',', '.') }}</span>
+                                                <span class="text-sm font-semibold text-slate-500 ml-2">/thn</span>
+                                            </div>
+                                        </div>
+                                        <a href="{{ route('login') }}" class="block w-full bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-400 hover:to-rose-500 text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(249,115,22,0.4)] hover:shadow-[0_10px_35px_-8px_rgba(249,115,22,0.6)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide">
+                                            Deploy K-CBT
+                                        </a>
+                                    </div>
+                                </div>
+
+                            @else
+                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-[2rem] shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 hover:-translate-y-2 transition-all duration-400 flex flex-col relative overflow-hidden group hover-lift border-gradient">
+                                    
+                                    <div class="absolute top-0 right-0 w-56 h-56 bg-blue-50 rounded-full blur-[40px] -mr-14 -mt-14 pointer-events-none group-hover:bg-blue-100/60 transition-colors duration-500"></div>
+
+                                    <div class="p-8 border-b border-slate-100/80 relative z-10 bg-slate-50/50 group-hover:bg-blue-50/40 transition-colors">
+                                        <h3 class="text-2xl font-black text-slate-900 mb-1 group-hover:text-blue-600 transition-colors duration-300">{{ $product->name }}</h3>
+                                        
+                                        @if($product->discount_percent > 0)
+                                            <div class="mt-4 flex flex-col">
+                                                <div class="flex items-center gap-2 mb-1">
+                                                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-600 text-[10px] font-black uppercase tracking-wider">Hemat {{ $product->discount_percent }}%</span>
+                                                    <span class="relative inline-block text-sm font-bold text-slate-400">
+                                                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                                                        <span class="absolute left-0 top-1/2 w-full h-[1.5px] bg-rose-400 -translate-y-1/2"></span>
+                                                    </span>
+                                                </div>
+                                                <div class="flex items-baseline text-slate-900">
+                                                    <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->final_price, 0, ',', '.') }}</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/bln</span>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="flex items-baseline mt-4 text-slate-900">
+                                                <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                                                <span class="text-sm font-semibold text-slate-500 ml-1">/bln</span>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="p-8 flex-1 relative z-10">
+                                        @php
+                                            // Gabungkan spesifikasi produk dan fitur kategori untuk hosting reguler
+                                            $prodSpecs = array_filter(array_map('trim', explode('.', $product->description)));
+                                            $catFeatures = array_filter(array_map('trim', explode('.', $category->description ?? '')));
+                                            $allRegFeatures = array_merge($prodSpecs, $catFeatures);
+                                        @endphp
+                                        <ul class="space-y-3.5">
+                                            @foreach($allRegFeatures as $descLine)
+                                                @if(strlen(trim($descLine)) > 2)
+                                                    <li class="flex items-start text-sm text-slate-600 font-medium group/item">
+                                                        <div class="flex-shrink-0 w-5 h-5 rounded-md bg-blue-50 flex items-center justify-center mr-3 group-hover/item:bg-blue-500 transition-all duration-300">
+                                                            <svg class="h-3 w-3 text-blue-500 group-hover/item:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                                        </div>
+                                                        <span class="group-hover/item:text-slate-900 transition-colors leading-snug">{{ trim($descLine) }}</span>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </div>
+
+                                    <div class="p-8 pt-0 mt-auto relative z-10">
+                                        <a href="{{ route('login') }}" class="block w-full bg-slate-900 hover:bg-blue-600 text-white font-black py-4 rounded-xl text-center shadow-lg transition-all duration-300 transform hover:-translate-y-1 text-sm uppercase tracking-wide">
+                                            Pilih Cloud Ini
                                         </a>
                                     </div>
                                 </div>
@@ -553,14 +410,12 @@
                     </div>
 
                     @if($products->where('category_id', $category->id)->count() == 0)
-                        <div class="text-center text-slate-400 py-20 bg-white border border-slate-100 rounded-3xl" data-aos="fade-up">
-                            <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
-                                <svg class="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                                </svg>
+                        <div class="text-center text-slate-400 py-20 bg-white border border-slate-100 rounded-[2rem]" data-aos="fade-up">
+                            <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-inner">
+                                <svg class="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
                             </div>
-                            <h3 class="text-lg font-bold text-slate-900 mb-1">Belum ada paket</h3>
-                            <p class="text-sm text-slate-500">Paket di kategori ini akan segera tersedia.</p>
+                            <h3 class="text-lg font-bold text-slate-900 mb-1">Katalog Kosong</h3>
+                            <p class="text-sm text-slate-500">Layanan di kategori ini sedang dipersiapkan oleh tim kami.</p>
                         </div>
                     @endif
 
@@ -569,7 +424,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="relative bg-slate-950 pt-20 pb-10 overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900 to-slate-950 z-0"></div>
         <div class="absolute inset-0 grid-pattern opacity-30 z-0"></div>
@@ -590,7 +444,7 @@
                 </div>
                 
                 <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
-                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-5">Layanan</h4>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-5">Layanan Kami</h4>
                     <ul class="space-y-3">
                         @foreach($categories as $category)
                             <li>
@@ -604,19 +458,15 @@
                 </div>
                 
                 <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
-                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-5">Informasi</h4>
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-5">Dukungan Teknis</h4>
                     <ul class="space-y-3">
                         <li class="flex items-center text-sm text-slate-400">
-                            <svg class="w-4 h-4 mr-2.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            support@k-host.id
+                            <svg class="w-4 h-4 mr-2.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z"></path></svg>
+                            admin@k-projects.com
                         </li>
                         <li class="flex items-center text-sm text-slate-400">
                             <svg class="w-4 h-4 mr-2.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             Response time &lt; 30 menit
-                        </li>
-                        <li class="flex items-center text-sm text-slate-400">
-                            <svg class="w-4 h-4 mr-2.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                            99.9% Uptime Guarantee
                         </li>
                     </ul>
                 </div>
@@ -636,29 +486,15 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // AOS - once:true is the #1 perf fix for scroll pages
-        AOS.init({
-            once: true,
-            offset: 60,
-            duration: 600,
-            easing: 'ease-out-cubic',
-            disable: function() { return window.innerWidth < 768; }
-        });
+        AOS.init({ once: true, offset: 60, duration: 600, easing: 'ease-out-cubic', disable: function() { return window.innerWidth < 768; } });
 
-        // ========================
-        // NAVBAR SCROLL - THROTTLED
-        // ========================
         const nav = document.getElementById('mainNav');
         let ticking = false;
-
         function onScroll() {
             if (!ticking) {
                 requestAnimationFrame(() => {
-                    if (window.scrollY > 80) {
-                        nav.classList.add('nav-scrolled');
-                    } else {
-                        nav.classList.remove('nav-scrolled');
-                    }
+                    if (window.scrollY > 80) nav.classList.add('nav-scrolled');
+                    else nav.classList.remove('nav-scrolled');
                     ticking = false;
                 });
                 ticking = true;
@@ -666,23 +502,11 @@
         }
         window.addEventListener('scroll', onScroll, { passive: true });
 
-        // ========================
-        // MOBILE MENU
-        // ========================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-        });
-
-        // ========================
-        // CATEGORY FILTER SYSTEM
-        // ========================
         const allSections = document.querySelectorAll('.category-section');
         const filterBtns = document.querySelectorAll('.cat-filter-btn');
         const navPills = document.querySelectorAll('.cat-nav-link');
@@ -691,103 +515,60 @@
 
         function filterCategories(categoryId) {
             activeCategory = categoryId;
-
-            filterBtns.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.category === categoryId);
-            });
-
-            navPills.forEach(pill => {
-                pill.classList.toggle('active-pill', pill.dataset.category === categoryId);
-            });
-
+            filterBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.category === categoryId));
+            navPills.forEach(pill => pill.classList.toggle('active-pill', pill.dataset.category === categoryId));
             mobileNavLinks.forEach(link => {
-                if (link.dataset.category === categoryId) {
-                    link.classList.remove('text-white/70');
-                    link.classList.add('text-blue-400');
-                } else {
-                    link.classList.remove('text-blue-400');
-                    link.classList.add('text-white/70');
-                }
+                if (link.dataset.category === categoryId) { link.classList.remove('text-white/70'); link.classList.add('text-blue-400'); }
+                else { link.classList.remove('text-blue-400'); link.classList.add('text-white/70'); }
             });
 
-            // Simple show/hide - no max-height animation (much faster)
             allSections.forEach(section => {
                 const sectionCat = section.dataset.sectionCategory;
                 if (categoryId === 'all' || sectionCat === categoryId) {
-                    section.classList.remove('section-hidden');
-                    section.classList.add('section-visible');
+                    section.classList.remove('section-hidden'); section.classList.add('section-visible');
                 } else {
-                    section.classList.remove('section-visible');
-                    section.classList.add('section-hidden');
+                    section.classList.remove('section-visible'); section.classList.add('section-hidden');
                 }
             });
         }
 
-        // Filter bar click
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                const catId = btn.dataset.category;
-                filterCategories(catId);
-                if (catId === 'all') {
-                    document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                    const target = document.getElementById('kategori-' + catId);
-                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                const catId = btn.dataset.category; filterCategories(catId);
+                if (catId === 'all') document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                else { const target = document.getElementById('kategori-' + catId); if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
             });
         });
 
-        // Navbar pill click
         navPills.forEach(pill => {
             pill.addEventListener('click', (e) => {
-                e.preventDefault();
-                const catId = pill.dataset.category;
-                filterCategories(catId);
-                if (catId === 'all') {
-                    document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                    const target = document.getElementById('kategori-' + catId);
-                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                e.preventDefault(); const catId = pill.dataset.category; filterCategories(catId);
+                if (catId === 'all') document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                else { const target = document.getElementById('kategori-' + catId); if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
             });
         });
 
-        // Mobile nav click
         mobileNavLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const catId = link.dataset.category;
-                filterCategories(catId);
-                mobileMenu.classList.add('hidden');
-                if (catId === 'all') {
-                    document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                    const target = document.getElementById('kategori-' + catId);
-                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                e.preventDefault(); const catId = link.dataset.category; filterCategories(catId); mobileMenu.classList.add('hidden');
+                if (catId === 'all') document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                else { const target = document.getElementById('kategori-' + catId); if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
             });
         });
 
-        // Logo -> show all
         document.getElementById('navLogo').addEventListener('click', (e) => {
-            e.preventDefault();
-            filterCategories('all');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            e.preventDefault(); filterCategories('all'); window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Scroll spy - throttled with IntersectionObserver (no scroll listener)
         const observerOptions = { root: null, rootMargin: '-30% 0px -60% 0px', threshold: 0 };
         const scrollObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && activeCategory === 'all') {
                     const catId = entry.target.dataset.sectionCategory;
-                    navPills.forEach(pill => {
-                        pill.classList.toggle('active-pill', pill.dataset.category === catId);
-                    });
+                    navPills.forEach(pill => pill.classList.toggle('active-pill', pill.dataset.category === catId));
                 }
             });
         }, observerOptions);
-
         allSections.forEach(section => scrollObserver.observe(section));
     </script>
 </body>
