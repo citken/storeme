@@ -7,8 +7,10 @@
     $cbtCategories = $categories->filter(fn($c) => str_contains(strtolower($c->name), 'cbt'));
     $regCategories = $categories->filter(fn($c) => !str_contains(strtolower($c->name), 'cbt'));
     
-    $cbtProducts = $products->where('is_cbt_panel', true);
-    $regProducts = $products->where('is_cbt_panel', false);
+    // FIX BUG: Gunakan filter() agar angka 0 dari DB terbaca sebagai false dengan benar
+    $cbtProducts = $products->filter(fn($p) => $p->is_cbt_panel);
+    $regProducts = $products->filter(fn($p) => !$p->is_cbt_panel);
+
 
     // K-AI FIX: Kalkulasi Statistik Cepat untuk Dashboard
     $pendingOrdersCount = $orders->where('status', 'pending')->count() + $orders->where('status', 'processing')->count();

@@ -98,6 +98,7 @@
 </head>
 <body class="bg-slate-50 font-sans antialiased text-slate-800 overflow-x-hidden">
     
+    <!-- NAVBAR -->
     <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -143,6 +144,7 @@
         </div>
     </nav>
 
+    <!-- HERO SECTION -->
     <main class="relative bg-slate-950 overflow-hidden min-h-screen flex flex-col justify-center">
         <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-[#0a1628] to-indigo-950/80 z-0"></div>
         <div class="absolute inset-0 grid-pattern z-0 opacity-60"></div>
@@ -152,18 +154,6 @@
         <div class="gpu-accelerate absolute top-1/3 -right-20 w-[350px] h-[350px] bg-indigo-500/25 rounded-full filter blur-[64px] animate-blob animation-delay-2000 z-0"></div>
         <div class="gpu-accelerate absolute -bottom-20 left-1/3 w-[380px] h-[380px] bg-violet-600/20 rounded-full filter blur-[64px] animate-blob animation-delay-4000 z-0"></div>
         
-        <div class="gpu-accelerate absolute top-20 left-[10%] w-2 h-2 bg-blue-400/40 rounded-full animate-float" style="animation-delay: 0s;"></div>
-        <div class="gpu-accelerate absolute top-40 right-[15%] w-1.5 h-1.5 bg-indigo-400/30 rounded-full animate-float" style="animation-delay: 1s;"></div>
-        <div class="gpu-accelerate absolute top-[60%] left-[8%] w-1 h-1 bg-violet-400/40 rounded-full animate-float" style="animation-delay: 2s;"></div>
-        <div class="gpu-accelerate absolute top-[30%] right-[5%] w-2.5 h-2.5 bg-cyan-400/20 rounded-full animate-float" style="animation-delay: 3s;"></div>
-        <div class="gpu-accelerate absolute bottom-[20%] right-[25%] w-1.5 h-1.5 bg-blue-300/30 rounded-full animate-float" style="animation-delay: 1.5s;"></div>
-        
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] lg:w-[800px] lg:h-[800px] opacity-[0.03] pointer-events-none z-0">
-            <div class="absolute inset-0 rounded-full border border-blue-400/50"></div>
-            <div class="absolute inset-8 rounded-full border border-indigo-400/30"></div>
-            <div class="absolute inset-16 rounded-full border border-violet-400/20"></div>
-        </div>
-
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-44 text-center z-10 w-full">
             <div data-aos="zoom-in" data-aos-duration="600" class="inline-flex items-center px-5 py-2.5 rounded-full glass text-blue-200 text-xs sm:text-sm font-semibold mb-10 animate-float">
                 <span class="relative flex h-2.5 w-2.5 mr-3">
@@ -179,10 +169,10 @@
             </h1>
             
             <p data-aos="fade-up" data-aos-duration="800" data-aos-delay="200" class="mt-8 max-w-2xl mx-auto text-lg md:text-xl text-slate-400 font-normal leading-relaxed">
-                Tingkatkan skala aplikasi Anda dengan Server High-Performance. Sewa panel K-CBT Premium dengan kontrol API penuh, atau bangun infrastruktur tanpa batas di atas Cloud Hosting kami.
+                Tingkatkan skala aplikasi Anda dengan Server High-Performance. Sewa panel K-CBT Premium dengan kontrol API penuh, atau bangun infrastruktur di atas Cloud Hosting kami.
             </p>
             
-            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="300" class="mt-14 flex flex-col sm:flex-row justify-center gap-4">
+            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="300" class="mt-14 flex justify-center">
                 <a href="#products" class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl hover:from-blue-500 hover:to-indigo-500 shadow-[0_0_30px_-8px_rgba(59,130,246,0.5)] hover:shadow-[0_0_45px_-8px_rgba(59,130,246,0.7)] hover:-translate-y-1 overflow-hidden transition-all duration-300">
                     <span class="relative z-10 flex items-center">
                         Eksplorasi Layanan
@@ -192,6 +182,7 @@
                 </a>
             </div>
             
+            <!-- Quick Features -->
             <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="400" class="mt-20 max-w-3xl mx-auto grid grid-cols-3 gap-6">
                 <div class="text-center group cursor-default">
                     <div class="text-3xl md:text-4xl font-black text-white mb-1 group-hover:text-blue-400 transition-colors duration-300">99.9%</div>
@@ -215,6 +206,7 @@
         </div>
     </main>
 
+    <!-- FILTER BAR & PRICELIST -->
     <div id="products" class="relative bg-slate-50">
         <div class="absolute inset-0 dot-grid pointer-events-none opacity-30"></div>
         
@@ -257,10 +249,10 @@
                             @endphp
 
                             @if($product->is_cbt_panel)
+                                <!-- CBT PREMIUM CARD -->
                                 <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="relative bg-gradient-to-b from-[#0c1222] to-[#162032] rounded-[2rem] shadow-2xl border border-slate-700/50 hover:border-orange-500/30 hover:-translate-y-2 transition-all duration-400 flex flex-col overflow-hidden group hover-lift border-gradient cbt-border-gradient">
                                     
                                     <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/8 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none group-hover:bg-orange-500/15 transition-colors duration-500"></div>
-                                    <div class="absolute bottom-0 left-0 w-48 h-48 bg-rose-500/5 rounded-full blur-[40px] -ml-8 -mb-8 pointer-events-none group-hover:bg-rose-500/10 transition-colors duration-500"></div>
 
                                     <div class="absolute top-0 right-0 z-20">
                                         <div class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[10px] font-black px-5 py-2.5 rounded-bl-[1.5rem] uppercase tracking-[0.15em] shadow-lg flex items-center shadow-orange-500/25">
@@ -273,46 +265,57 @@
                                         <h3 class="text-3xl font-black text-white mb-6 pr-24 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-300 group-hover:to-rose-300 transition-all duration-400">{{ $product->name }}</h3>
                                         
                                         @php
-                                            // 1. Ekstrak Spek dari Input Hardware
-                                            $desc = $product->description;
-                                            preg_match_all('/(\d+\s*(User|GB|Core|NVMe|TB|MB|RAM|Disk))/i', $desc, $specMatches);
-                                            $specs = $specMatches[0];
-                                            
-                                            // 2. Ekstrak Fitur dari Kategori Induk
+                                            // FIX: Ekstrak Spek dengan akurat tanpa menghilangkan teks penting
+                                            $rawSpecs = array_filter(array_map('trim', explode(',', $product->description)));
                                             $features = array_filter(array_map('trim', explode('.', $category->description ?? '')));
                                             
                                             $badges = [];
-                                            foreach($specs as $spec) {
+                                            foreach($rawSpecs as $spec) {
+                                                if(empty($spec)) continue;
                                                 $lower = strtolower($spec);
-                                                if(str_contains($lower, 'user')) $badges[] = ['icon' => '👥', 'text' => $spec, 'color' => 'text-blue-300', 'bg' => 'bg-blue-500/10 border-blue-400/20'];
-                                                elseif(str_contains($lower, 'ram')) $badges[] = ['icon' => '🧠', 'text' => $spec, 'color' => 'text-pink-300', 'bg' => 'bg-pink-500/10 border-pink-400/20'];
-                                                elseif(str_contains($lower, 'disk') || str_contains($lower, 'nvme')) $badges[] = ['icon' => '💾', 'text' => $spec, 'color' => 'text-purple-300', 'bg' => 'bg-purple-500/10 border-purple-400/20'];
-                                                elseif(str_contains($lower, 'core') || str_contains($lower, 'cpu')) $badges[] = ['icon' => '⚡', 'text' => $spec, 'color' => 'text-amber-300', 'bg' => 'bg-amber-500/10 border-amber-400/20'];
-                                                else $badges[] = ['icon' => '✨', 'text' => $spec, 'color' => 'text-slate-300', 'bg' => 'bg-slate-600/20 border-slate-500/30'];
+                                                
+                                                $label = 'SPESIFIKASI'; $icon = '📌'; $color = 'text-slate-300'; $bg = 'bg-slate-800/50 border-slate-700/50';
+
+                                                // Logika Kategori Label yang Jelas
+                                                if(str_contains($lower, 'user') || str_contains($lower, 'peserta')) {
+                                                    $label = 'KAPASITAS'; $icon = '👥'; $color = 'text-blue-400'; $bg = 'bg-blue-500/10 border-blue-500/20';
+                                                } elseif(str_contains($lower, 'ram') || str_contains($lower, 'memory')) {
+                                                    $label = 'MEMORY'; $icon = '🧠'; $color = 'text-pink-400'; $bg = 'bg-pink-500/10 border-pink-500/20';
+                                                } elseif(str_contains($lower, 'disk') || str_contains($lower, 'nvme') || str_contains($lower, 'ssd') || str_contains($lower, 'storage')) {
+                                                    $label = 'STORAGE'; $icon = '💾'; $color = 'text-purple-400'; $bg = 'bg-purple-500/10 border-purple-500/20';
+                                                } elseif(str_contains($lower, 'core') || str_contains($lower, 'cpu')) {
+                                                    $label = 'PROCESSOR'; $icon = '⚡'; $color = 'text-amber-400'; $bg = 'bg-amber-500/10 border-amber-500/20';
+                                                }
+
+                                                $badges[] = [ 'label' => $label, 'icon' => $icon, 'text' => $spec, 'color' => $color, 'bg' => $bg ];
                                             }
                                         @endphp
 
-                                        <div class="flex flex-wrap gap-2 mb-2">
+                                        <!-- Badge Grid Keren -->
+                                        <div class="grid grid-cols-2 gap-3 mb-4">
                                             @foreach($badges as $badge)
-                                                <div class="{{ $badge['bg'] }} border px-3.5 py-1.5 rounded-lg flex items-center shadow-sm">
-                                                    <span class="text-sm mr-1.5">{{ $badge['icon'] }}</span>
-                                                    <span class="{{ $badge['color'] }} text-[10px] font-bold tracking-wide uppercase">{{ trim($badge['text']) }}</span>
+                                                <div class="{{ $badge['bg'] }} border px-3 py-2.5 rounded-xl flex items-center shadow-sm">
+                                                    <span class="text-xl mr-3 drop-shadow-md">{{ $badge['icon'] }}</span>
+                                                    <div class="flex flex-col">
+                                                        <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1.5">{{ $badge['label'] }}</span>
+                                                        <span class="{{ $badge['color'] }} text-[11px] font-black tracking-wide uppercase leading-none">{{ trim($badge['text']) }}</span>
+                                                    </div>
                                                 </div>
                                             @endforeach
                                         </div>
                                     </div>
 
-                                    <div class="p-8 pt-6 flex-1 relative z-10">
-                                        <div class="h-px w-full bg-gradient-to-r from-orange-500/20 via-slate-600/50 to-transparent mb-5"></div>
+                                    <div class="p-8 pt-4 flex-1 relative z-10">
+                                        <div class="h-px w-full bg-gradient-to-r from-orange-500/20 via-slate-700/50 to-transparent mb-5"></div>
                                         <ul class="space-y-3.5">
                                             @foreach($features as $feature)
                                                 @php $f = trim($feature); @endphp
-                                                @if(strlen($f) > 5 && !preg_match('/(User|GB|Core|NVMe|RAM|Disk)/i', $f))
-                                                    <li class="flex items-start text-sm text-slate-300 font-medium group/item">
+                                                @if(strlen($f) > 5)
+                                                    <li class="flex items-start text-sm text-slate-400 font-medium group/item">
                                                         <div class="flex-shrink-0 w-5 h-5 rounded-md bg-orange-500/10 flex items-center justify-center mr-3 border border-orange-500/20 group-hover/item:bg-orange-500 group-hover/item:border-orange-500 transition-all duration-300">
                                                             <svg class="h-3 w-3 text-orange-400 group-hover/item:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                                                         </div>
-                                                        <span class="group-hover/item:text-white transition-colors duration-300 leading-snug">{{ $f }}</span>
+                                                        <span class="group-hover/item:text-slate-200 transition-colors duration-300 leading-snug">{{ $f }}</span>
                                                     </li>
                                                 @endif
                                             @endforeach
@@ -322,7 +325,7 @@
                                     <div class="p-8 pt-0 mt-auto relative z-10">
                                         <div class="bg-slate-900/60 rounded-2xl p-5 mb-5 border border-slate-700/50 group-hover:border-slate-600/80 transition-colors duration-400">
                                             <div class="flex justify-between items-center mb-2">
-                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">Investasi Tahunan</span>
+                                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.15em]">Investasi Tahunan</span>
                                                 @if($product->discount_percent > 0)
                                                     <span class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[9px] px-2.5 py-0.5 rounded-md font-black uppercase tracking-wider shadow-sm">Save {{ $product->discount_percent }}%</span>
                                                 @endif
@@ -348,6 +351,7 @@
                                 </div>
 
                             @else
+                                <!-- REGULER HOSTING CARD -->
                                 <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-[2rem] shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 hover:-translate-y-2 transition-all duration-400 flex flex-col relative overflow-hidden group hover-lift border-gradient">
                                     
                                     <div class="absolute top-0 right-0 w-56 h-56 bg-blue-50 rounded-full blur-[40px] -mr-14 -mt-14 pointer-events-none group-hover:bg-blue-100/60 transition-colors duration-500"></div>
@@ -379,7 +383,6 @@
 
                                     <div class="p-8 flex-1 relative z-10">
                                         @php
-                                            // Gabungkan spesifikasi produk dan fitur kategori untuk hosting reguler
                                             $prodSpecs = array_filter(array_map('trim', explode('.', $product->description)));
                                             $catFeatures = array_filter(array_map('trim', explode('.', $category->description ?? '')));
                                             $allRegFeatures = array_merge($prodSpecs, $catFeatures);
@@ -424,6 +427,7 @@
         </div>
     </div>
 
+    <!-- FOOTER -->
     <footer class="relative bg-slate-950 pt-20 pb-10 overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900 to-slate-950 z-0"></div>
         <div class="absolute inset-0 grid-pattern opacity-30 z-0"></div>
