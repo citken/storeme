@@ -1,13 +1,13 @@
 <!-- resources/views/auth/login.blade.php -->
 @php
     use Illuminate\Support\Facades\Auth;
-
-    // Kalau sudah login langsung redirect
-    if(Auth::check()) {
-        header("Location: " . route('dashboard'));
-        exit;
-    }
 @endphp
+
+@if (Auth::check())
+    <script>
+        window.location.href = "{{ url('/home') }}";
+    </script>
+@endif
 
 <!DOCTYPE html>
 <html lang="id">
@@ -15,7 +15,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - K-Host</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
@@ -43,34 +42,22 @@
 
     <div class="glass w-full max-w-md rounded-3xl p-8 shadow-2xl text-white">
 
-        <!-- Logo -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-extrabold tracking-wide">
-                K-Host
-            </h1>
-
-            <p class="text-gray-200 mt-2 text-sm">
-                Login untuk masuk ke dashboard hosting
-            </p>
+            <h1 class="text-4xl font-extrabold tracking-wide">K-Host</h1>
+            <p class="text-gray-200 mt-2 text-sm">Login untuk masuk ke dashboard hosting</p>
         </div>
 
-        <!-- Error -->
         @if($errors->any())
             <div class="bg-red-500/20 border border-red-400 text-red-100 px-4 py-3 rounded-xl mb-5">
                 {{ $errors->first() }}
             </div>
         @endif
 
-        <!-- Form Login -->
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <!-- Email -->
             <div class="mb-5">
-                <label class="block mb-2 text-sm font-semibold">
-                    Email Address
-                </label>
-
+                <label class="block mb-2 text-sm font-semibold">Email Address</label>
                 <input
                     type="email"
                     name="email"
@@ -80,12 +67,8 @@
                 >
             </div>
 
-            <!-- Password -->
             <div class="mb-6">
-                <label class="block mb-2 text-sm font-semibold">
-                    Password
-                </label>
-
+                <label class="block mb-2 text-sm font-semibold">Password</label>
                 <input
                     type="password"
                     name="password"
@@ -95,7 +78,6 @@
                 >
             </div>
 
-            <!-- Button Login -->
             <button
                 type="submit"
                 class="w-full bg-blue-500 hover:bg-blue-600 transition duration-300 text-white font-bold py-3 rounded-xl shadow-lg"
@@ -103,12 +85,8 @@
                 Login Sekarang
             </button>
 
-            <!-- Register -->
             <div class="text-center mt-6">
-                <p class="text-sm text-gray-200">
-                    Belum punya akun?
-                </p>
-
+                <p class="text-sm text-gray-200">Belum punya akun?</p>
                 <a
                     href="{{ route('register') }}"
                     class="inline-block mt-3 px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition"
