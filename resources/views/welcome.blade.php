@@ -21,6 +21,7 @@
                         float: "float 6s ease-in-out infinite",
                         shimmer: "shimmer 2.5s linear infinite",
                         gradientShift: "gradientShift 8s ease infinite",
+                        waPulse: "waPulse 2s infinite",
                     },
                     keyframes: {
                         blob: {
@@ -41,6 +42,11 @@
                             "0%, 100%": { backgroundPosition: "0% 50%" },
                             "50%": { backgroundPosition: "100% 50%" },
                         },
+                        waPulse: {
+                            "0%": { boxShadow: "0 0 0 0 rgba(37, 211, 102, 0.7)" },
+                            "70%": { boxShadow: "0 0 0 15px rgba(37, 211, 102, 0)" },
+                            "100%": { boxShadow: "0 0 0 0 rgba(37, 211, 102, 0)" },
+                        }
                     }
                 }
             }
@@ -94,10 +100,74 @@
         }
         .filter-bar-solid { background: rgba(248, 250, 252, 0.97); border-bottom: 1px solid rgba(226, 232, 240, 0.8); }
         .nav-scrolled { background: rgba(2, 6, 23, 0.92) !important; border-bottom: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+
+        /* Floating WA Button Styles */
+        .wa-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+        }
+        .wa-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: #25d366;
+            color: #fff;
+            border-radius: 50%;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .wa-button:hover {
+            background-color: #128C7E;
+            transform: scale(1.05);
+        }
+        .wa-tooltip {
+            position: absolute;
+            right: 75px;
+            background-color: white;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(20px);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        .wa-float:hover .wa-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        .wa-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -6px;
+            transform: translateY(-50%);
+            border-width: 6px 0 6px 6px;
+            border-color: transparent transparent transparent white;
+        }
     </style>
 </head>
-<body class="bg-slate-50 font-sans antialiased text-slate-800 overflow-x-hidden">
+<body class="bg-slate-50 font-sans antialiased text-slate-800 overflow-x-hidden relative">
     
+    <a href="https://wa.me/6288277512080?text=Halo%20Admin%20K-Host,%20saya%20ingin%20bertanya%20seputar%20layanan%20Cloud/CBT." target="_blank" class="wa-float group">
+        <div class="wa-tooltip">Halo! Butuh bantuan?</div>
+        <div class="wa-button animate-waPulse">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+            </svg>
+        </div>
+    </a>
+
     <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -260,62 +330,44 @@
                                         <h3 class="text-3xl font-black text-white mb-6 pr-24 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-orange-300 group-hover:to-rose-300 transition-all duration-400">{{ $product->name }}</h3>
                                         
                                         @php
-                                            // FIX: Brutal Cleanup! Buang semua kata-kata sampah dari admin panel.
-                                            $cleanString = str_ireplace(
-                                                ['Kapasitas Max:', 'Spesifikasi:', 'Bersamaan', 'Kapasitas', 'Max', 'Spesifikasi'], 
-                                                '', 
-                                                $product->description
-                                            );
+                                            $desc = $product->description;
+                                            preg_match_all('/(\d+\s*(User|GB|Core|NVMe|TB|MB|RAM|Disk))/i', $desc, $specMatches);
+                                            $specs = $specMatches[0];
                                             
-                                            // Pecah string berdasarkan KOMA (,) ATAU TITIK (.)
-                                            $rawSpecs = array_filter(array_map('trim', preg_split('/[,.]+/', $cleanString)));
                                             $features = array_filter(array_map('trim', explode('.', $category->description ?? '')));
                                             
                                             $badges = [];
-                                            foreach($rawSpecs as $spec) {
-                                                if(empty($spec)) continue;
+                                            foreach($specs as $spec) {
                                                 $lower = strtolower($spec);
-                                                
-                                                $label = 'SPESIFIKASI'; $icon = '📌'; $color = 'text-slate-300'; $bg = 'bg-slate-800/50 border-slate-700/50';
-
-                                                if(str_contains($lower, 'user') || str_contains($lower, 'peserta')) {
-                                                    $label = 'KAPASITAS'; $icon = '👥'; $color = 'text-blue-400'; $bg = 'bg-blue-500/10 border-blue-500/20';
-                                                } elseif(str_contains($lower, 'ram') || str_contains($lower, 'memory')) {
-                                                    $label = 'MEMORY'; $icon = '🧠'; $color = 'text-pink-400'; $bg = 'bg-pink-500/10 border-pink-500/20';
-                                                } elseif(str_contains($lower, 'disk') || str_contains($lower, 'nvme') || str_contains($lower, 'ssd') || str_contains($lower, 'storage')) {
-                                                    $label = 'STORAGE'; $icon = '💾'; $color = 'text-purple-400'; $bg = 'bg-purple-500/10 border-purple-500/20';
-                                                } elseif(str_contains($lower, 'core') || str_contains($lower, 'cpu') || str_contains($lower, 'vcpu')) {
-                                                    $label = 'PROCESSOR'; $icon = '⚡'; $color = 'text-amber-400'; $bg = 'bg-amber-500/10 border-amber-500/20';
-                                                }
-
-                                                $badges[] = [ 'label' => $label, 'icon' => $icon, 'text' => $spec, 'color' => $color, 'bg' => $bg ];
+                                                if(str_contains($lower, 'user')) $badges[] = ['icon' => '👥', 'text' => $spec, 'color' => 'text-blue-300', 'bg' => 'bg-blue-500/10 border-blue-400/20'];
+                                                elseif(str_contains($lower, 'ram')) $badges[] = ['icon' => '🧠', 'text' => $spec, 'color' => 'text-pink-300', 'bg' => 'bg-pink-500/10 border-pink-400/20'];
+                                                elseif(str_contains($lower, 'disk') || str_contains($lower, 'nvme')) $badges[] = ['icon' => '💾', 'text' => $spec, 'color' => 'text-purple-300', 'bg' => 'bg-purple-500/10 border-purple-400/20'];
+                                                elseif(str_contains($lower, 'core') || str_contains($lower, 'cpu')) $badges[] = ['icon' => '⚡', 'text' => $spec, 'color' => 'text-amber-300', 'bg' => 'bg-amber-500/10 border-amber-400/20'];
+                                                else $badges[] = ['icon' => '✨', 'text' => $spec, 'color' => 'text-slate-300', 'bg' => 'bg-slate-600/20 border-slate-500/30'];
                                             }
                                         @endphp
 
-                                        <div class="grid grid-cols-2 gap-2.5 mb-4">
+                                        <div class="flex flex-wrap gap-2 mb-2">
                                             @foreach($badges as $badge)
-                                                <div class="{{ $badge['bg'] }} border px-3 py-2.5 rounded-xl flex items-center shadow-sm h-14 overflow-hidden">
-                                                    <span class="text-xl mr-2.5 drop-shadow-md flex-shrink-0">{{ $badge['icon'] }}</span>
-                                                    <div class="flex flex-col justify-center min-w-0">
-                                                        <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1 truncate">{{ $badge['label'] }}</span>
-                                                        <span class="{{ $badge['color'] }} text-[11px] font-black tracking-wide uppercase leading-tight truncate" title="{{ trim($badge['text']) }}">{{ trim($badge['text']) }}</span>
-                                                    </div>
+                                                <div class="{{ $badge['bg'] }} border px-3.5 py-1.5 rounded-lg flex items-center shadow-sm">
+                                                    <span class="text-sm mr-1.5">{{ $badge['icon'] }}</span>
+                                                    <span class="{{ $badge['color'] }} text-[10px] font-bold tracking-wide uppercase">{{ trim($badge['text']) }}</span>
                                                 </div>
                                             @endforeach
                                         </div>
                                     </div>
 
-                                    <div class="p-8 pt-4 flex-1 relative z-10">
-                                        <div class="h-px w-full bg-gradient-to-r from-orange-500/20 via-slate-700/50 to-transparent mb-5"></div>
+                                    <div class="p-8 pt-6 flex-1 relative z-10">
+                                        <div class="h-px w-full bg-gradient-to-r from-orange-500/20 via-slate-600/50 to-transparent mb-5"></div>
                                         <ul class="space-y-3.5">
                                             @foreach($features as $feature)
                                                 @php $f = trim($feature); @endphp
-                                                @if(strlen($f) > 5)
-                                                    <li class="flex items-start text-sm text-slate-400 font-medium group/item">
+                                                @if(strlen($f) > 5 && !preg_match('/(User|GB|Core|NVMe|RAM|Disk)/i', $f))
+                                                    <li class="flex items-start text-sm text-slate-300 font-medium group/item">
                                                         <div class="flex-shrink-0 w-5 h-5 rounded-md bg-orange-500/10 flex items-center justify-center mr-3 border border-orange-500/20 group-hover/item:bg-orange-500 group-hover/item:border-orange-500 transition-all duration-300">
                                                             <svg class="h-3 w-3 text-orange-400 group-hover/item:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                                                         </div>
-                                                        <span class="group-hover/item:text-slate-200 transition-colors duration-300 leading-snug">{{ $f }}</span>
+                                                        <span class="group-hover/item:text-white transition-colors duration-300 leading-snug">{{ $f }}</span>
                                                     </li>
                                                 @endif
                                             @endforeach
@@ -325,7 +377,7 @@
                                     <div class="p-8 pt-0 mt-auto relative z-10">
                                         <div class="bg-slate-900/60 rounded-2xl p-5 mb-5 border border-slate-700/50 group-hover:border-slate-600/80 transition-colors duration-400">
                                             <div class="flex justify-between items-center mb-2">
-                                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.15em]">Investasi Tahunan</span>
+                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">Investasi Tahunan</span>
                                                 @if($product->discount_percent > 0)
                                                     <span class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[9px] px-2.5 py-0.5 rounded-md font-black uppercase tracking-wider shadow-sm">Save {{ $product->discount_percent }}%</span>
                                                 @endif
