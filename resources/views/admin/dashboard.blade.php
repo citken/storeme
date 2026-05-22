@@ -84,12 +84,20 @@
                         @forelse($cbtCategories as $category)
                         <tr class="hover:bg-orange-50/40 transition-colors group">
                             <td class="p-6">
-                                <form action="{{ route('admin.category.update', $category->id) }}" method="POST" class="flex flex-col gap-3">
-                                    @csrf @method('PUT')
-                                    <input type="text" name="name" value="{{ $category->name }}" class="bg-white border border-slate-200 group-hover:border-orange-300 rounded-lg px-4 py-2 text-sm font-black text-slate-800 focus:ring-2 focus:ring-orange-500 outline-none" required>
-                                    <textarea name="description" rows="3" class="bg-white border border-slate-200 group-hover:border-orange-300 rounded-lg px-4 py-2 text-xs text-slate-600 focus:ring-2 focus:ring-orange-500 outline-none resize-y min-h-[70px]" required>{{ $category->description }}</textarea>
-                                    <button type="submit" class="bg-slate-800 text-white w-full sm:w-auto self-end px-6 py-2 rounded-lg text-xs font-bold hover:bg-orange-500 transition-all shadow-sm">Simpan Update</button>
-                                </form>
+                                <div class="flex items-end gap-2">
+                                    <form action="{{ route('admin.category.update', $category->id) }}" method="POST" class="flex-1 flex flex-col gap-3">
+                                        @csrf @method('PUT')
+                                        <input type="text" name="name" value="{{ $category->name }}" class="bg-white border border-slate-200 group-hover:border-orange-300 rounded-lg px-4 py-2 text-sm font-black text-slate-800 focus:ring-2 focus:ring-orange-500 outline-none" required>
+                                        <textarea name="description" rows="3" class="bg-white border border-slate-200 group-hover:border-orange-300 rounded-lg px-4 py-2 text-xs text-slate-600 focus:ring-2 focus:ring-orange-500 outline-none resize-y min-h-[70px]" required>{{ $category->description }}</textarea>
+                                        <button type="submit" class="bg-slate-800 text-white w-full sm:w-auto self-end px-6 py-2 rounded-lg text-xs font-bold hover:bg-orange-500 transition-all shadow-sm">Simpan Update</button>
+                                    </form>
+                                    <form action="{{ route('admin.category.delete', $category->id) }}" method="POST" onsubmit="return confirm('PERINGATAN! Yakin ingin menghapus kategori ini secara permanen?');">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="bg-rose-100 hover:bg-rose-600 text-rose-600 hover:text-white px-3 py-2 rounded-lg transition-colors" title="Hapus Kategori">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -118,16 +126,11 @@
                             @endforeach
                         </select>
                         <input type="text" name="name" placeholder="Nama Paket (Starter/Pro)" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm" required>
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">Rp</span>
-                            <input type="number" name="price" placeholder="Harga/Thn" class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm font-black text-blue-700 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm" required>
-                        </div>
+                        <input type="number" name="price" placeholder="Harga/Thn (Isi 0 = Hubungi Kami)" class="bg-white border border-orange-300 rounded-xl px-4 py-2.5 text-sm font-black text-blue-700 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm" required>
                     </div>
                     <div class="flex flex-col md:flex-row gap-3 items-stretch">
-                        <textarea name="description" rows="2" placeholder="Spek (Pisahkan dgn Koma: 100 User, 2GB RAM, 2 Core vCPU)" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm resize-y" required></textarea>
-                        <button type="submit" class="bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black px-6 py-2.5 rounded-xl shadow-[0_5px_15px_rgba(249,115,22,0.4)] hover:shadow-[0_8px_20px_rgba(249,115,22,0.6)] hover:-translate-y-0.5 transition-all shrink-0 h-auto sm:h-full">
-                            + PAKET CBT
-                        </button>
+                        <textarea name="description" rows="2" placeholder="Spek (Pisahkan dgn Koma: 100 User, 2GB RAM)" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm resize-y" required></textarea>
+                        <button type="submit" class="bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black px-6 py-2.5 rounded-xl hover:-translate-y-0.5 transition-all shrink-0">+ PAKET</button>
                     </div>
                 </form>
             </div>
@@ -138,41 +141,46 @@
                         @forelse($cbtProducts as $product)
                         <tr class="hover:bg-orange-50/40 transition-colors group">
                             <td class="p-6">
-                                <form action="{{ route('admin.product.update', $product->id) }}" method="POST" class="space-y-3">
-                                    @csrf @method('PUT')
+                                <div class="flex items-end gap-2">
+                                    <form action="{{ route('admin.product.update', $product->id) }}" method="POST" class="flex-1 space-y-3">
+                                        @csrf @method('PUT')
+                                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                                            <div class="col-span-12 md:col-span-4">
+                                                <select name="category_id" class="bg-white border border-slate-200 rounded-lg px-3 py-2 w-full text-xs font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 outline-none" required>
+                                                    @foreach($cbtCategories as $category)
+                                                        <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-span-12 md:col-span-8">
+                                                <input type="text" name="name" value="{{ $product->name }}" class="bg-white border border-slate-200 rounded-lg px-3 py-2 w-full text-sm font-black text-slate-800 outline-none" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                                            <div class="col-span-6 md:col-span-8 relative">
+                                                <label class="text-[9px] font-bold text-orange-600 uppercase mb-1 block">Harga (Isi 0 untuk "Hubungi Kami")</label>
+                                                <input type="number" name="price" value="{{ $product->price }}" class="bg-white border border-orange-200 rounded-lg px-3 py-2 w-full text-sm font-mono font-bold text-slate-700 outline-none" required>
+                                            </div>
+                                            <div class="col-span-6 md:col-span-4">
+                                                <label class="text-[9px] font-bold text-slate-400 uppercase mb-1 block">Diskon (%)</label>
+                                                <input type="number" name="discount_percent" value="{{ $product->discount_percent }}" class="bg-white border border-slate-200 rounded-lg px-3 py-2 w-full text-sm text-center font-bold text-rose-500 outline-none">
+                                            </div>
+                                        </div>
+
+                                        <div class="flex flex-col gap-2">
+                                            <textarea name="description" rows="2" class="bg-white border border-slate-200 rounded-lg px-4 py-2 w-full text-xs font-medium text-slate-700 outline-none resize-y min-h-[50px]" required>{{ $product->description }}</textarea>
+                                            <button type="submit" class="bg-slate-800 text-white self-end px-6 py-2 rounded-lg text-xs font-bold hover:bg-orange-500 transition-all">Simpan Update</button>
+                                        </div>
+                                    </form>
                                     
-                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-                                        <div class="col-span-12 md:col-span-4">
-                                            <label class="text-[10px] text-slate-400 font-bold uppercase mb-1 block">Kategori / Lokasi</label>
-                                            <select name="category_id" class="bg-white border border-slate-200 group-hover:border-orange-300 rounded-lg px-3 py-2 w-full text-xs font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 outline-none" required>
-                                                @foreach($cbtCategories as $category)
-                                                    <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-span-12 md:col-span-8">
-                                            <label class="text-[10px] text-slate-400 font-bold uppercase mb-1 block">Nama Paket</label>
-                                            <input type="text" name="name" value="{{ $product->name }}" class="bg-white border border-slate-200 group-hover:border-orange-300 rounded-lg px-3 py-2 w-full text-sm font-black text-slate-800 focus:ring-2 focus:ring-orange-500 outline-none" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-                                        <div class="col-span-6 md:col-span-8 relative">
-                                            <label class="text-[10px] text-slate-400 font-bold uppercase mb-1 block">Harga (Rp)</label>
-                                            <input type="number" name="price" value="{{ $product->price }}" class="bg-white border border-slate-200 group-hover:border-orange-300 rounded-lg px-3 py-2 w-full text-sm font-mono font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 outline-none" required>
-                                        </div>
-                                        <div class="col-span-6 md:col-span-4">
-                                            <label class="text-[10px] text-slate-400 font-bold uppercase mb-1 block">Diskon (%)</label>
-                                            <input type="number" name="discount_percent" value="{{ $product->discount_percent }}" class="bg-white border border-slate-200 group-hover:border-orange-300 rounded-lg px-3 py-2 w-full text-sm text-center font-bold text-rose-500 focus:ring-2 focus:ring-orange-500 outline-none">
-                                        </div>
-                                    </div>
-
-                                    <div class="flex flex-col gap-2">
-                                        <label class="text-[10px] text-slate-400 font-bold uppercase block">Spesifikasi Hardware (Pisahkan dg Koma)</label>
-                                        <textarea name="description" rows="3" class="bg-white border border-slate-200 group-hover:border-orange-300 rounded-lg px-4 py-2 w-full text-xs font-medium text-slate-700 focus:ring-2 focus:ring-orange-500 outline-none resize-y min-h-[70px]" required>{{ $product->description }}</textarea>
-                                        <button type="submit" class="bg-slate-800 text-white self-end px-6 py-2 rounded-lg text-xs font-bold hover:bg-orange-500 transition-all shadow-sm">Simpan Update</button>
-                                    </div>
-                                </form>
+                                    <form action="{{ route('admin.product.delete', $product->id) }}" method="POST" onsubmit="return confirm('PERINGATAN! Yakin ingin menghapus paket K-CBT ini?');">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="bg-rose-100 hover:bg-rose-600 text-rose-600 hover:text-white px-3 py-2 rounded-lg transition-colors" title="Hapus Paket">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -192,7 +200,6 @@
         </div>
         <div>
             <h2 class="text-2xl font-black text-slate-900 tracking-tight">Zona Manajemen Hosting & Reguler</h2>
-            <p class="text-xs font-bold text-blue-600 uppercase tracking-wider">Cloud Server & Domain</p>
         </div>
     </div>
 
@@ -201,17 +208,16 @@
         <div class="bg-white rounded-[2rem] shadow-[0_5px_20px_-5px_rgba(59,130,246,0.1)] border border-blue-100 overflow-hidden flex flex-col">
             <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center">
                 <h3 class="font-black text-slate-800 text-lg">📁 Kategori Reguler</h3>
-                <span class="text-[10px] font-black bg-blue-100 text-blue-700 px-3 py-1 rounded-full tracking-widest">GLOBAL FEATURES</span>
             </div>
             
             <div class="p-6 bg-slate-50/50 border-b border-slate-100">
                 <form action="{{ route('admin.category.store') }}" method="POST" class="flex flex-col gap-3">
                     @csrf
                     <input type="hidden" name="sort_order" value="2">
-                    <input type="text" name="name" placeholder="Kategori (Hosting/VPS)" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" required>
+                    <input type="text" name="name" placeholder="Kategori (Hosting/VPS)" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-800 outline-none shadow-sm" required>
                     <div class="flex flex-col sm:flex-row gap-2 items-stretch">
-                        <textarea name="description" rows="2" placeholder="Fitur Global (Pisahkan dgn Titik)..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm resize-y min-h-[50px]" required></textarea>
-                        <button type="submit" class="bg-slate-900 text-white font-black px-6 py-2.5 rounded-xl hover:bg-blue-600 transition-colors shadow-md shrink-0 h-auto sm:h-full">+</button>
+                        <textarea name="description" rows="2" placeholder="Fitur Global (Pisahkan dgn Titik)..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none shadow-sm resize-y" required></textarea>
+                        <button type="submit" class="bg-slate-900 text-white font-black px-6 py-2.5 rounded-xl hover:bg-blue-600 transition-colors shadow-md">+</button>
                     </div>
                 </form>
             </div>
@@ -222,12 +228,20 @@
                         @forelse($regCategories as $category)
                         <tr class="hover:bg-blue-50/40 transition-colors group">
                             <td class="p-6">
-                                <form action="{{ route('admin.category.update', $category->id) }}" method="POST" class="flex flex-col gap-3">
-                                    @csrf @method('PUT')
-                                    <input type="text" name="name" value="{{ $category->name }}" class="bg-white border border-slate-200 group-hover:border-blue-300 rounded-lg px-4 py-2 w-full text-sm font-black text-slate-800 focus:ring-2 focus:ring-blue-500 outline-none" required>
-                                    <textarea name="description" rows="3" class="bg-white border border-slate-200 group-hover:border-blue-300 rounded-lg px-4 py-2 w-full text-xs text-slate-600 focus:ring-2 focus:ring-blue-500 outline-none resize-y min-h-[70px]" required>{{ $category->description }}</textarea>
-                                    <button type="submit" class="bg-slate-800 text-white w-full sm:w-auto self-end px-6 py-2 rounded-lg text-xs font-bold hover:bg-blue-600 hover:text-white transition-all shadow-sm">Simpan Update</button>
-                                </form>
+                                <div class="flex items-end gap-2">
+                                    <form action="{{ route('admin.category.update', $category->id) }}" method="POST" class="flex-1 flex flex-col gap-3">
+                                        @csrf @method('PUT')
+                                        <input type="text" name="name" value="{{ $category->name }}" class="bg-white border border-slate-200 rounded-lg px-4 py-2 text-sm font-black text-slate-800 outline-none" required>
+                                        <textarea name="description" rows="2" class="bg-white border border-slate-200 rounded-lg px-4 py-2 text-xs text-slate-600 outline-none resize-y min-h-[50px]" required>{{ $category->description }}</textarea>
+                                        <button type="submit" class="bg-slate-800 text-white w-full sm:w-auto self-end px-6 py-2 rounded-lg text-xs font-bold hover:bg-blue-600 transition-all shadow-sm">Simpan Update</button>
+                                    </form>
+                                    <form action="{{ route('admin.category.delete', $category->id) }}" method="POST" onsubmit="return confirm('PERINGATAN! Yakin hapus kategori ini?');">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="bg-rose-100 hover:bg-rose-600 text-rose-600 hover:text-white px-3 py-2 rounded-lg transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -238,109 +252,79 @@
             </div>
         </div>
 
-        {{-- ============================================================ --}}
-        {{-- VARIAN LAYANAN REGULER - WITH CATEGORY FILTER --}}
-        {{-- ============================================================ --}}
         <div class="bg-white rounded-[2rem] shadow-[0_5px_20px_-5px_rgba(59,130,246,0.1)] border border-blue-100 overflow-hidden flex flex-col">
             <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center">
                 <h3 class="font-black text-slate-800 text-lg">☁️ Varian Layanan Reguler</h3>
-                <span class="text-[10px] font-black bg-blue-100 text-blue-700 px-3 py-1 rounded-full tracking-widest">ALL FEATURES</span>
             </div>
             
-            {{-- FORM TAMBAH PRODUK --}}
             <div class="p-6 bg-slate-50/50 border-b border-slate-100">
                 <form action="{{ route('admin.product.store') }}" method="POST" class="space-y-3">
                     @csrf
                     <input type="hidden" name="is_cbt_panel" value="0"> 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <select name="category_id" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none shadow-sm" required>
+                        <select name="category_id" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 outline-none shadow-sm" required>
                             <option value="">Pilih Kategori</option>
                             @foreach($regCategories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
-                        <input type="text" name="name" placeholder="Nama Layanan" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none shadow-sm" required>
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">Rp</span>
-                            <input type="number" name="price" placeholder="Harga/Bln" class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm font-black text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none shadow-sm" required>
-                        </div>
+                        <input type="text" name="name" placeholder="Nama Layanan" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 outline-none shadow-sm" required>
+                        <input type="number" name="price" placeholder="Harga/Bln (Isi 0 = Hubungi Kami)" class="bg-white border border-blue-300 rounded-xl px-4 py-2.5 text-sm font-black text-slate-700 outline-none shadow-sm" required>
                     </div>
                     <div class="flex flex-col md:flex-row gap-3 items-stretch">
-                        <textarea name="description" rows="2" placeholder="Deskripsi/Fitur Produk (Pisahkan dgn Titik)..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none shadow-sm resize-y" required></textarea>
-                        <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black px-6 py-2.5 rounded-xl shadow-[0_5px_15px_rgba(59,130,246,0.4)] hover:shadow-[0_8px_20px_rgba(59,130,246,0.6)] hover:-translate-y-0.5 transition-all shrink-0 h-auto sm:h-full">
-                            + LAYANAN
-                        </button>
+                        <textarea name="description" rows="2" placeholder="Deskripsi/Fitur Produk (Pisahkan dgn Titik)..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 outline-none shadow-sm resize-y" required></textarea>
+                        <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black px-6 py-2.5 rounded-xl hover:-translate-y-0.5 transition-all shrink-0">+ LAYANAN</button>
                     </div>
                 </form>
             </div>
 
-            {{-- FILTER KATEGORI --}}
-            <div class="px-6 py-4 bg-white border-b border-slate-100">
-                <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-wider mr-1">Filter:</span>
-                    <button onclick="filterRegProducts('all')" data-filter="all"
-                        class="reg-filter-btn active px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-blue-600 text-white border-blue-600">
-                        Semua ({{ $regProducts->count() }})
-                    </button>
-                    @foreach($regCategories as $cat)
-                    <button onclick="filterRegProducts('{{ $cat->id }}')" data-filter="{{ $cat->id }}"
-                        class="reg-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition-all bg-white text-slate-600 border-slate-200 hover:border-blue-400 hover:text-blue-600">
-                        {{ $cat->name }} ({{ $regProducts->where('category_id', $cat->id)->count() }})
-                    </button>
-                    @endforeach
-                </div>
-            </div>
-
-            {{-- LIST PRODUK --}}
-            <div class="p-0 overflow-y-auto max-h-[500px] flex-1">
+            <div class="p-0 overflow-y-auto max-h-[450px] flex-1">
                 <table class="w-full text-left border-collapse">
                     <tbody class="divide-y divide-slate-100" id="reg-products-tbody">
                         @forelse($regProducts as $product)
                         <tr class="hover:bg-blue-50/40 transition-colors group reg-product-row" data-category-id="{{ $product->category_id }}">
                             <td class="p-6">
-                                {{-- BADGE KATEGORI --}}
-                                <div class="flex items-center gap-2 mb-3">
-                                    <span class="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 text-blue-700 text-[10px] font-black px-2.5 py-1 rounded-full">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block"></span>
-                                        {{ $product->category->name ?? '-' }}
-                                    </span>
+                                <div class="flex items-end gap-2">
+                                    <form action="{{ route('admin.product.update', $product->id) }}" method="POST" class="flex-1 space-y-3">
+                                        @csrf @method('PUT')
+                                        
+                                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                                            <div class="col-span-12 md:col-span-4">
+                                                <select name="category_id" class="bg-white border border-slate-200 rounded-lg px-3 py-2 w-full text-xs font-bold text-slate-700 outline-none" required>
+                                                    @foreach($regCategories as $category)
+                                                        <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-span-12 md:col-span-8">
+                                                <input type="text" name="name" value="{{ $product->name }}" class="bg-white border border-slate-200 rounded-lg px-3 py-2 w-full text-sm font-black text-slate-800 outline-none" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                                            <div class="col-span-6 md:col-span-8 relative">
+                                                <label class="text-[9px] font-bold text-blue-600 uppercase mb-1 block">Harga (Isi 0 untuk "Hubungi Kami")</label>
+                                                <input type="number" name="price" value="{{ $product->price }}" class="bg-white border border-blue-200 rounded-lg px-3 py-2 w-full text-sm font-mono font-bold text-slate-700 outline-none" required>
+                                            </div>
+                                            <div class="col-span-6 md:col-span-4">
+                                                <label class="text-[9px] font-bold text-slate-400 uppercase mb-1 block">Diskon (%)</label>
+                                                <input type="number" name="discount_percent" value="{{ $product->discount_percent }}" class="bg-white border border-slate-200 rounded-lg px-3 py-2 w-full text-sm text-center font-bold text-rose-500 outline-none">
+                                            </div>
+                                        </div>
+
+                                        <div class="flex flex-col gap-2">
+                                            <textarea name="description" rows="2" class="bg-white border border-slate-200 rounded-lg px-4 py-2 w-full text-xs font-medium text-slate-700 outline-none resize-y min-h-[50px]" required>{{ $product->description }}</textarea>
+                                            <button type="submit" class="bg-slate-800 text-white self-end px-6 py-2 rounded-lg text-xs font-bold hover:bg-blue-600 transition-all shadow-sm">Simpan Update</button>
+                                        </div>
+                                    </form>
+
+                                    <form action="{{ route('admin.product.delete', $product->id) }}" method="POST" onsubmit="return confirm('PERINGATAN! Yakin hapus layanan ini?');">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="bg-rose-100 hover:bg-rose-600 text-rose-600 hover:text-white px-3 py-2 rounded-lg transition-colors" title="Hapus Layanan">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </form>
                                 </div>
-
-                                <form action="{{ route('admin.product.update', $product->id) }}" method="POST" class="space-y-3">
-                                    @csrf @method('PUT')
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-                                        <div class="col-span-12 md:col-span-4">
-                                            <label class="text-[10px] text-slate-400 font-bold uppercase mb-1 block">Kategori / Lokasi</label>
-                                            <select name="category_id" class="bg-white border border-slate-200 group-hover:border-blue-300 rounded-lg px-3 py-2 w-full text-xs font-bold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none" required>
-                                                @foreach($regCategories as $category)
-                                                    <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-span-12 md:col-span-8">
-                                            <label class="text-[10px] text-slate-400 font-bold uppercase mb-1 block">Nama Layanan</label>
-                                            <input type="text" name="name" value="{{ $product->name }}" class="bg-white border border-slate-200 group-hover:border-blue-300 rounded-lg px-3 py-2 w-full text-sm font-black text-slate-800 focus:ring-2 focus:ring-blue-500 outline-none" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-                                        <div class="col-span-6 md:col-span-8 relative">
-                                            <label class="text-[10px] text-slate-400 font-bold uppercase mb-1 block">Harga (Rp)</label>
-                                            <input type="number" name="price" value="{{ $product->price }}" class="bg-white border border-slate-200 group-hover:border-blue-300 rounded-lg px-3 py-2 w-full text-sm font-mono font-bold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none" required>
-                                        </div>
-                                        <div class="col-span-6 md:col-span-4">
-                                            <label class="text-[10px] text-slate-400 font-bold uppercase mb-1 block">Diskon (%)</label>
-                                            <input type="number" name="discount_percent" value="{{ $product->discount_percent }}" class="bg-white border border-slate-200 group-hover:border-blue-300 rounded-lg px-3 py-2 w-full text-sm text-center font-bold text-rose-500 focus:ring-2 focus:ring-blue-500 outline-none">
-                                        </div>
-                                    </div>
-
-                                    <div class="flex flex-col gap-2">
-                                        <label class="text-[10px] text-slate-400 font-bold uppercase block">Deskripsi & Fitur (Pisahkan dg Titik)</label>
-                                        <textarea name="description" rows="3" class="bg-white border border-slate-200 group-hover:border-blue-300 rounded-lg px-4 py-2 w-full text-xs font-medium text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none resize-y min-h-[70px]" required>{{ $product->description }}</textarea>
-                                        <button type="submit" class="bg-slate-800 text-white self-end px-6 py-2 rounded-lg text-xs font-bold hover:bg-blue-600 transition-all shadow-sm">Simpan Update</button>
-                                    </div>
-                                </form>
                             </td>
                         </tr>
                         @empty
@@ -348,12 +332,6 @@
                         @endforelse
                     </tbody>
                 </table>
-
-                {{-- Pesan saat filter kosong --}}
-                <div id="reg-no-result" class="hidden p-10 text-center">
-                    <div class="text-4xl mb-2">🔍</div>
-                    <div class="text-sm font-bold text-slate-400">Tidak ada layanan di kategori ini.</div>
-                </div>
             </div>
         </div>
     </div>
@@ -589,44 +567,7 @@
     </div>
 </div>
 
-{{-- ============================================================ --}}
-{{-- JAVASCRIPT FILTER KATEGORI REGULER --}}
-{{-- ============================================================ --}}
-<script>
-function filterRegProducts(categoryId) {
-    const rows = document.querySelectorAll('.reg-product-row');
-    const noResult = document.getElementById('reg-no-result');
-    const buttons = document.querySelectorAll('.reg-filter-btn');
-
-    // Update active button style
-    buttons.forEach(btn => {
-        if (btn.dataset.filter == categoryId) {
-            btn.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
-            btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
-        } else {
-            btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
-            btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
-        }
-    });
-
-    // Filter rows
-    let visibleCount = 0;
-    rows.forEach(row => {
-        if (categoryId === 'all' || row.dataset.categoryId == categoryId) {
-            row.style.display = '';
-            visibleCount++;
-        } else {
-            row.style.display = 'none';
-        }
-    });
-
-    // Tampilkan pesan kosong jika tidak ada hasil
-    if (visibleCount === 0) {
-        noResult.classList.remove('hidden');
-    } else {
-        noResult.classList.add('hidden');
-    }
-}
-</script>
-
 @endsection
+
+
+ini admin terbaruu kodenya dan tolong benerin hapusnya jangan ngerusak design tapi perbaiki letaknya yg pas hapus dll

@@ -166,4 +166,21 @@ class AdminController extends Controller
             return redirect()->back()->withErrors(['Gagal memproses deposit: ' . $e->getMessage()]);
         }
     }
+    public function deleteCategory($id)
+    {
+        $category = \App\Models\Category::findOrFail($id);
+        // Opsional: Cek apakah ada produk di dalam kategori ini sebelum menghapus
+        if(\App\Models\Product::where('category_id', $id)->count() > 0) {
+            return back()->withErrors(['Gagal: Kategori ini masih memiliki layanan/produk.']);
+        }
+        $category->delete();
+        return back()->with('success', 'Kategori berhasil dihapus!');
+    }
+
+    public function deleteProduct($id)
+    {
+        $product = \App\Models\Product::findOrFail($id);
+        $product->delete();
+        return back()->with('success', 'Layanan/Paket berhasil dihapus!');
+    }
 }
