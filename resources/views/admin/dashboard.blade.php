@@ -569,5 +569,3 @@
 
 @endsection
 
-
-ini admin terbaruu kodenya dan tolong benerin hapusnya jangan ngerusak design tapi perbaiki letaknya yg pas hapus dll
