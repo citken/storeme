@@ -83,4 +83,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/order/{order}', [AdminController::class, 'updateOrderStatus'])->name('admin.order.update');
     Route::put('/deposit/{deposit}', [AdminController::class, 'updateDepositStatus'])->name('admin.deposit.update');
     Route::post('/settings/cbt', [AdminController::class, 'updateCbtFeatures'])->name('admin.settings.cbt');
+    // Tambahkan baris ini di dalam grup middleware admin
+Route::delete('/category/{id}', [AdminController::class, 'deleteCategory'])->name('admin.category.delete');
+Route::delete('/product/{id}', [AdminController::class, 'deleteProduct'])->name('admin.product.delete');
 });
