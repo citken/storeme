@@ -376,23 +376,24 @@
 
                                     <div class="p-8 pt-0 mt-auto relative z-10">
                                         @if($product->price == 0)
-                                            <div class="flex items-baseline text-white">
-                                                <span class="text-3xl font-black tracking-tight text-[#25D366]">Harga Custom</span>
+                                            <div class="bg-slate-900/60 rounded-2xl p-5 mb-5 border border-slate-700/50">
+                                                <div class="flex items-baseline text-[#25D366]">
+                                                    <span class="text-3xl font-black tracking-tight">Harga Custom</span>
+                                                </div>
                                             </div>
-                                            <div class="mt-4">
-                                                <a href="https://wa.me/6288277512080?text={{ urlencode('Halo Admin K-Host, saya tertarik untuk custom harga pada paket ' . $product->name . '.') }}" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(37,211,102,0.4)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide flex items-center justify-center">
-                                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                                                    Hubungi via WA
-                                                </a>
-                                            </div>
+                                            <a href="https://wa.me/6288277512080?text={{ urlencode('Halo Admin K-Host, saya tertarik untuk custom harga pada paket K-CBT ' . $product->name . '.') }}" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(37,211,102,0.4)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide flex items-center justify-center">
+                                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                                                Hubungi via WA
+                                            </a>
                                         @else
                                             <div class="bg-slate-900/60 rounded-2xl p-5 mb-5 border border-slate-700/50 group-hover:border-slate-600/80 transition-colors duration-400">
                                                 <div class="flex justify-between items-center mb-2">
-                                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">Investasi Tahunan</span>
+                                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">Investasi</span>
                                                     @if($product->discount_percent > 0)
                                                         <span class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[9px] px-2.5 py-0.5 rounded-md font-black uppercase tracking-wider shadow-sm">Save {{ $product->discount_percent }}%</span>
                                                     @endif
                                                 </div>
+                                                
                                                 @if($product->discount_percent > 0)
                                                     <div class="mb-1">
                                                         <span class="relative inline-block text-sm font-bold text-slate-500">
@@ -401,16 +402,17 @@
                                                         </span>
                                                     </div>
                                                 @endif
+    
                                                 <div class="flex items-baseline text-white">
                                                     <span class="text-xl font-bold mr-1">Rp</span>
                                                     <span class="text-4xl font-black tracking-tight">{{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-500 ml-2">/thn</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-2">/{{ $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln') }}</span>
                                                 </div>
                                             </div>
-                                            <form action="{{ route('user.buy', $product->id) }}" method="POST" onsubmit="return confirm('Beli paket {{ $product->name }}?\nSaldo Rp {{ number_format($product->final_price, 0, ',', '.') }} akan dipotong otomatis.');">
+                                            <form action="{{ route('user.buy', $product->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-400 hover:to-rose-500 text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(249,115,22,0.4)] hover:shadow-[0_10px_35px_-8px_rgba(249,115,22,0.6)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide">
-                                                    Pesan K-CBT Sekarang
+                                                <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-400 hover:to-rose-500 text-white font-bold py-4 rounded-2xl shadow-[0_8px_25px_-8px_rgba(249,115,22,0.4)] hover:shadow-[0_10px_35px_-8px_rgba(249,115,22,0.6)] hover:-translate-y-0.5 transition-all duration-300 text-sm uppercase tracking-wider">
+                                                    Deploy K-CBT Sekarang
                                                 </button>
                                             </form>
                                         @endif
@@ -418,15 +420,12 @@
                                 </div>
 
                             @else
-                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-[2rem] shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 hover:-translate-y-2 transition-all duration-400 flex flex-col relative overflow-hidden group hover-lift border-gradient">
-                                    
-                                    <div class="absolute top-0 right-0 w-56 h-56 bg-blue-50 rounded-full blur-[40px] -mr-14 -mt-14 pointer-events-none group-hover:bg-blue-100/60 transition-colors duration-500"></div>
-
-                                    <div class="p-8 border-b border-slate-100/80 relative z-10 bg-slate-50/50 group-hover:bg-blue-50/40 transition-colors">
-                                        <h3 class="text-2xl font-black text-slate-900 mb-1 group-hover:text-blue-600 transition-colors duration-300">{{ $product->name }}</h3>
+                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-[2rem] shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full overflow-hidden group">
+                                    <div class="p-8 border-b border-slate-50 bg-slate-50/50 group-hover:bg-blue-50/50 transition-colors">
+                                        <h3 class="text-2xl font-black text-slate-900 mb-3">{{ $product->name }}</h3>
                                         
                                         @if($product->price == 0)
-                                            <div class="flex items-baseline mt-4 text-slate-900">
+                                            <div class="flex items-baseline mt-4">
                                                 <span class="text-3xl font-black tracking-tight text-[#25D366]">Harga Custom</span>
                                             </div>
                                         @elseif($product->discount_percent > 0)
@@ -440,31 +439,28 @@
                                                 </div>
                                                 <div class="flex items-baseline text-slate-900">
                                                     <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/bln</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln') }}</span>
                                                 </div>
                                             </div>
                                         @else
                                             <div class="flex items-baseline mt-4 text-slate-900">
                                                 <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-                                                <span class="text-sm font-semibold text-slate-500 ml-1">/bln</span>
+                                                <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln') }}</span>
                                             </div>
                                         @endif
                                     </div>
 
-                                    <div class="p-8 flex-1 relative z-10">
+                                    <div class="p-8 flex-1">
                                         @php
-                                            $prodSpecs = array_filter(array_map('trim', explode('.', $product->description)));
-                                            $catFeatures = array_filter(array_map('trim', explode('.', $category->description ?? '')));
-                                            $allRegFeatures = array_merge($prodSpecs, $catFeatures);
+                                            $regDesc = $product->description;
+                                            $regFeatures = array_filter(array_map('trim', explode('.', $regDesc)));
                                         @endphp
-                                        <ul class="space-y-3.5">
-                                            @foreach($allRegFeatures as $descLine)
+                                        <ul class="space-y-3">
+                                            @foreach($regFeatures as $descLine)
                                                 @if(strlen(trim($descLine)) > 2)
-                                                    <li class="flex items-start text-sm text-slate-600 font-medium group/item">
-                                                        <div class="flex-shrink-0 w-5 h-5 rounded-md bg-blue-50 flex items-center justify-center mr-3 group-hover/item:bg-blue-500 transition-all duration-300">
-                                                            <svg class="h-3 w-3 text-blue-500 group-hover/item:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                                                        </div>
-                                                        <span class="group-hover/item:text-slate-900 transition-colors leading-snug">{{ trim($descLine) }}</span>
+                                                    <li class="flex items-start text-sm text-slate-600 font-medium">
+                                                        <svg class="h-5 w-5 text-indigo-500 mr-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                                        <span class="leading-snug">{{ trim($descLine) }}</span>
                                                     </li>
                                                 @endif
                                             @endforeach
@@ -473,15 +469,15 @@
 
                                     <div class="p-8 pt-0 mt-auto relative z-10">
                                         @if($product->price == 0)
-                                            <a href="https://wa.me/6288277512080?text={{ urlencode('Halo Admin K-Host, saya tertarik untuk custom harga pada paket ' . $product->name . '.') }}" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(37,211,102,0.4)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide flex items-center justify-center">
+                                            <a href="https://wa.me/6288277512080?text={{ urlencode('Halo Admin K-Host, saya tertarik untuk custom harga pada layanan ' . $product->name . '.') }}" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(37,211,102,0.4)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide flex items-center justify-center">
                                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
                                                 Hubungi via WA
                                             </a>
                                         @else
-                                            <form action="{{ route('user.buy', $product->id) }}" method="POST" onsubmit="return confirm('Beli layanan {{ $product->name }}?\nSaldo Anda akan dipotong.');">
+                                            <form action="{{ route('user.buy', $product->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="w-full bg-slate-900 hover:bg-blue-600 text-white font-black py-4 rounded-xl text-center shadow-lg transition-all duration-300 transform hover:-translate-y-1 text-sm uppercase tracking-wide">
-                                                    Pilih Cloud Ini
+                                                <button type="submit" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-black py-4 rounded-xl text-center shadow-md transition-all duration-300 transform hover:-translate-y-1 text-sm uppercase tracking-wide">
+                                                    Pilih Paket Ini
                                                 </button>
                                             </form>
                                         @endif
@@ -491,168 +487,25 @@
 
                         @endforeach
                     </div>
-
-                    @if($products->where('category_id', $category->id)->count() == 0)
-                        <div class="text-center text-slate-400 py-20 bg-white border border-slate-100 rounded-[2rem]" data-aos="fade-up">
-                            <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-inner">
-                                <svg class="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900 mb-1">Katalog Kosong</h3>
-                            <p class="text-sm text-slate-500">Layanan di kategori ini sedang dipersiapkan oleh tim kami.</p>
-                        </div>
-                    @endif
-
-                </section>
-            @endforeach
-        </div>
+                </div>
+            @endif
+        @endforeach
     </div>
 
-    <footer class="relative bg-slate-950 pt-20 pb-10 overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-slate-900 to-slate-950 z-0"></div>
-        <div class="absolute inset-0 grid-pattern opacity-30 z-0"></div>
-        
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-                <div data-aos="fade-up" data-aos-duration="600">
-                    <div class="flex items-center space-x-2.5 mb-5">
-                        <div class="w-9 h-9 bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
-                            <span class="text-white font-black text-lg leading-none">K</span>
-                        </div>
-                        <div>
-                            <span class="text-lg font-extrabold text-white tracking-tight">K-Host</span>
-                            <span class="block text-[8px] font-bold uppercase tracking-[0.2em] text-blue-400 -mt-0.5">Cloud Infrastructure</span>
-                        </div>
-                    </div>
-                    <p class="text-slate-400 text-sm leading-relaxed max-w-xs">Solusi server dan panel CBT terbaik untuk menunjang kebutuhan ujian berskala masif dan project digital Anda.</p>
-                </div>
-                
-                <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
-                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-5">Layanan Kami</h4>
-                    <ul class="space-y-3">
-                        @foreach($categories as $category)
-                            <li>
-                                <a href="#kategori-{{ $category->id }}" class="text-sm text-slate-400 hover:text-white transition-colors duration-300 flex items-center group">
-                                    <svg class="w-3 h-3 mr-2 text-slate-600 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                    {{ $category->name }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-                
-                <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
-                    <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-5">Dukungan Teknis</h4>
-                    <ul class="space-y-3">
-                        <li class="flex items-center text-sm text-slate-400">
-                            <svg class="w-4 h-4 mr-2.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v10a2 2 0 002 2z"></path></svg>
-                            admin@k-projects.com
-                        </li>
-                        <li class="flex items-center text-sm text-slate-400">
-                            <svg class="w-4 h-4 mr-2.5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Response time &lt; 30 menit
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-800 to-transparent mb-8"></div>
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p class="text-slate-500 text-xs font-medium tracking-wide">&copy; {{ date('Y') }} K-Projects. All rights reserved.</p>
-                <div class="flex items-center space-x-1 text-xs text-slate-600">
-                    <span>Powered by</span>
-                    <span class="font-bold text-slate-400">K-Host Cloud</span>
-                    <span class="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full ml-1 animate-pulse"></span>
-                </div>
-            </div>
-        </div>
-    </footer>
+</div>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ once: true, offset: 60, duration: 600, easing: 'ease-out-cubic', disable: function() { return window.innerWidth < 768; } });
+<style>
+    .animate-spin-slow { animation: spin 3s linear infinite; }
+</style>
 
-        const nav = document.getElementById('mainNav');
-        let ticking = false;
-        function onScroll() {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    if (window.scrollY > 80) nav.classList.add('nav-scrolled');
-                    else nav.classList.remove('nav-scrolled');
-                    ticking = false;
-                });
-                ticking = true;
-            }
+<script>
+    function toggleApiForm(id) {
+        var form = document.getElementById(id);
+        if (form.classList.contains('hidden')) {
+            form.classList.remove('hidden');
+        } else {
+            form.classList.add('hidden');
         }
-        window.addEventListener('scroll', onScroll, { passive: true });
-
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
-
-        const allSections = document.querySelectorAll('.category-section');
-        const filterBtns = document.querySelectorAll('.cat-filter-btn');
-        const navPills = document.querySelectorAll('.cat-nav-link');
-        const mobileNavLinks = document.querySelectorAll('.cat-nav-link-mobile');
-        let activeCategory = 'all';
-
-        function filterCategories(categoryId) {
-            activeCategory = categoryId;
-            filterBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.category === categoryId));
-            navPills.forEach(pill => pill.classList.toggle('active-pill', pill.dataset.category === categoryId));
-            mobileNavLinks.forEach(link => {
-                if (link.dataset.category === categoryId) { link.classList.remove('text-white/70'); link.classList.add('text-blue-400'); }
-                else { link.classList.remove('text-blue-400'); link.classList.add('text-white/70'); }
-            });
-
-            allSections.forEach(section => {
-                const sectionCat = section.dataset.sectionCategory;
-                if (categoryId === 'all' || sectionCat === categoryId) {
-                    section.classList.remove('section-hidden'); section.classList.add('section-visible');
-                } else {
-                    section.classList.remove('section-visible'); section.classList.add('section-hidden');
-                }
-            });
-        }
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const catId = btn.dataset.category; filterCategories(catId);
-                if (catId === 'all') document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                else { const target = document.getElementById('kategori-' + catId); if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-            });
-        });
-
-        navPills.forEach(pill => {
-            pill.addEventListener('click', (e) => {
-                e.preventDefault(); const catId = pill.dataset.category; filterCategories(catId);
-                if (catId === 'all') document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                else { const target = document.getElementById('kategori-' + catId); if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-            });
-        });
-
-        mobileNavLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault(); const catId = link.dataset.category; filterCategories(catId); mobileMenu.classList.add('hidden');
-                if (catId === 'all') document.getElementById('products').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                else { const target = document.getElementById('kategori-' + catId); if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-            });
-        });
-
-        document.getElementById('navLogo').addEventListener('click', (e) => {
-            e.preventDefault(); filterCategories('all'); window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        const observerOptions = { root: null, rootMargin: '-30% 0px -60% 0px', threshold: 0 };
-        const scrollObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && activeCategory === 'all') {
-                    const catId = entry.target.dataset.sectionCategory;
-                    navPills.forEach(pill => pill.classList.toggle('active-pill', pill.dataset.category === catId));
-                }
-            });
-        }, observerOptions);
-        allSections.forEach(section => scrollObserver.observe(section));
-    </script>
-</body>
-</html>
+    }
+</script>
+@endsection
