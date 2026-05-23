@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller 
 {
-   public function dashboard() {
+    public function dashboard() {
         $orders = Order::with(['user', 'product'])->latest()->get();
         $categories = Category::orderBy('sort_order', 'asc')->get(); 
         $products = Product::with('category')->get();
@@ -19,7 +19,14 @@ class AdminController extends Controller
         
         $cbt_features = \App\Models\Setting::firstOrCreate(['key' => 'cbt_features'], ['value' => 'Private Server Dedicated. Anti-Cheat Lock Browser.'])->value;
 
-        return view('admin.dashboard', compact('orders', 'categories', 'products', 'deposits', 'cbt_features'));
+        // NEW: Mengambil order yang akan kedaluwarsa dalam 7 hari (Bisa dipakai di UI admin nanti)
+        $expiringOrders = Order::where('status', 'active')
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '<=', now()->addDays(7))
+            ->where('is_suspended', false)
+            ->get();
+
+        return view('admin.dashboard', compact('orders', 'categories', 'products', 'deposits', 'cbt_features', 'expiringOrders'));
     }
 
     public function updateCbtFeatures(Request $request) {
@@ -64,6 +71,20 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Kategori dan Fitur Utama berhasil diperbarui!');
     }
 
+    public function deleteCategory($id)
+    {
+        $category = \App\Models\Category::findOrFail($id);
+        if(\App\Models\Product::where('category_id', $id)->count() > 0) {
+            return back()->withErrors(['Gagal: Kategori ini masih memiliki layanan/produk.']);
+        }
+        $category->delete();
+        return back()->with('success', 'Kategori berhasil dihapus!');
+    }
+
+    // ==========================================================
+    // MANAJEMEN PRODUK / PAKET
+    // ==========================================================
+
     public function storeProduct(Request $request) {
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
@@ -72,9 +93,9 @@ class AdminController extends Controller
             'price' => 'required|numeric|min:0',
             'discount_percent' => 'nullable|numeric|min:0|max:100',
             'logo_path' => 'nullable|image|max:2048',
+            'duration_months' => 'required|integer|min:0', // NEW: Validasi Masa Aktif
         ]);
 
-        // FIX: Gunakan value input, bukan has() — has() selalu true meski value="0"
         $validated['is_cbt_panel'] = (int) $request->input('is_cbt_panel', 0);
         $validated['discount_percent'] = $validated['discount_percent'] ?? 0;
 
@@ -88,16 +109,24 @@ class AdminController extends Controller
 
     public function updateProduct(Request $request, Product $product) {
         $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id', // FIX: tambahkan agar kategori tersimpan saat update
+            'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'discount_percent' => 'nullable|numeric|min:0|max:100',
+            'duration_months' => 'required|integer|min:0', // NEW: Validasi Masa Aktif
             'description' => 'required|string',
         ]);
 
         $validated['discount_percent'] = $validated['discount_percent'] ?? 0;
         $product->update($validated);
         return redirect()->back()->with('success', 'Produk berhasil diupdate.');
+    }
+
+    public function deleteProduct($id)
+    {
+        $product = \App\Models\Product::findOrFail($id);
+        $product->delete();
+        return back()->with('success', 'Layanan/Paket berhasil dihapus!');
     }
 
     public function bulkUpdatePrice(Request $request) {
@@ -118,15 +147,26 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Harga seluruh produk berhasil dinaikkan secara serentak!');
     }
 
+    // ==========================================================
+    // MANAJEMEN TRANSAKSI & ORDER
+    // ==========================================================
+
     public function updateOrderStatus(Request $request, Order $order) {
         $validated = $request->validate([
             'status' => 'required|in:pending,processing,active,completed,cancelled',
-            'cbt_api_endpoint' => 'nullable|url',
+            'cbt_api_endpoint' => 'nullable|string', // FIX: diubah ke string agar format http://ip:port aman
             'cbt_api_key' => 'nullable|string',
-            'service_url' => 'nullable|url',
+            'service_url' => 'nullable|string', // FIX: string untuk format IP:PORT
             'service_username' => 'nullable|string',
             'service_password' => 'nullable|string'
         ]);
+        
+        // NEW: Logika penetapan tanggal kedaluwarsa otomatis saat order pertama kali aktif
+        if ($request->status == 'active' && $order->status != 'active' && is_null($order->expires_at)) {
+            if ($order->product && $order->product->duration_months > 0) {
+                $order->expires_at = now()->addMonths($order->product->duration_months);
+            }
+        }
         
         $order->update($validated);
         return redirect()->back()->with('success', 'Status & Kredensial Pesanan berhasil diupdate.');
@@ -165,22 +205,5 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['Gagal memproses deposit: ' . $e->getMessage()]);
         }
-    }
-    public function deleteCategory($id)
-    {
-        $category = \App\Models\Category::findOrFail($id);
-        // Opsional: Cek apakah ada produk di dalam kategori ini sebelum menghapus
-        if(\App\Models\Product::where('category_id', $id)->count() > 0) {
-            return back()->withErrors(['Gagal: Kategori ini masih memiliki layanan/produk.']);
-        }
-        $category->delete();
-        return back()->with('success', 'Kategori berhasil dihapus!');
-    }
-
-    public function deleteProduct($id)
-    {
-        $product = \App\Models\Product::findOrFail($id);
-        $product->delete();
-        return back()->with('success', 'Layanan/Paket berhasil dihapus!');
     }
 }

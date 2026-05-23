@@ -118,7 +118,7 @@
                 <form action="{{ route('admin.product.store') }}" method="POST" class="space-y-3">
                     @csrf
                     <input type="hidden" name="is_cbt_panel" value="1"> 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <select name="category_id" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm" required>
                             <option value="">Pilih Kategori CBT</option>
                             @foreach($cbtCategories as $category)
@@ -126,11 +126,21 @@
                             @endforeach
                         </select>
                         <input type="text" name="name" placeholder="Nama Paket (Starter/Pro)" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm" required>
-                        <input type="number" name="price" placeholder="Harga/Thn (Isi 0 = Hubungi Kami)" class="bg-white border border-orange-300 rounded-xl px-4 py-2.5 text-sm font-black text-blue-700 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm" required>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">Rp</span>
+                            <input type="number" name="price" placeholder="Harga (Isi 0 = Hubungi WA)" class="w-full bg-white border border-orange-300 rounded-xl pl-10 pr-4 py-2.5 text-sm font-black text-blue-700 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm" required>
+                        </div>
+                        <select name="duration_months" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm" required>
+                            <option value="1">Aktif 1 Bulan</option>
+                            <option value="3">Aktif 3 Bulan</option>
+                            <option value="6">Aktif 6 Bulan</option>
+                            <option value="12" selected>Aktif 1 Tahun</option>
+                            <option value="0">Selamanya (Lifetime)</option>
+                        </select>
                     </div>
                     <div class="flex flex-col md:flex-row gap-3 items-stretch">
                         <textarea name="description" rows="2" placeholder="Spek (Pisahkan dgn Koma: 100 User, 2GB RAM)" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-orange-500 outline-none shadow-sm resize-y" required></textarea>
-                        <button type="submit" class="bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black px-6 py-2.5 rounded-xl hover:-translate-y-0.5 transition-all shrink-0">+ PAKET</button>
+                        <button type="submit" class="bg-gradient-to-r from-orange-500 to-rose-600 text-white font-black px-6 py-2.5 rounded-xl hover:-translate-y-0.5 transition-all shrink-0 h-auto sm:h-full">+ PAKET</button>
                     </div>
                 </form>
             </div>
@@ -158,11 +168,21 @@
                                         </div>
 
                                         <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-                                            <div class="col-span-6 md:col-span-8 relative">
-                                                <label class="text-[9px] font-bold text-orange-600 uppercase mb-1 block">Harga (Isi 0 untuk "Hubungi Kami")</label>
+                                            <div class="col-span-12 sm:col-span-5 relative">
+                                                <label class="text-[9px] font-bold text-orange-600 uppercase mb-1 block">Harga (Isi 0 = Hub WA)</label>
                                                 <input type="number" name="price" value="{{ $product->price }}" class="bg-white border border-orange-200 rounded-lg px-3 py-2 w-full text-sm font-mono font-bold text-slate-700 outline-none" required>
                                             </div>
-                                            <div class="col-span-6 md:col-span-4">
+                                            <div class="col-span-6 sm:col-span-4">
+                                                <label class="text-[9px] font-bold text-slate-400 uppercase mb-1 block">Masa Aktif</label>
+                                                <select name="duration_months" class="bg-white border border-slate-200 rounded-lg px-3 py-2 w-full text-xs font-bold text-slate-700 outline-none" required>
+                                                    <option value="1" {{ $product->duration_months == 1 ? 'selected' : '' }}>1 Bulan</option>
+                                                    <option value="3" {{ $product->duration_months == 3 ? 'selected' : '' }}>3 Bulan</option>
+                                                    <option value="6" {{ $product->duration_months == 6 ? 'selected' : '' }}>6 Bulan</option>
+                                                    <option value="12" {{ $product->duration_months == 12 ? 'selected' : '' }}>1 Tahun</option>
+                                                    <option value="0" {{ $product->duration_months == 0 ? 'selected' : '' }}>Selamanya</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-span-6 sm:col-span-3">
                                                 <label class="text-[9px] font-bold text-slate-400 uppercase mb-1 block">Diskon (%)</label>
                                                 <input type="number" name="discount_percent" value="{{ $product->discount_percent }}" class="bg-white border border-slate-200 rounded-lg px-3 py-2 w-full text-sm text-center font-bold text-rose-500 outline-none">
                                             </div>
@@ -170,7 +190,7 @@
 
                                         <div class="flex flex-col gap-2">
                                             <textarea name="description" rows="2" class="bg-white border border-slate-200 rounded-lg px-4 py-2 w-full text-xs font-medium text-slate-700 outline-none resize-y min-h-[50px]" required>{{ $product->description }}</textarea>
-                                            <button type="submit" class="bg-slate-800 text-white self-end px-6 py-2 rounded-lg text-xs font-bold hover:bg-orange-500 transition-all">Simpan Update</button>
+                                            <button type="submit" class="bg-slate-800 text-white self-end px-6 py-2 rounded-lg text-xs font-bold hover:bg-orange-500 transition-all shadow-sm">Simpan Update</button>
                                         </div>
                                     </form>
                                     
@@ -261,7 +281,7 @@
                 <form action="{{ route('admin.product.store') }}" method="POST" class="space-y-3">
                     @csrf
                     <input type="hidden" name="is_cbt_panel" value="0"> 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <select name="category_id" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 outline-none shadow-sm" required>
                             <option value="">Pilih Kategori</option>
                             @foreach($regCategories as $category)
@@ -269,11 +289,21 @@
                             @endforeach
                         </select>
                         <input type="text" name="name" placeholder="Nama Layanan" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 outline-none shadow-sm" required>
-                        <input type="number" name="price" placeholder="Harga/Bln (Isi 0 = Hubungi Kami)" class="bg-white border border-blue-300 rounded-xl px-4 py-2.5 text-sm font-black text-slate-700 outline-none shadow-sm" required>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">Rp</span>
+                            <input type="number" name="price" placeholder="Harga (Isi 0 = Hub WA)" class="w-full bg-white border border-blue-300 rounded-xl pl-10 pr-4 py-2.5 text-sm font-black text-slate-700 outline-none shadow-sm" required>
+                        </div>
+                        <select name="duration_months" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none shadow-sm" required>
+                            <option value="1" selected>Aktif 1 Bulan</option>
+                            <option value="3">Aktif 3 Bulan</option>
+                            <option value="6">Aktif 6 Bulan</option>
+                            <option value="12">Aktif 1 Tahun</option>
+                            <option value="0">Selamanya (Lifetime)</option>
+                        </select>
                     </div>
                     <div class="flex flex-col md:flex-row gap-3 items-stretch">
                         <textarea name="description" rows="2" placeholder="Deskripsi/Fitur Produk (Pisahkan dgn Titik)..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 outline-none shadow-sm resize-y" required></textarea>
-                        <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black px-6 py-2.5 rounded-xl hover:-translate-y-0.5 transition-all shrink-0">+ LAYANAN</button>
+                        <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black px-6 py-2.5 rounded-xl hover:-translate-y-0.5 transition-all shrink-0 h-auto sm:h-full">+ LAYANAN</button>
                     </div>
                 </form>
             </div>
@@ -302,11 +332,21 @@
                                         </div>
 
                                         <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-                                            <div class="col-span-6 md:col-span-8 relative">
-                                                <label class="text-[9px] font-bold text-blue-600 uppercase mb-1 block">Harga (Isi 0 untuk "Hubungi Kami")</label>
+                                            <div class="col-span-12 sm:col-span-5 relative">
+                                                <label class="text-[9px] font-bold text-blue-600 uppercase mb-1 block">Harga (Isi 0 untuk WA)</label>
                                                 <input type="number" name="price" value="{{ $product->price }}" class="bg-white border border-blue-200 rounded-lg px-3 py-2 w-full text-sm font-mono font-bold text-slate-700 outline-none" required>
                                             </div>
-                                            <div class="col-span-6 md:col-span-4">
+                                            <div class="col-span-6 sm:col-span-4">
+                                                <label class="text-[9px] font-bold text-slate-400 uppercase mb-1 block">Masa Aktif</label>
+                                                <select name="duration_months" class="bg-white border border-slate-200 rounded-lg px-3 py-2 w-full text-xs font-bold text-slate-700 outline-none" required>
+                                                    <option value="1" {{ $product->duration_months == 1 ? 'selected' : '' }}>1 Bulan</option>
+                                                    <option value="3" {{ $product->duration_months == 3 ? 'selected' : '' }}>3 Bulan</option>
+                                                    <option value="6" {{ $product->duration_months == 6 ? 'selected' : '' }}>6 Bulan</option>
+                                                    <option value="12" {{ $product->duration_months == 12 ? 'selected' : '' }}>1 Tahun</option>
+                                                    <option value="0" {{ $product->duration_months == 0 ? 'selected' : '' }}>Selamanya</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-span-6 sm:col-span-3">
                                                 <label class="text-[9px] font-bold text-slate-400 uppercase mb-1 block">Diskon (%)</label>
                                                 <input type="number" name="discount_percent" value="{{ $product->discount_percent }}" class="bg-white border border-slate-200 rounded-lg px-3 py-2 w-full text-sm text-center font-bold text-rose-500 outline-none">
                                             </div>
@@ -369,6 +409,13 @@
                         <div class="mt-3 bg-orange-50 border border-orange-100 rounded-lg p-2.5 inline-block w-full">
                             <div class="text-xs font-bold text-orange-800 truncate">{{ $order->product->name }}</div>
                             <div class="text-[10px] font-bold text-slate-500 mt-0.5">Rp {{ number_format($order->total_price, 0, ',', '.') }}</div>
+                            @if($order->expires_at)
+                                <div class="mt-1 pt-1 border-t border-orange-200/50">
+                                    <span class="text-[9px] font-black {{ now()->greaterThan($order->expires_at) ? 'text-rose-500' : 'text-orange-600' }} uppercase">
+                                        Exp: {{ $order->expires_at->format('d M Y') }}
+                                    </span>
+                                </div>
+                            @endif
                         </div>
                         <a href="https://wa.me/{{ $order->user->whatsapp }}" target="_blank" class="inline-flex items-center mt-3 px-3 py-1.5 bg-[#25D366]/10 text-[#25D366] text-[11px] font-black rounded-lg hover:bg-[#25D366] hover:text-white transition-colors border border-[#25D366]/20">
                             <svg class="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
@@ -471,6 +518,13 @@
                         <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 inline-block w-full">
                             <div class="text-sm font-bold text-slate-800">{{ $order->product->name }}</div>
                             <div class="text-xs font-black text-blue-600 mt-1">Rp {{ number_format($order->total_price, 0, ',', '.') }}</div>
+                            @if($order->expires_at)
+                                <div class="mt-1 pt-1 border-t border-blue-200/50">
+                                    <span class="text-[9px] font-black {{ now()->greaterThan($order->expires_at) ? 'text-rose-500' : 'text-blue-600' }} uppercase">
+                                        Exp: {{ $order->expires_at->format('d M Y') }}
+                                    </span>
+                                </div>
+                            @endif
                         </div>
                     </td>
 
@@ -568,4 +622,3 @@
 </div>
 
 @endsection
-

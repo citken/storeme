@@ -38,7 +38,7 @@
         
         <div class="grid grid-cols-1 gap-6">
             @forelse($orders as $order)
-                <div class="bg-white rounded-2xl border-2 {{ $order->status == 'active' ? 'border-green-400 shadow-xl shadow-green-500/10' : 'border-slate-200 shadow-sm' }} overflow-hidden flex flex-col lg:flex-row transition-all hover:border-blue-400 group">
+                <div class="bg-white rounded-2xl border-2 {{ ($order->is_suspended || ($order->expires_at && now()->greaterThan($order->expires_at))) ? 'border-rose-400 shadow-xl shadow-rose-500/10' : ($order->status == 'active' ? 'border-green-400 shadow-xl shadow-green-500/10' : 'border-slate-200 shadow-sm') }} overflow-hidden flex flex-col lg:flex-row transition-all hover:border-blue-400 group">
                     
                     <div class="p-8 w-full lg:w-5/12 flex flex-col justify-center bg-slate-50/50 group-hover:bg-blue-50/30 transition-colors">
                         <div class="flex items-center space-x-3 mb-3">
@@ -53,15 +53,46 @@
                                 <span class="text-slate-900">Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
                             </div>
                             <div class="flex items-center text-sm font-bold text-slate-600">
-                                <span class="w-24 text-slate-400 uppercase text-[10px] tracking-wider">Status</span>
-                                <span class="font-black uppercase px-2.5 py-0.5 rounded text-[10px] tracking-wider
-                                    {{ $order->status == 'active' ? 'bg-green-100 text-green-700' : ($order->status == 'processing' ? 'bg-blue-100 text-blue-700 animate-pulse' : 'bg-yellow-100 text-yellow-700') }}">
-                                    {{ $order->status }}
-                                </span>
+                                <span class="w-24 text-slate-400 uppercase text-[10px] tracking-wider">Status Sistem</span>
+                                @if($order->is_suspended)
+                                    <span class="font-black uppercase px-2.5 py-0.5 rounded text-[10px] tracking-wider bg-rose-100 text-rose-700 animate-pulse">SUSPENDED</span>
+                                @else
+                                    <span class="font-black uppercase px-2.5 py-0.5 rounded text-[10px] tracking-wider
+                                        {{ $order->status == 'active' ? 'bg-green-100 text-green-700' : ($order->status == 'processing' ? 'bg-blue-100 text-blue-700 animate-pulse' : 'bg-yellow-100 text-yellow-700') }}">
+                                        {{ $order->status }}
+                                    </span>
+                                @endif
                             </div>
+                            
+                            @if($order->status == 'active')
+                                <div class="flex items-center text-sm font-bold text-slate-600 pt-2 border-t border-slate-200/60 mt-2">
+                                    <span class="w-24 text-slate-400 uppercase text-[10px] tracking-wider">Masa Aktif</span>
+                                    @if($order->expires_at)
+                                        @if(now()->greaterThan($order->expires_at))
+                                            <span class="text-rose-600 text-xs font-black bg-rose-100 px-2 py-0.5 rounded">TELAH EXPIRED</span>
+                                        @else
+                                            <span class="text-slate-900 text-xs bg-slate-200/50 px-2 py-0.5 rounded">{{ $order->expires_at->format('d M Y') }} <span class="text-blue-600">({{ now()->diffInDays($order->expires_at) }} Hari Lagi)</span></span>
+                                        @endif
+                                    @else
+                                        <span class="text-emerald-600 text-xs font-black bg-emerald-100 px-2 py-0.5 rounded">LIFETIME (Selamanya)</span>
+                                    @endif
+                                </div>
+                                
+                                @if($order->expires_at)
+                                    <div class="mt-4">
+                                        <form action="{{ route('user.order.extend', $order->id) }}" method="POST" onsubmit="return confirm('Perpanjang masa aktif layanan ini?\nSaldo Rp {{ number_format($order->product->final_price, 0, ',', '.') }} akan dipotong dari akun Anda.');">
+                                            @csrf
+                                            <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-wider shadow-md transition transform hover:-translate-y-0.5 flex items-center justify-center">
+                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                Perpanjang (Rp {{ number_format($order->product->final_price, 0, ',', '.') }})
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
+                            @endif
                         </div>
 
-                        @if($order->product->is_cbt_panel && $order->status == 'active')
+                        @if($order->product->is_cbt_panel && $order->status == 'active' && !$order->is_suspended)
                             <div class="mt-auto">
                                 <button onclick="toggleApiForm('form-api-{{ $order->id }}')" class="flex items-center justify-center space-x-2 w-full bg-slate-900 text-white px-5 py-3 rounded-xl font-black text-xs shadow-lg hover:bg-slate-800 transition transform hover:-translate-y-0.5">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" /></svg>
@@ -71,7 +102,17 @@
                         @endif
                     </div>
 
-                    <div class="w-full lg:w-7/12 border-t lg:border-t-0 lg:border-l border-slate-200">
+                    <div class="w-full lg:w-7/12 border-t lg:border-t-0 lg:border-l border-slate-200 relative">
+                        @if($order->is_suspended)
+                            <div class="absolute inset-0 z-20 backdrop-blur-md bg-white/60 flex flex-col items-center justify-center p-8 text-center border-l border-rose-200">
+                                <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mb-4 shadow-inner">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                </div>
+                                <h4 class="text-xl font-black text-rose-600 mb-2">LAYANAN DITANGGUHKAN</h4>
+                                <p class="text-xs font-bold text-slate-600 max-w-sm mb-4">Masa aktif layanan ini telah habis. Sistem telah mengunci akses Panel Anda secara otomatis. Silakan lakukan perpanjangan untuk membuka kembali akses.</p>
+                            </div>
+                        @endif
+
                         @if($order->status == 'active' && $order->service_url)
                             <div class="h-full flex flex-col">
                                 <div class="p-8 flex-1 bg-white">
@@ -87,9 +128,13 @@
                                             <p class="text-[10px] text-slate-500 uppercase font-bold mb-1">Username</p>
                                             <p class="text-sm font-mono font-black text-slate-900">{{ $order->service_username ?? '-' }}</p>
                                         </div>
-                                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+                                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl relative overflow-hidden">
                                             <p class="text-[10px] text-slate-500 uppercase font-bold mb-1">Password</p>
-                                            <p class="text-sm font-mono font-black text-slate-900">{{ $order->service_password ?? '-' }}</p>
+                                            @if(str_contains($order->service_password, 'BLOCKED') || str_contains($order->service_password, 'SUSPENDED'))
+                                                <p class="text-sm font-mono font-black text-rose-600">LOCKED 🔒</p>
+                                            @else
+                                                <p class="text-sm font-mono font-black text-slate-900">{{ $order->service_password ?? '-' }}</p>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -225,7 +270,7 @@
                                         @else
                                             <div class="bg-slate-900/70 rounded-2xl p-5 mb-5 border border-slate-700/40 group-hover:border-slate-600/60 transition-colors duration-400">
                                                 <div class="flex justify-between items-center mb-2">
-                                                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Investasi Tahunan</span>
+                                                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Investasi</span>
                                                     @if($product->discount_percent > 0)
                                                         <span class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[9px] px-2.5 py-0.5 rounded-md font-black uppercase tracking-wider shadow-sm">Save {{ $product->discount_percent }}%</span>
                                                     @endif
@@ -243,7 +288,7 @@
                                                 <div class="flex items-baseline text-white">
                                                     <span class="text-xl font-bold mr-1">Rp</span>
                                                     <span class="text-4xl font-black tracking-tight">{{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-500 ml-2">/thn</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-2">/{{ $product->duration_months == 0 ? 'Selamanya' : $product->duration_months . ' Bln' }}</span>
                                                 </div>
                                             </div>
                                             <form action="{{ route('user.buy', $product->id) }}" method="POST" onsubmit="return confirm('Beli paket {{ $product->name }}?\nSaldo Rp {{ number_format($product->final_price, 0, ',', '.') }} akan dipotong otomatis.');">
@@ -276,13 +321,13 @@
                                                 </div>
                                                 <div class="flex items-baseline text-slate-900">
                                                     <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/bln</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $product->duration_months == 0 ? 'Selamanya' : $product->duration_months . ' Bln' }}</span>
                                                 </div>
                                             </div>
                                         @else
                                             <div class="flex items-baseline mt-4 text-slate-900">
                                                 <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-                                                <span class="text-sm font-semibold text-slate-500 ml-1">/bln</span>
+                                                <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $product->duration_months == 0 ? 'Selamanya' : $product->duration_months . ' Bln' }}</span>
                                             </div>
                                         @endif
                                     </div>
