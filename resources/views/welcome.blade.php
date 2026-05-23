@@ -312,8 +312,6 @@
                             
                             @php
                                 $aosDelay = ($loop->index % 3) * 80;
-                                // Kalkulasi Durasi Teks
-                                $durText = $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln');
                             @endphp
 
                             @if($product->is_cbt_panel)
@@ -378,24 +376,23 @@
 
                                     <div class="p-8 pt-0 mt-auto relative z-10">
                                         @if($product->price == 0)
-                                            <div class="bg-slate-900/60 rounded-2xl p-5 mb-5 border border-slate-700/50">
-                                                <div class="flex items-baseline text-[#25D366]">
-                                                    <span class="text-3xl font-black tracking-tight">Harga Custom</span>
-                                                </div>
+                                            <div class="flex items-baseline text-white">
+                                                <span class="text-3xl font-black tracking-tight text-[#25D366]">Harga Custom</span>
                                             </div>
-                                            <a href="https://wa.me/6288277512080?text={{ urlencode('Halo Admin K-Host, saya tertarik untuk custom harga pada paket K-CBT ' . $product->name . '.') }}" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(37,211,102,0.4)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide flex items-center justify-center">
-                                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                                                Hubungi via WA
-                                            </a>
+                                            <div class="mt-4">
+                                                <a href="https://wa.me/6288277512080?text={{ urlencode('Halo Admin K-Host, saya tertarik untuk custom harga pada paket ' . $product->name . '.') }}" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(37,211,102,0.4)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide flex items-center justify-center">
+                                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                                                    Hubungi via WA
+                                                </a>
+                                            </div>
                                         @else
                                             <div class="bg-slate-900/60 rounded-2xl p-5 mb-5 border border-slate-700/50 group-hover:border-slate-600/80 transition-colors duration-400">
                                                 <div class="flex justify-between items-center mb-2">
-                                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">Investasi</span>
+                                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">Investasi Tahunan</span>
                                                     @if($product->discount_percent > 0)
                                                         <span class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[9px] px-2.5 py-0.5 rounded-md font-black uppercase tracking-wider shadow-sm">Save {{ $product->discount_percent }}%</span>
                                                     @endif
                                                 </div>
-                                                
                                                 @if($product->discount_percent > 0)
                                                     <div class="mb-1">
                                                         <span class="relative inline-block text-sm font-bold text-slate-500">
@@ -404,36 +401,32 @@
                                                         </span>
                                                     </div>
                                                 @endif
-    
                                                 <div class="flex items-baseline text-white">
                                                     <span class="text-xl font-bold mr-1">Rp</span>
                                                     <span class="text-4xl font-black tracking-tight">{{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-500 ml-2">/{{ $durText }}</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-2">/thn</span>
                                                 </div>
                                             </div>
-                                            @auth
-                                                <form action="{{ route('user.buy', $product->id) }}" method="POST" onsubmit="return confirm('Beli paket {{ $product->name }}?\nSaldo Rp {{ number_format($product->final_price, 0, ',', '.') }} akan dipotong otomatis.');">
-                                                    @csrf
-                                                    <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-400 hover:to-rose-500 text-white font-bold py-4 rounded-2xl shadow-[0_8px_25px_-8px_rgba(249,115,22,0.4)] hover:shadow-[0_10px_35px_-8px_rgba(249,115,22,0.6)] hover:-translate-y-0.5 transition-all duration-300 text-sm uppercase tracking-wider">
-                                                        Deploy K-CBT Sekarang
-                                                    </button>
-                                                </form>
-                                            @else
-                                                <a href="{{ route('login') }}" class="block w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 text-sm uppercase tracking-wide text-center">
-                                                    Login untuk Memesan
-                                                </a>
-                                            @endauth
+                                            <form action="{{ route('user.buy', $product->id) }}" method="POST" onsubmit="return confirm('Beli paket {{ $product->name }}?\nSaldo Rp {{ number_format($product->final_price, 0, ',', '.') }} akan dipotong otomatis.');">
+                                                @csrf
+                                                <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-rose-600 hover:from-orange-400 hover:to-rose-500 text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(249,115,22,0.4)] hover:shadow-[0_10px_35px_-8px_rgba(249,115,22,0.6)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide">
+                                                    Pesan K-CBT Sekarang
+                                                </button>
+                                            </form>
                                         @endif
                                     </div>
                                 </div>
 
                             @else
-                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-[2rem] shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full overflow-hidden group hover-lift border-gradient">
-                                    <div class="p-8 border-b border-slate-50 bg-slate-50/50 group-hover:bg-blue-50/50 transition-colors">
-                                        <h3 class="text-2xl font-black text-slate-900 mb-3">{{ $product->name }}</h3>
+                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-[2rem] shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 hover:-translate-y-2 transition-all duration-400 flex flex-col relative overflow-hidden group hover-lift border-gradient">
+                                    
+                                    <div class="absolute top-0 right-0 w-56 h-56 bg-blue-50 rounded-full blur-[40px] -mr-14 -mt-14 pointer-events-none group-hover:bg-blue-100/60 transition-colors duration-500"></div>
+
+                                    <div class="p-8 border-b border-slate-100/80 relative z-10 bg-slate-50/50 group-hover:bg-blue-50/40 transition-colors">
+                                        <h3 class="text-2xl font-black text-slate-900 mb-1 group-hover:text-blue-600 transition-colors duration-300">{{ $product->name }}</h3>
                                         
                                         @if($product->price == 0)
-                                            <div class="flex items-baseline mt-4">
+                                            <div class="flex items-baseline mt-4 text-slate-900">
                                                 <span class="text-3xl font-black tracking-tight text-[#25D366]">Harga Custom</span>
                                             </div>
                                         @elseif($product->discount_percent > 0)
@@ -447,28 +440,31 @@
                                                 </div>
                                                 <div class="flex items-baseline text-slate-900">
                                                     <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $durText }}</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/bln</span>
                                                 </div>
                                             </div>
                                         @else
                                             <div class="flex items-baseline mt-4 text-slate-900">
                                                 <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-                                                <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $durText }}</span>
+                                                <span class="text-sm font-semibold text-slate-500 ml-1">/bln</span>
                                             </div>
                                         @endif
                                     </div>
 
-                                    <div class="p-8 flex-1">
+                                    <div class="p-8 flex-1 relative z-10">
                                         @php
-                                            $regDesc = $product->description;
-                                            $regFeatures = array_filter(array_map('trim', explode('.', $regDesc)));
+                                            $prodSpecs = array_filter(array_map('trim', explode('.', $product->description)));
+                                            $catFeatures = array_filter(array_map('trim', explode('.', $category->description ?? '')));
+                                            $allRegFeatures = array_merge($prodSpecs, $catFeatures);
                                         @endphp
-                                        <ul class="space-y-3">
-                                            @foreach($regFeatures as $descLine)
+                                        <ul class="space-y-3.5">
+                                            @foreach($allRegFeatures as $descLine)
                                                 @if(strlen(trim($descLine)) > 2)
-                                                    <li class="flex items-start text-sm text-slate-600 font-medium">
-                                                        <svg class="h-5 w-5 text-indigo-500 mr-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                                                        <span class="leading-snug">{{ trim($descLine) }}</span>
+                                                    <li class="flex items-start text-sm text-slate-600 font-medium group/item">
+                                                        <div class="flex-shrink-0 w-5 h-5 rounded-md bg-blue-50 flex items-center justify-center mr-3 group-hover/item:bg-blue-500 transition-all duration-300">
+                                                            <svg class="h-3 w-3 text-blue-500 group-hover/item:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                                        </div>
+                                                        <span class="group-hover/item:text-slate-900 transition-colors leading-snug">{{ trim($descLine) }}</span>
                                                     </li>
                                                 @endif
                                             @endforeach
@@ -477,23 +473,17 @@
 
                                     <div class="p-8 pt-0 mt-auto relative z-10">
                                         @if($product->price == 0)
-                                            <a href="https://wa.me/6288277512080?text={{ urlencode('Halo Admin K-Host, saya tertarik untuk custom harga pada layanan ' . $product->name . '.') }}" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(37,211,102,0.4)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide flex items-center justify-center">
+                                            <a href="https://wa.me/6288277512080?text={{ urlencode('Halo Admin K-Host, saya tertarik untuk custom harga pada paket ' . $product->name . '.') }}" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black text-sm py-4 rounded-xl shadow-[0_8px_25px_-8px_rgba(37,211,102,0.4)] text-center transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wide flex items-center justify-center">
                                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
                                                 Hubungi via WA
                                             </a>
                                         @else
-                                            @auth
-                                                <form action="{{ route('user.buy', $product->id) }}" method="POST" onsubmit="return confirm('Beli layanan {{ $product->name }}?\nSaldo Anda akan dipotong.');">
-                                                    @csrf
-                                                    <button type="submit" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-black py-4 rounded-xl text-center shadow-md transition-all duration-300 transform hover:-translate-y-1 text-sm uppercase tracking-wide">
-                                                        Pilih Paket Ini
-                                                    </button>
-                                                </form>
-                                            @else
-                                                <a href="{{ route('login') }}" class="block w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-4 rounded-xl text-center shadow-sm transition-all duration-300 transform hover:-translate-y-0.5 text-sm uppercase tracking-wide">
-                                                    Login untuk Memesan
-                                                </a>
-                                            @endauth
+                                            <form action="{{ route('user.buy', $product->id) }}" method="POST" onsubmit="return confirm('Beli layanan {{ $product->name }}?\nSaldo Anda akan dipotong.');">
+                                                @csrf
+                                                <button type="submit" class="w-full bg-slate-900 hover:bg-blue-600 text-white font-black py-4 rounded-xl text-center shadow-lg transition-all duration-300 transform hover:-translate-y-1 text-sm uppercase tracking-wide">
+                                                    Pilih Cloud Ini
+                                                </button>
+                                            </form>
                                         @endif
                                     </div>
                                 </div>
