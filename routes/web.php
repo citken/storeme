@@ -45,6 +45,7 @@ Route::get('/admin/approve', [AdminDepositController::class, 'approve']);
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\UserController::class, 'dashboard'])->name('user.dashboard');
     Route::post('/buy/{product}', [\App\Http\Controllers\UserController::class, 'buyProduct'])->name('user.buy');
+    Route::post('/order/{id}/extend', [\App\Http\Controllers\UserController::class, 'extendOrder'])->name('user.order.extend');
     
     // Fitur Tembak API K-CBT
     Route::post('/cbt/change-password/{order}', [\App\Http\Controllers\UserController::class, 'changeCbtPassword'])->name('user.cbt.password');

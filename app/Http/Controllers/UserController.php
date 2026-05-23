@@ -47,6 +47,32 @@ class UserController extends Controller
             return back()->withErrors(['Gagal memproses pesanan: ' . $e->getMessage()]);
         }
     }
+    public function extendOrder(Request $request, $id)
+{
+    $order = \App\Models\Order::where('user_id', \Auth::id())->findOrFail($id);
+    $price = $order->product->final_price;
+    $user = \Auth::user();
+
+    if ($user->balance < $price) {
+        return back()->withErrors(['Saldo Anda tidak mencukupi untuk memperpanjang layanan.']);
+    }
+
+    // Potong Saldo
+    $user->decrement('balance', $price);
+
+    // Tambah Waktu
+    // Jika belum expired, ditambah dari tanggal expired. Jika sudah expired, ditambah dari hari ini.
+    if ($order->expires_at && now()->greaterThan($order->expires_at)) {
+        $order->expires_at = now()->addMonths($order->product->duration_months);
+    } else {
+        $order->expires_at = ($order->expires_at ?? now())->addMonths($order->product->duration_months);
+    }
+
+    $order->is_suspended = false; // Buka akses jika sebelumnya di-suspend
+    $order->save();
+
+    return back()->with('success', 'Layanan berhasil diperpanjang!');
+}
 
     // --- FITUR KEREN: REMOTE API GANTI PASSWORD K-CBT ---
     // --- FITUR KEREN: REMOTE API GANTI PASSWORD K-CBT ---
