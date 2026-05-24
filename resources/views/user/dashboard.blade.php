@@ -109,7 +109,7 @@
                                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                                 </div>
                                 <h4 class="text-xl font-black text-rose-600 mb-2">LAYANAN DITANGGUHKAN</h4>
-                                <p class="text-xs font-bold text-slate-600 max-w-sm mb-4">Masa aktif layanan ini telah habis. Sistem telah mengunci akses Panel Anda secara otomatis. Silakan lakukan perpanjangan di samping kiri untuk membuka kembali akses.</p>
+                                <p class="text-xs font-bold text-slate-600 max-w-sm mb-4">Masa aktif layanan ini telah habis. Sistem telah mengunci akses Panel Anda secara otomatis. Silakan lakukan perpanjangan untuk membuka kembali akses.</p>
                             </div>
                         @endif
 
@@ -218,6 +218,7 @@
                             
                             @php
                                 $aosDelay = ($loop->index % 3) * 80;
+                                $durText = $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln');
                             @endphp
 
                             @if($product->is_cbt_panel)
@@ -292,7 +293,7 @@
                                                 <div class="flex items-baseline text-white">
                                                     <span class="text-xl font-bold mr-1">Rp</span>
                                                     <span class="text-4xl font-black tracking-tight">{{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-500 ml-2">/{{ $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln') }}</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-2">/{{ $durText }}</span>
                                                 </div>
                                             </div>
                                             <form action="{{ route('user.buy', $product->id) }}" method="POST" onsubmit="return confirm('Beli paket {{ $product->name }}?\nSaldo Rp {{ number_format($product->final_price, 0, ',', '.') }} akan dipotong otomatis.');">
@@ -306,7 +307,7 @@
                                 </div>
 
                             @else
-                                <div class="bg-white rounded-[2rem] shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full overflow-hidden group">
+                                <div data-aos="fade-up" data-aos-delay="{{ $aosDelay }}" class="bg-white rounded-[2rem] shadow-lg border border-slate-100 hover:shadow-2xl hover:border-blue-200 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full overflow-hidden group hover-lift border-gradient">
                                     <div class="p-8 border-b border-slate-50 bg-slate-50/50 group-hover:bg-blue-50/50 transition-colors">
                                         <h3 class="text-2xl font-black text-slate-900 mb-3">{{ $product->name }}</h3>
                                         
@@ -325,24 +326,25 @@
                                                 </div>
                                                 <div class="flex items-baseline text-slate-900">
                                                     <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln') }}</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $durText }}</span>
                                                 </div>
                                             </div>
                                         @else
                                             <div class="flex items-baseline mt-4 text-slate-900">
                                                 <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-                                                <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln') }}</span>
+                                                <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $durText }}</span>
                                             </div>
                                         @endif
                                     </div>
 
                                     <div class="p-8 flex-1">
                                         @php
-                                            $regDesc = $product->description;
-                                            $regFeatures = array_filter(array_map('trim', explode('.', $regDesc)));
+                                            $prodSpecs = array_filter(array_map('trim', explode('.', $product->description)));
+                                            $catFeatures = array_filter(array_map('trim', explode('.', $category->description ?? '')));
+                                            $allRegFeatures = array_merge($prodSpecs, $catFeatures);
                                         @endphp
                                         <ul class="space-y-3">
-                                            @foreach($regFeatures as $descLine)
+                                            @foreach($allRegFeatures as $descLine)
                                                 @if(strlen(trim($descLine)) > 2)
                                                     <li class="flex items-start text-sm text-slate-600 font-medium">
                                                         <svg class="h-5 w-5 text-indigo-500 mr-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
@@ -362,7 +364,7 @@
                                         @else
                                             <form action="{{ route('user.buy', $product->id) }}" method="POST" onsubmit="return confirm('Beli layanan {{ $product->name }}?\nSaldo Anda akan dipotong.');">
                                                 @csrf
-                                                <button type="submit" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-black text-sm py-4 rounded-xl shadow-md transition-all transform hover:-translate-y-1">
+                                                <button type="submit" class="w-full bg-slate-900 hover:bg-blue-600 text-white font-black py-4 rounded-xl text-center shadow-md transition-all duration-300 transform hover:-translate-y-1 text-sm uppercase tracking-wide">
                                                     Pilih Paket Ini
                                                 </button>
                                             </form>
