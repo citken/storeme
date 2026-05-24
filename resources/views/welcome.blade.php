@@ -205,11 +205,11 @@
             
             <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="400" class="mt-20 max-w-3xl mx-auto grid grid-cols-3 gap-6">
                 <div class="text-center group cursor-default">
-                    <div class="text-3xl md:text-4xl font-black text-white mb-1 group-hover:text-blue-400 transition-colors duration-300">99.9%</div>
+                    <div class="text-3xl md:text-4xl font-black text-white mb-1 group-hover:text-blue-400 transition-colors duration-300">95%</div>
                     <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Uptime SLA</div>
                 </div>
                 <div class="text-center group cursor-default border-x border-white/5">
-                    <div class="text-3xl md:text-4xl font-black text-white mb-1 group-hover:text-indigo-400 transition-colors duration-300">10Gbps</div>
+                    <div class="text-3xl md:text-4xl font-black text-white mb-1 group-hover:text-indigo-400 transition-colors duration-300">720Mbps</div>
                     <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Network Port</div>
                 </div>
                 <div class="text-center group cursor-default">
