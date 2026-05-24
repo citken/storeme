@@ -109,7 +109,7 @@
                                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                                 </div>
                                 <h4 class="text-xl font-black text-rose-600 mb-2">LAYANAN DITANGGUHKAN</h4>
-                                <p class="text-xs font-bold text-slate-600 max-w-sm mb-4">Masa aktif layanan ini telah habis. Sistem telah mengunci akses Panel Anda secara otomatis. Silakan lakukan perpanjangan untuk membuka kembali akses.</p>
+                                <p class="text-xs font-bold text-slate-600 max-w-sm mb-4">Masa aktif layanan ini telah habis. Sistem telah mengunci akses Panel Anda secara otomatis. Silakan lakukan perpanjangan di samping kiri untuk membuka kembali akses.</p>
                             </div>
                         @endif
 
@@ -216,6 +216,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
                         @foreach($categoryProducts as $product)
                             
+                            @php
+                                $aosDelay = ($loop->index % 3) * 80;
+                            @endphp
+
                             @if($product->is_cbt_panel)
                                 <div class="bg-gradient-to-b from-slate-900 to-slate-800 rounded-[2rem] shadow-xl border border-slate-700 hover:border-orange-500 hover:shadow-orange-500/20 transition-all duration-300 flex flex-col h-full relative overflow-hidden group">
                                     <div class="absolute top-0 right-0 bg-gradient-to-r from-orange-500 to-red-600 text-white text-[10px] font-black px-5 py-2 rounded-bl-2xl uppercase tracking-wider shadow-lg z-10">
@@ -268,9 +272,9 @@
                                                 Hubungi via WA
                                             </a>
                                         @else
-                                            <div class="bg-slate-900/70 rounded-2xl p-5 mb-5 border border-slate-700/40 group-hover:border-slate-600/60 transition-colors duration-400">
+                                            <div class="bg-slate-900/60 rounded-2xl p-5 mb-5 border border-slate-700/50 group-hover:border-slate-600/80 transition-colors duration-400">
                                                 <div class="flex justify-between items-center mb-2">
-                                                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Investasi</span>
+                                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">Investasi</span>
                                                     @if($product->discount_percent > 0)
                                                         <span class="bg-gradient-to-r from-orange-500 to-rose-600 text-white text-[9px] px-2.5 py-0.5 rounded-md font-black uppercase tracking-wider shadow-sm">Save {{ $product->discount_percent }}%</span>
                                                     @endif
@@ -278,7 +282,7 @@
                                                 
                                                 @if($product->discount_percent > 0)
                                                     <div class="mb-1">
-                                                        <span class="relative inline-block text-sm font-bold text-slate-600">
+                                                        <span class="relative inline-block text-sm font-bold text-slate-500">
                                                             Rp {{ number_format($product->price, 0, ',', '.') }}
                                                             <span class="absolute left-0 top-1/2 w-full h-[2px] bg-orange-500/70 -translate-y-1/2 rounded-full"></span>
                                                         </span>
@@ -288,7 +292,7 @@
                                                 <div class="flex items-baseline text-white">
                                                     <span class="text-xl font-bold mr-1">Rp</span>
                                                     <span class="text-4xl font-black tracking-tight">{{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-500 ml-2">/{{ $product->duration_months == 0 ? 'Selamanya' : $product->duration_months . ' Bln' }}</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-2">/{{ $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln') }}</span>
                                                 </div>
                                             </div>
                                             <form action="{{ route('user.buy', $product->id) }}" method="POST" onsubmit="return confirm('Beli paket {{ $product->name }}?\nSaldo Rp {{ number_format($product->final_price, 0, ',', '.') }} akan dipotong otomatis.');">
@@ -321,13 +325,13 @@
                                                 </div>
                                                 <div class="flex items-baseline text-slate-900">
                                                     <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->final_price, 0, ',', '.') }}</span>
-                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $product->duration_months == 0 ? 'Selamanya' : $product->duration_months . ' Bln' }}</span>
+                                                    <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln') }}</span>
                                                 </div>
                                             </div>
                                         @else
                                             <div class="flex items-baseline mt-4 text-slate-900">
                                                 <span class="text-3xl font-black tracking-tight">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-                                                <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $product->duration_months == 0 ? 'Selamanya' : $product->duration_months . ' Bln' }}</span>
+                                                <span class="text-sm font-semibold text-slate-500 ml-1">/{{ $product->duration_months == 0 ? 'Selamanya' : ($product->duration_months == 12 ? '1 Thn' : $product->duration_months . ' Bln') }}</span>
                                             </div>
                                         @endif
                                     </div>
